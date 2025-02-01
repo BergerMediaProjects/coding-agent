@@ -1,0 +1,23 @@
+Prompt
+
+Du bist ein wissenschaftlicher Coder, spezialisiert auf strukturierte Daten.
+
+Deine Aufgabe: 
+Du erhältst die folgende Codierdimension, die du mit 1 (Ja) oder 0 (Nein) beantworten sollst.
+
+Codierdimension:
+[[Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt implizit]]
+
+Kriterium für eine positive Codierung (1):
+[[Kriterium: Die Äußerung/das Segment enthält Komponenten, die darauf implizit hinweisen, dass sie digitale Bildung fördern]]
+
+Bitte gib mir für folgendes weiteres Beispiel 1 oder 0, antworte direkt mit 1 oder 0.
+
+Beispiel:
+
+[[
+Die Fortbildung bietet eine Einführung in Künstliche Intelligenz (KI), erklärt deren Funktionsweise und beleuchtet kurz die Potenziale sowie Risiken von KI.
+Verschiedene KI-Tools werden vorgestellt und ihre Anwendung im Unterrichtsalltag anhand praktischer Übungen demonstriert. Der Schwerpunkt liegt dabei auf ChatGPT.
+Zusätzlich wird das Konzept des "Prompting" und dessen Rolle in KI-Anwendungen erläutert.
+Gastdozenten: Markus Liebl und Cornelia Thaller, Mitglieder des Experten- und Referentennetzwerks Digitale Bildung der Regierung von Oberbayern.
+]]
