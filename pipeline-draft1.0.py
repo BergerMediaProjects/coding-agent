@@ -26,6 +26,7 @@ from atomic_agents import (
     AgentError
 )
 from datetime import datetime
+from enum import Enum
 
 # Configuration
 CONFIG = {
@@ -70,8 +71,60 @@ class ProcessingResult(BaseModel):
     confidence: float = Field(..., ge=0.0, le=1.0, description="AI confidence score")
     reasoning: str = Field(..., description="AI reasoning for the classification")
 
+class ConfidenceLevel(str, Enum):
+    """
+    Classification confidence levels based on GPT's confidence score
+    
+    Thresholds:
+    - LOW: 0.0 to 0.33 - Limited confidence in classification
+    - MEDIUM: 0.34 to 0.66 - Moderate confidence in classification
+    - HIGH: 0.67 to 1.0 - Strong confidence in classification
+    """
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+class ValidationResult(BaseModel):
+    """Structure for validated classification results"""
+    value: str = Field(..., pattern="^[01]$", description="Classification value (0 or 1)")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Raw confidence score")
+    confidence_level: ConfidenceLevel = Field(..., description="Interpreted confidence level")
+    reasoning: str = Field(..., description="Classification reasoning")
+
+class CodingSchemeCategory(BaseModel):
+    """Structure for a single category in coding scheme"""
+    criteria: str = Field(..., description="Criteria for coding this category")
+    examples: List[str] = Field(..., description="Example cases for value 1")
+    values: str = Field(..., description="Allowed values (e.g., 'Ja (1), Nein (0)')")
+
+class CodingScheme(BaseModel):
+    """Complete coding scheme structure with validation"""
+    categories: Dict[str, CodingSchemeCategory]
+
+    @classmethod
+    def from_yaml(cls, yaml_dict: Dict) -> 'CodingScheme':
+        """
+        Create validated scheme from raw YAML dict
+        
+        Args:
+            yaml_dict: Raw dictionary from YAML file
+            
+        Returns:
+            Validated CodingScheme
+            
+        Raises:
+            ValueError: If scheme structure is invalid
+        """
+        try:
+            return cls(categories={
+                category_name: CodingSchemeCategory(**category_data)
+                for category_name, category_data in yaml_dict.items()
+            })
+        except Exception as e:
+            raise ValueError(f"Invalid coding scheme structure: {str(e)}")
+
 # ============================================================================
-# Service Components
+# Management Components
 # ============================================================================
 
 class DataManager:
@@ -96,9 +149,28 @@ class DataManager:
 class ResourceManager:
     """Manages loading and preparation of classification resources"""
     @staticmethod
-    async def load_scheme(path: str) -> dict:
-        with open(path, "r", encoding="utf-8") as file:
-            return yaml.safe_load(file)
+    async def load_scheme(path: str) -> CodingScheme:
+        """
+        Load and validate coding scheme from YAML
+        
+        Args:
+            path: Path to coding scheme YAML file
+            
+        Returns:
+            Validated CodingScheme
+            
+        Raises:
+            FileNotFoundError: If scheme file doesn't exist
+            ValueError: If scheme structure is invalid
+        """
+        try:
+            with open(path, "r", encoding="utf-8") as file:
+                raw_scheme = yaml.safe_load(file)
+                return CodingScheme.from_yaml(raw_scheme)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Coding scheme file not found: {path}")
+        except yaml.YAMLError as e:
+            raise ValueError(f"Invalid YAML in coding scheme: {str(e)}")
     
     @staticmethod
     async def load_template(path: str) -> str:
@@ -106,10 +178,10 @@ class ResourceManager:
             return file.read()
     
     @staticmethod
-    async def construct_prompt(template: str, entry: DataEntry, scheme: dict, category_key: str) -> str:
+    async def construct_prompt(template: str, entry: DataEntry, scheme: CodingScheme, category_key: str) -> str:
         """Constructs prompt for a specific category from the coding scheme"""
-        # Get the category details from scheme
-        category_data = scheme[category_key]
+        # Get the category details from validated scheme
+        category_data = scheme.categories[category_key]
         
         # Replace basic placeholders
         prompt = template.replace("[title]", entry.title)
@@ -117,11 +189,11 @@ class ResourceManager:
         
         # Replace scheme-specific placeholders
         prompt = prompt.replace("[category_name]", category_key)
-        prompt = prompt.replace("[criteria]", category_data['criteria'])
-        prompt = prompt.replace("[values]", category_data['values'])
+        prompt = prompt.replace("[criteria]", category_data.criteria)
+        prompt = prompt.replace("[values]", category_data.values)
         
         # Format examples list with proper indentation
-        examples_text = "\n".join(f"- {example}" for example in category_data['examples'])
+        examples_text = "\n".join(f"- {example}" for example in category_data.examples)
         prompt = prompt.replace("[examples]", examples_text)
         
         # Add category validation hint
@@ -200,7 +272,7 @@ class ResultsManager:
         return metrics
 
 # ============================================================================
-# AI Agents
+# AI and Validation Components
 # ============================================================================
 
 class GPTClassificationInput(AgentInput):
@@ -213,25 +285,67 @@ class GPTClassificationOutput(AgentOutput):
     """Output schema for GPT classification"""
     response: str = Field(..., description="Raw GPT response")
 
-class ResponseInterpreterInput(AgentInput):
-    """Input schema for response interpretation"""
-    response: str = Field(..., description="Raw GPT response to interpret")
+class ResponseValidator:
+    """Validates and interprets GPT classification responses"""
+    
+    @staticmethod
+    def get_confidence_level(confidence: float) -> ConfidenceLevel:
+        """Convert numerical confidence to interpretable level"""
+        if confidence < 0.34:
+            return ConfidenceLevel.LOW
+        elif confidence < 0.67:
+            return ConfidenceLevel.MEDIUM
+        return ConfidenceLevel.HIGH
+    
+    def validate_response(self, response: str, logger: logging.Logger = None) -> ValidationResult:
+        """
+        Validate and interpret GPT's classification response
+        Args:
+            response: Raw JSON response from GPT
+            logger: Optional logger for validation issues
+        """
+        try:
+            # Parse JSON response
+            result = json.loads(response)
+            
+            # Validate value (must be "0" or "1")
+            value = str(result.get("value", "0"))
+            if value not in ["0", "1"]:
+                raise ValueError(f"Invalid value: {value}. Must be '0' or '1'")
+            
+            # Validate and interpret confidence
+            confidence = float(result.get("confidence", 0.0))
+            if not 0 <= confidence <= 1:
+                raise ValueError(f"Confidence must be between 0 and 1, got: {confidence}")
+            
+            confidence_level = self.get_confidence_level(confidence)
+            
+            # Get reasoning
+            reasoning = str(result.get("reasoning", "No reasoning provided"))
+            
+            if logger:
+                logger.debug(f"Validated response with {confidence_level} confidence")
+            
+            return ValidationResult(
+                value=value,
+                confidence=confidence,
+                confidence_level=confidence_level,
+                reasoning=reasoning
+            )
+            
+        except (json.JSONDecodeError, ValueError) as e:
+            if logger:
+                logger.warning(f"Validation error: Failed to parse response - {str(e)}")
+            
+            # Return safe defaults on error
+            return ValidationResult(
+                value="0",
+                confidence=0.0,
+                confidence_level=ConfidenceLevel.LOW,
+                reasoning=f"Error parsing response: {str(e)}"
+            )
 
-class ResponseInterpreterOutput(AgentOutput):
-    """Output schema for response interpretation"""
-    value: str = Field(
-        ..., 
-        description="Classification value (0 or 1)",
-        pattern="^[01]$"  # Ensure only "0" or "1" are allowed
-    )
-    confidence: float = Field(
-        ..., 
-        description="Confidence score",
-        ge=0.0,
-        le=1.0
-    )
-    reasoning: str = Field(..., description="Reasoning for the classification")
-
+# GPT agent handles the AI interaction
 class GPTClassificationAgent(AtomicAgent):
     """AI agent for classifying training data entries"""
     def __init__(self):
@@ -253,120 +367,95 @@ class GPTClassificationAgent(AtomicAgent):
             )
             return GPTClassificationOutput(response=response.choices[0].message.content)
         except Exception as e:
-            raise AgentError(f"GPT classification error: {str(e)}")
-
-class ResponseInterpreter(AtomicAgent):
-    """AI agent for interpreting classification responses"""
-    async def _process(self, input_data: ResponseInterpreterInput, context: AgentContext) -> ResponseInterpreterOutput:
-        try:
-            result = json.loads(input_data.response)
-            
-            # Validate and extract fields
-            value = str(result.get("value", "0"))
-            if value not in ["0", "1"]:
-                raise ValueError(f"Invalid value: {value}. Must be '0' or '1'")
-            
-            confidence = float(result.get("confidence", 0.0))
-            if not 0 <= confidence <= 1:
-                raise ValueError(f"Confidence must be between 0 and 1, got: {confidence}")
-            
-            reasoning = str(result.get("reasoning", "No reasoning provided"))
-            
-            return ResponseInterpreterOutput(
-                value=value,
-                confidence=confidence,
-                reasoning=reasoning
-            )
-        except (json.JSONDecodeError, ValueError) as e:
-            context.metadata["interpretation_error"] = str(e)
-            return ResponseInterpreterOutput(
-                value="0",
-                confidence=0.0,
-                reasoning=f"Error parsing response: {str(e)}"
-            )
+            raise AgentError(f"Classification error: Failed to get GPT response - {str(e)}")
 
 # ============================================================================
-# Pipeline Coordinator
+# Classification Coordinator
 # ============================================================================
 
 class TrainingDataClassifier:
-    """Coordinates the classification of training data using AI agents and services"""
+    """
+    Coordinates the classification of training data using AI and validation
+    
+    Components:
+    - Data & Resource Management
+    - GPT Classification
+    - Response Validation
+    - Results & Metrics
+    """
+    
     def __init__(self, config: Dict):
         self.config = config
         self.logger = logging.getLogger("training_classifier")
         
-        # Initialize managers
+        # Initialize components
         self.data_manager = DataManager()
         self.resource_manager = ResourceManager()
         self.results_manager = ResultsManager()
-        
-        # Initialize AI agents
         self.classification_agent = GPTClassificationAgent()
-        self.response_interpreter = ResponseInterpreter()
+        self.response_validator = ResponseValidator()  # Now a regular validator
 
-    async def process_entry(self, entry: DataEntry, template: str, scheme: dict) -> List[ProcessingResult]:
-        """Process a single entry for all categories in the scheme"""
-        context = AgentContext()
+    async def process_entry(self, entry: DataEntry, template: str, scheme: CodingScheme) -> List[ProcessingResult]:
         results = []
         
-        # Process each category
-        for category_key in scheme.keys():
+        for category_key in scheme.categories.keys():
             self.logger.info(f"Processing category: {category_key}")
             
-            # Construct category-specific prompt
+            # Get GPT classification (this part still uses AtomicAgent)
             prompt = await self.resource_manager.construct_prompt(
-                template, 
-                entry, 
-                scheme,
-                category_key
+                template, entry, scheme, category_key
             )
-            
-            # Get GPT classification using config
             gpt_input = GPTClassificationInput(
                 prompt=prompt,
                 model=self.config['gpt']['model'],
                 temperature=self.config['gpt']['temperature']
             )
-            gpt_output = await self.classification_agent.process(gpt_input, context)
+            gpt_output = await self.classification_agent.process(gpt_input)
             
-            # Parse response
-            interpreter_input = ResponseInterpreterInput(response=gpt_output.response)
-            interpreter_output = await self.response_interpreter.process(interpreter_input, context)
+            # Validate and interpret response (no longer async)
+            validation_result = self.response_validator.validate_response(
+                gpt_output.response,
+                logger=self.logger
+            )
             
-            # Check for errors
-            if "interpretation_error" in context.metadata:
-                self.logger.warning(
-                    f"Interpretation error for category {category_key}: "
-                    f"{context.metadata['interpretation_error']}"
-                )
+            self.logger.info(
+                f"Category {category_key} classified with {validation_result.confidence_level} "
+                f"confidence ({validation_result.confidence:.2f})"
+            )
             
-            # Store result
             results.append(ProcessingResult(
                 title=entry.title,
                 description=entry.description,
                 category=category_key,
                 human_code=entry.human_code,
-                ai_code=interpreter_output.value,  # Changed from category to value
-                confidence=interpreter_output.confidence,
-                reasoning=interpreter_output.reasoning
+                ai_code=validation_result.value,
+                confidence=validation_result.confidence,
+                reasoning=validation_result.reasoning
             ))
-            
+        
         return results
 
     async def run(self):
-        """Run the complete classification pipeline"""
+        """Run the complete classification process"""
         self.logger.info("Starting classification")
         try:
-            # Load resources
+            # Load and validate resources
             dataset = await self.data_manager.load_data(self.config['paths']['data_csv'])
             if self.config['paths'].get('human_codes'):
                 codes = await self.data_manager.load_data(self.config['paths']['human_codes'])
                 dataset = await self.data_manager.merge_datasets(dataset, codes)
             
-            scheme = await self.resource_manager.load_scheme(self.config['paths']['coding_scheme'])
+            # Load scheme with validation
+            try:
+                scheme = await self.resource_manager.load_scheme(self.config['paths']['coding_scheme'])
+                self.logger.info(f"Loaded coding scheme with {len(scheme.categories)} categories")
+            except ValueError as e:
+                self.logger.error(f"Failed to load coding scheme: {str(e)}")
+                raise
+            
             template = await self.resource_manager.load_template(self.config['paths']['prompt_template'])
             
-            # Process entries
+            # Process entries with validated scheme
             all_results = []
             entry_count = 0
             async for entry in self.data_manager.iterate_entries(dataset):
@@ -396,6 +485,7 @@ class TrainingDataClassifier:
             raise
 
 async def main():
+    """Initialize and run the training data classifier"""
     # Ensure logs directory exists
     os.makedirs('logs', exist_ok=True)
     
@@ -409,9 +499,9 @@ async def main():
         ]
     )
     
-    # Run pipeline
-    pipeline = TrainingDataClassifier(CONFIG)
-    await pipeline.run()
+    # Run classifier
+    classifier = TrainingDataClassifier(CONFIG)
+    await classifier.run()
 
 if __name__ == "__main__":
     asyncio.run(main())
