@@ -1,31 +1,29 @@
 2.0 a Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt explizit:
-  criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass es der Lerninhalt oder
-    das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme zu fördern'
+  criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass es der Lerninhalt oder das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme zu fördern. Mögliche Synonyme: medienbezogene Kompetenz, digitale Kompetenz, mediale Bildung, Mediendidaktik, medienbezogene Kompetenz, mediendidaktische Kompetenz, medienerzieherische Kompetenz, Medienerziehung. Medien-und Informationsethik; jede Fähigkeit, mit Medien umzugehen (z.B. Fähigkeit ,mit Datenbanken umzugehen; Fähigkeit mit Medien X umzugehen; Gestalten mit digitalen Medien“)'
   examples:
-  - „ Die Lehrkräfte erwerben Kompetenzen im Bereich der Medien“
-  - „Die Lehrkräfte sind in der Lage… mit Medien umzugehen“
+  - Die Lehrkräfte erwerben Kompetenzen im Bereich der Medien
+  - Die Lehrkräfte sind in der Lage… mit Medien umzugehen
   values: Ja (1); Nein (0)
+  
 2.0 b Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt implizit:
-  criteria: 'Kriterium: Die Äußerung/das Segment enthält Komponenten, die darauf implizit
-    hinweisen, dass sie digitale Bildung fördern'
+  criteria: 'Kriterium: Die Äußerung/das Segment enthält Komponenten, die darauf implizit hinweisen, dass sie digitale Bildung fördern'
   examples:
-  - z.B. "Fake News" ohne weitere Angabe
+  - 'Fake News' ohne weitere Angabe
   values: Ja (1), Nein (0)
 2.1.1 Zielkompetenz:
   criteria: Meint die eigenen Medienkompetenzen der Lehrkräfte
-  examples: []
+  examples:
+  - Die Lehrkräfte erwerben Kompetenzen im Bereich der Medien
   values: Ja (1), Nein (0)
 2.1.2 Handlungskomponente:
-  criteria: 'Handlungskomponente medienbezogener Lehrkompetenzen. Hängt konkret mit
-    dem Unterrichten zusammen. '
+  criteria: 'Handlungskomponente medienbezogener Lehrkompetenzen. Hängt konkret mit dem Unterrichten zusammen.'
   examples:
-  - 'Begriffe: Fähigkeit; Workshop, Praktikum -> wenn auf Unterricht bezogen!'
+  - Begriffe: Fähigkeit; Workshop, Praktikum -> wenn auf Unterricht bezogen!
   values: Ja (1), Nein (0)
 2.1.3 Wissenskomponente:
-  criteria: Wissenskomponente medienbezogener Lehrkompetenzen. Alle Dimensionen außer
-    eine (TK) hängen konkret mit dem Unterrichten zusammen.
+  criteria: Wissenskomponente medienbezogener Lehrkompetenzen. Alle Dimensionen außer eine (TK) hängen konkret mit dem Unterrichten zusammen.
   examples:
-  - 'Begriffe: Kenntnisse '
+  - Begriffe: Kenntnisse
   values: Ja (1), Nein (0)
 2.2.1 bedienen und anwenden:
   criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte Medien bedienen
@@ -72,7 +70,8 @@
     über Wissen im Hinblick auf digitale Medien und deren informatische Grundlage
     verfügen und es für den eigenen fachlichen und fachübergreifenden Kompetenzerwerb
     nutzen können.'
-  examples: []
+  examples:
+  - 'Nutzen von Algorithmen für die Lösung von Problemen'
   values: Ja (1) nur, wenn auch 2.1.1 = 1; Nein (0)
 2.2.7 analysieren, reflektieren und diskutieren:
   criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte
@@ -109,17 +108,17 @@
     entwickeln können und/oder Lehrkräfte Lehr-Lern-Arrangements zur Förderung von
     Selbststeuerungskompetenz entwickeln können.'
   examples:
-  - · Fähigkeit digital gestützte Lehr-Lernszenarien selbstständig oder zusammen mit
+  - Fähigkeit digital gestützte Lehr-Lernszenarien selbstständig oder zusammen mit
     anderen Lehrkräften zu planen.
-  - · Fähigkeit passende digitale Medien für eine pädagogische Aktivität zu finden
+  - Fähigkeit passende digitale Medien für eine pädagogische Aktivität zu finden
     und in die Planung miteinzubeziehen.
-  - · Fähigkeit, den Einsatz digitaler Medien im Unterricht passend zu den pädagogischen
+  - Fähigkeit, den Einsatz digitaler Medien im Unterricht passend zu den pädagogischen
     Zielen zu planen.
-  - · Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung der bisherigen
+  - Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung der bisherigen
     medialen Erfahrungen und Interessen der SchülerInnen zu planen.
-  - · Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung von medienrechtlichen
-    und –ethischen Aspekten (z. B. Datenschutz) zu planen.
-  - · Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung von motivationalen
+  - Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung von medienrechtlichen
+    und medienethischen Aspekten (z. B. Datenschutz) zu planen.
+  - Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung von motivationalen
     und emotionalen Faktoren der SchülerInnen zu planen
   values: Ja (1) nur, wenn auch 2.1.2 = 1; Nein (0)
 '2.3.2 Realisierung ':
