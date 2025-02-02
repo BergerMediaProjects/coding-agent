@@ -1,11 +1,19 @@
 """
-AI Training Data Pipeline
+AI Training Data Classification Pipeline
 
-This pipeline processes training data through a combination of:
-1. Service Components: Handle basic operations like loading and saving data
-2. AI Agents: Make decisions about categorization and handle complex processing
+Key Components:
+1. Data Structures: Define the shape and validation of data throughout the pipeline
+2. Management Components: Handle data loading, resource management, and results
+3. AI Components: Handle GPT interaction and response validation
+4. Pipeline Coordinator: Orchestrates the entire classification process
 
-The pipeline maintains clean separation between AI and non-AI tasks for clarity and maintainability.
+Flow:
+1. Load and validate input data and coding scheme
+2. For each entry:
+   a. Generate category-specific prompts
+   b. Get GPT classification
+   c. Validate and interpret responses
+3. Save results and calculate agreement metrics
 """
 
 from openai import OpenAI
@@ -28,31 +36,38 @@ from atomic_agents import (
 from datetime import datetime
 from enum import Enum
 
-# Configuration
+# Configuration for file paths, logging, and GPT settings
 CONFIG = {
     'paths': {
-        'data_csv': "teacher_training_data.csv",
-        'human_codes': "human_codes.csv",
-        'coding_scheme': "old_data_training/coding_scheme.yml",
-        'prompt_template': "prompt.txt",
-        'output_base': "ai_coded_results"
+        'data_csv': "teacher_training_data.csv",        # Input training data
+        'human_codes': "human_codes.csv",               # Human-assigned codes for comparison
+        'coding_scheme': "coding_scheme.yml",           # Category definitions and criteria
+        'prompt_template': "prompt.txt",                # Template for GPT prompts
+        'output_base': "ai_coded_results"               # Base name for output files
     },
     'logging': {
         'level': 'INFO',
         'file': os.path.join('logs', 'atomic_agents.log')
     },
     'gpt': {
-        'model': 'gpt-4',
-        'temperature': 0.0
+        'model': 'gpt-4',                              # GPT model to use
+        'temperature': 0.0                             # 0.0 for most consistent results
     }
 }
 
 # ============================================================================
-# Data Structures
+# Data Structures - Define and validate data shapes throughout the pipeline
 # ============================================================================
 
 class DataEntry(BaseModel):
-    """Structure for a single data entry"""
+    """
+    Single training data entry with validation
+    
+    Fields:
+    - title: Training title
+    - description: Training description to classify
+    - human_code: Optional human-assigned classification (0 or 1)
+    """
     title: str
     description: str
     human_code: str = Field(
@@ -62,7 +77,18 @@ class DataEntry(BaseModel):
     )
 
 class ProcessingResult(BaseModel):
-    """Structure for processing results"""
+    """
+    Structure for storing classification results
+    
+    Fields:
+    - title: Training entry title
+    - description: Training description
+    - category: Category from coding scheme being evaluated
+    - human_code: Human-assigned classification (0 or 1)
+    - ai_code: GPT-assigned classification (0 or 1)
+    - confidence: GPT's confidence in classification (0.0 to 1.0)
+    - reasoning: GPT's explanation for classification
+    """
     title: str
     description: str
     category: str = Field(..., description="Category being evaluated")
@@ -92,7 +118,14 @@ class ValidationResult(BaseModel):
     reasoning: str = Field(..., description="Classification reasoning")
 
 class CodingSchemeCategory(BaseModel):
-    """Structure for a single category in coding scheme"""
+    """
+    Structure for a single category in the coding scheme
+    
+    Fields:
+    - criteria: Description of what qualifies for this category
+    - examples: List of example cases that would be coded as 1
+    - values: String describing the coding values (typically 'Ja (1), Nein (0)')
+    """
     criteria: str = Field(..., description="Criteria for coding this category")
     examples: List[str] = Field(..., description="Example cases for value 1")
     values: str = Field(..., description="Allowed values (e.g., 'Ja (1), Nein (0)')")
@@ -128,10 +161,25 @@ class CodingScheme(BaseModel):
 # ============================================================================
 
 class DataManager:
-    """Manages training data loading and processing"""
+    """
+    Manages loading and processing of training data
+    
+    Responsibilities:
+    1. Load CSV data files
+    2. Merge human codes with training data
+    3. Generate validated DataEntry objects
+    """
     @staticmethod
     async def load_data(path: str) -> pd.DataFrame:
-        return pd.read_csv(path)
+        """Load and validate CSV data file"""
+        try:
+            return pd.read_csv(path)
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Data file not found: {path}")
+        except pd.errors.EmptyDataError:
+            raise ValueError(f"Data file is empty: {path}")
+        except Exception as e:
+            raise ValueError(f"Error loading data file: {str(e)}")
     
     @staticmethod
     async def merge_datasets(main_df: pd.DataFrame, codes_df: pd.DataFrame) -> pd.DataFrame:
@@ -147,7 +195,14 @@ class DataManager:
             )
 
 class ResourceManager:
-    """Manages loading and preparation of classification resources"""
+    """
+    Manages loading and preparation of classification resources
+    
+    Responsibilities:
+    1. Load and validate coding scheme from YAML
+    2. Load prompt template
+    3. Construct category-specific prompts
+    """
     @staticmethod
     async def load_scheme(path: str) -> CodingScheme:
         """
@@ -179,7 +234,28 @@ class ResourceManager:
     
     @staticmethod
     async def construct_prompt(template: str, entry: DataEntry, scheme: CodingScheme, category_key: str) -> str:
-        """Constructs prompt for a specific category from the coding scheme"""
+        """
+        Constructs prompt for a specific category from the coding scheme
+        
+        Process:
+        1. Get category details from scheme
+        2. Replace placeholders in template:
+           - [title] with entry title
+           - [description] with entry description
+           - [category_name] with category key
+           - [criteria] with category criteria
+           - [values] with allowed values
+           - [examples] with formatted example list
+        
+        Args:
+            template: Base prompt template
+            entry: Training data entry
+            scheme: Validated coding scheme
+            category_key: Category to evaluate
+            
+        Returns:
+            Formatted prompt for GPT
+        """
         # Get the category details from validated scheme
         category_data = scheme.categories[category_key]
         
@@ -196,13 +272,19 @@ class ResourceManager:
         examples_text = "\n".join(f"- {example}" for example in category_data.examples)
         prompt = prompt.replace("[examples]", examples_text)
         
-        # Add category validation hint
-        prompt = prompt.replace('"[category_name]"', f'"{category_key}"')
-        
         return prompt
 
 class ResultsManager:
-    """Manages classification results and metrics"""
+    """
+    Manages classification results and metrics
+    
+    Responsibilities:
+    1. Save results to timestamped CSV files
+    2. Calculate agreement metrics:
+       - Overall metrics
+       - Per-category metrics
+       - Cohen's Kappa scores
+    """
     @staticmethod
     def get_timestamped_filename(base_name: str) -> str:
         """Generate filename with timestamp"""
@@ -276,21 +358,51 @@ class ResultsManager:
 # ============================================================================
 
 class GPTClassificationInput(AgentInput):
-    """Input schema for GPT classification"""
+    """
+    Input structure for GPT classification requests
+    
+    Fields:
+    - prompt: Constructed prompt with category details
+    - model: GPT model to use (default: gpt-4)
+    - temperature: Controls randomness (0.0 for consistent results)
+    """
     prompt: str = Field(..., description="Prompt to send to GPT")
     model: str = Field(default="gpt-4", description="GPT model to use")
     temperature: float = Field(default=0.0, description="Temperature setting")
 
 class GPTClassificationOutput(AgentOutput):
-    """Output schema for GPT classification"""
+    """
+    Output structure from GPT classification
+    
+    Fields:
+    - response: Raw JSON response from GPT containing:
+      - value: Classification (0 or 1)
+      - confidence: Confidence score
+      - reasoning: Explanation for classification
+    """
     response: str = Field(..., description="Raw GPT response")
 
 class ResponseValidator:
-    """Validates and interprets GPT classification responses"""
+    """
+    Validates and interprets GPT classification responses
+    
+    Responsibilities:
+    1. Parse JSON responses from GPT
+    2. Validate classification values (0 or 1)
+    3. Validate and interpret confidence scores
+    4. Handle parsing and validation errors
+    """
     
     @staticmethod
     def get_confidence_level(confidence: float) -> ConfidenceLevel:
-        """Convert numerical confidence to interpretable level"""
+        """
+        Convert numerical confidence to interpretable level
+        
+        Thresholds:
+        - < 0.34: LOW confidence
+        - 0.34-0.66: MEDIUM confidence
+        - > 0.66: HIGH confidence
+        """
         if confidence < 0.34:
             return ConfidenceLevel.LOW
         elif confidence < 0.67:
@@ -300,9 +412,20 @@ class ResponseValidator:
     def validate_response(self, response: str, logger: logging.Logger = None) -> ValidationResult:
         """
         Validate and interpret GPT's classification response
+        
+        Process:
+        1. Parse JSON response
+        2. Validate classification value (0 or 1)
+        3. Validate confidence score (0.0 to 1.0)
+        4. Interpret confidence level
+        5. Extract reasoning
+        
         Args:
             response: Raw JSON response from GPT
             logger: Optional logger for validation issues
+            
+        Returns:
+            ValidationResult with validated and interpreted values
         """
         try:
             # Parse JSON response
@@ -347,12 +470,33 @@ class ResponseValidator:
 
 # GPT agent handles the AI interaction
 class GPTClassificationAgent(AtomicAgent):
-    """AI agent for classifying training data entries"""
+    """
+    AI agent for classifying training data entries
+    
+    Responsibilities:
+    1. Manage OpenAI API connection
+    2. Send prompts to GPT
+    3. Handle API errors and retries
+    4. Return structured responses
+    
+    Note: Uses AtomicAgent for consistent async processing
+    """
     def __init__(self):
         super().__init__()
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY", "your-api-key-here"))
 
     async def _process(self, input_data: GPTClassificationInput, context: AgentContext) -> GPTClassificationOutput:
+        """
+        Process a single classification request
+        
+        Steps:
+        1. Prepare GPT messages (system + user prompt)
+        2. Send request to OpenAI API
+        3. Extract and return response
+        
+        Raises:
+            AgentError: If API call fails or response is invalid
+        """
         try:
             response = self.client.chat.completions.create(
                 model=input_data.model,
@@ -375,13 +519,32 @@ class GPTClassificationAgent(AtomicAgent):
 
 class TrainingDataClassifier:
     """
-    Coordinates the classification of training data using AI and validation
+    Main pipeline coordinator for training data classification
+    
+    Process Flow:
+    1. Load and validate input data:
+       - Training data CSV
+       - Human codes (optional)
+       - Coding scheme YAML
+       - Prompt template
+       
+    2. For each training entry:
+       - Process each category in coding scheme
+       - Generate category-specific prompts
+       - Get GPT classification
+       - Validate and interpret responses
+       
+    3. Output handling:
+       - Save results to CSV
+       - Calculate agreement metrics
+       - Display evaluation results
     
     Components:
-    - Data & Resource Management
-    - GPT Classification
-    - Response Validation
-    - Results & Metrics
+    - DataManager: Handles data loading and processing
+    - ResourceManager: Manages coding scheme and prompts
+    - GPTClassificationAgent: Handles AI interaction
+    - ResponseValidator: Validates GPT responses
+    - ResultsManager: Handles results and metrics
     """
     
     def __init__(self, config: Dict):
@@ -396,12 +559,30 @@ class TrainingDataClassifier:
         self.response_validator = ResponseValidator()  # Now a regular validator
 
     async def process_entry(self, entry: DataEntry, template: str, scheme: CodingScheme) -> List[ProcessingResult]:
+        """
+        Process a single training entry across all categories
+        
+        Process:
+        1. For each category in scheme:
+           a. Generate category-specific prompt
+           b. Get GPT classification
+           c. Validate and interpret response
+           d. Store results
+        
+        Args:
+            entry: Training entry to classify
+            template: Base prompt template
+            scheme: Validated coding scheme
+            
+        Returns:
+            List of ProcessingResult, one per category
+        """
         results = []
         
         for category_key in scheme.categories.keys():
             self.logger.info(f"Processing category: {category_key}")
             
-            # Get GPT classification (this part still uses AtomicAgent)
+            # Generate prompt and get classification
             prompt = await self.resource_manager.construct_prompt(
                 template, entry, scheme, category_key
             )
@@ -412,17 +593,19 @@ class TrainingDataClassifier:
             )
             gpt_output = await self.classification_agent.process(gpt_input)
             
-            # Validate and interpret response (no longer async)
+            # Validate response
             validation_result = self.response_validator.validate_response(
                 gpt_output.response,
                 logger=self.logger
             )
             
+            # Log confidence level
             self.logger.info(
                 f"Category {category_key} classified with {validation_result.confidence_level} "
                 f"confidence ({validation_result.confidence:.2f})"
             )
             
+            # Store result
             results.append(ProcessingResult(
                 title=entry.title,
                 description=entry.description,
@@ -485,17 +668,29 @@ class TrainingDataClassifier:
             raise
 
 async def main():
-    """Initialize and run the training data classifier"""
+    """
+    Main entry point for the classification pipeline
+    
+    Process:
+    1. Setup environment:
+       - Create logs directory
+       - Configure logging
+       
+    2. Initialize and run classifier:
+       - Create TrainingDataClassifier with config
+       - Run classification process
+       - Handle any errors
+    """
     # Ensure logs directory exists
     os.makedirs('logs', exist_ok=True)
     
-    # Setup logging
+    # Setup logging with both console and file output
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.StreamHandler(),
-            logging.FileHandler(CONFIG['logging']['file'])
+            logging.StreamHandler(),  # Console output
+            logging.FileHandler(CONFIG['logging']['file'])  # File output
         ]
     )
     
