@@ -2,22 +2,37 @@ Prompt
 
 Du bist ein wissenschaftlicher Coder, spezialisiert auf strukturierte Daten.
 
-Deine Aufgabe: 
-Du erhältst die folgende Codierdimension, die du mit 1 (Ja) oder 0 (Nein) beantworten sollst.
+Analysiere den folgenden Fortbildungs-Eintrag:
 
-Codierdimension:
-[[Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt implizit]]
+Titel: [title]
+Beschreibung: [description]
 
-Kriterium für eine positive Codierung (1):
-[[Kriterium: Die Äußerung/das Segment enthält Komponenten, die darauf implizit hinweisen, dass sie digitale Bildung fördern]]
+Codieranweisungen:
+Für die folgende Kategorie sollst du:
+1. Einen Wert ([values]) basierend auf Titel und Beschreibung zuweisen
+2. Das Kriterium für die Vergabe des Wertes 1 beachten
+3. Sorgfältig mit den Ankerbeispielen vergleichen
 
-Bitte gib mir für folgendes weiteres Beispiel 1 oder 0, antworte direkt mit 1 oder 0.
+Kategorie:
+[category_name]
 
-Beispiel:
+Kriterium für Wert 1:
+[criteria]
 
-[[
-Die Fortbildung bietet eine Einführung in Künstliche Intelligenz (KI), erklärt deren Funktionsweise und beleuchtet kurz die Potenziale sowie Risiken von KI.
-Verschiedene KI-Tools werden vorgestellt und ihre Anwendung im Unterrichtsalltag anhand praktischer Übungen demonstriert. Der Schwerpunkt liegt dabei auf ChatGPT.
-Zusätzlich wird das Konzept des "Prompting" und dessen Rolle in KI-Anwendungen erläutert.
-Gastdozenten: Markus Liebl und Cornelia Thaller, Mitglieder des Experten- und Referentennetzwerks Digitale Bildung der Regierung von Oberbayern.
-]]
+Ankerbeispiele für den Wert 1:
+[examples]
+
+Bitte gib deine Analyse im JSON-Format zurück:
+{
+    "category": "[category_name]",
+    "value": gewählter_wert,
+    "confidence": konfidenz_zwischen_0_und_1,
+    "reasoning": "kurze Begründung mit Bezug auf Kriterium und Ankerbeispiele"
+}
+
+Richtlinien:
+1. Berücksichtige das Kriterium und die Ankerbeispiele
+2. Verwende nur die erlaubten Werte: [values]
+3. Gib eine Konfidenz zwischen 0 und 1 an
+4. Begründe deine Wahl mit Bezug auf das Kriterium
+5. Gib nur das JSON-Objekt zurück, keinen zusätzlichen Text
