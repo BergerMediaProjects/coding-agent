@@ -13,9 +13,6 @@ Für die folgende Kategorie sollst du:
 2. Das Kriterium für die Vergabe des Wertes 1 beachten
 3. Sorgfältig mit den Ankerbeispielen vergleichen
 
-Kategorie:
-[category_name]
-
 Kriterium für Wert 1:
 [criteria]
 

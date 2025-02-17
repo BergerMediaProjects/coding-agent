@@ -19,7 +19,17 @@ The pipeline consists of:
   pip install openai pandas pyyaml pydantic
   ```
 
-## File Structure 
+## File Structure
+
+project_root/
+├── pipeline-draft1.0.py    # Main pipeline script
+├── prompt.txt              # GPT prompt template
+├── requirements.txt        # Python dependencies
+├── utils/                  # Utility scripts
+│   └── generate_test_data.py  # Test data generator
+├── old_data_training/     # Training data directory
+│   └── coding_scheme.yml  # Classification categories
+└── logs/                  # Generated log files
 
 ## License
 
@@ -108,3 +118,25 @@ graph TD
     class GPT,VAL ai
     class CSV_OUT,METRICS,LOGS output
 ```
+
+## Setup
+
+1. Create a `.env` file in the project root:
+```bash
+OPENAI_API_KEY=your-api-key-here
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+## Development
+
+To generate test data for development:
+```bash
+python utils/generate_test_data.py
+```
+This will create:
+- teacher_training_data.csv: Sample training entries
+- human_codes.csv: Simulated human codes

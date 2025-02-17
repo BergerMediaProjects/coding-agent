@@ -1,15 +1,17 @@
 2.0 a Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt explizit:
-  criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass es der Lerninhalt oder das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme zu fördern. Mögliche Synonyme: medienbezogene Kompetenz, digitale Kompetenz, mediale Bildung, Mediendidaktik, medienbezogene Kompetenz, mediendidaktische Kompetenz, medienerzieherische Kompetenz, Medienerziehung. Medien-und Informationsethik; jede Fähigkeit, mit Medien umzugehen (z.B. Fähigkeit ,mit Datenbanken umzugehen; Fähigkeit mit Medien X umzugehen; Gestalten mit digitalen Medien“)'
+  criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass es der Lerninhalt oder das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme zu fördern. Mögliche Synonyme: medienbezogene Kompetenz, digitale Kompetenz, mediale Bildung, Mediendidaktik, medienbezogene Kompetenz, mediendidaktische Kompetenz, medienerzieherische Kompetenz, Medienerziehung. Medien-und Informationsethik; jede Fähigkeit, mit Medien umzugehen (z.B. Fähigkeit ,mit Datenbanken umzugehen; Fähigkeit mit Medien X umzugehen; Gestalten mit digitalen Medien")'
   examples:
   - Die Lehrkräfte erwerben Kompetenzen im Bereich der Medien
   - Die Lehrkräfte sind in der Lage… mit Medien umzugehen
   values: Ja (1); Nein (0)
   
 2.0 b Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt implizit:
-  criteria: 'Kriterium: Die Äußerung/das Segment enthält Komponenten, die darauf implizit hinweisen, dass sie digitale Bildung fördern'
+  criteria: "Die Äußerung/das Segment enthält Komponenten digitaler Bildung/Medienkompetenz"
   examples:
-  - 'Fake News' ohne weitere Angabe
-  values: Ja (1), Nein (0)
+    - "Digitale Medien im Unterricht"
+    - "Online-Lernplattformen"
+    - "Medienkompetenz"
+  values: "Ja (1), Nein (0)"
 2.1.1 Zielkompetenz:
   criteria: Meint die eigenen Medienkompetenzen der Lehrkräfte
   examples:
@@ -25,7 +27,7 @@
   examples:
   - Begriffe: Kenntnisse
   values: Ja (1), Nein (0)
-2.2.1 bedienen und anwenden:
+2.2.1 Bedienen und anwenden:
   criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte Medien bedienen
     und anwenden können.
   examples:
@@ -33,7 +35,7 @@
     Umgang mit dem tablet (hier ipad), WorksheetsCrafter und mit dem bookcreator "technisch
     geschult".
   values: Ja (1) nur, wenn auch 2.1.1 = 1; Nein (0)
-'2.2.2 suchen und verarbeiten ':
+'2.2.2 Suchen und verarbeiten ':
   criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte
     Informationen mithilfe digitaler Medien gezielt recherchieren, relevante Informationen
     identifizieren, analysieren, auswerten, interpretieren und kritisch beurteilen
@@ -41,7 +43,7 @@
   examples:
   - Verwenden von digitalen Medien, um sich zu informieren
   values: Ja (1) nur, wenn auch 2.1.1 = 1; Nein (0)
-2.2.3 kommunizieren und kooperieren:
+2.2.3 Kommunizieren und kooperieren:
   criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte
     mittels digitaler Anwendungen situations- und adressatengerecht kommunizieren
     und/oder in digitalen Umgebungen zu kooperativen Prozessen und Problemlösungen
@@ -50,7 +52,7 @@
   - Verwenden von digitalen Medien, um mit anderen zu kommunizieren und in Projekten
     zusammenzuarbeiten
   values: Ja (1) nur, wenn auch 2.1.1 = 1; Nein (0)
-2.2.4 produzieren und präsentieren:
+2.2.4 Produzieren und präsentieren:
   criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte
     mithilfe digitaler Medien Informationen multimedial unter Berücksichtigung rechtlicher
     Rahmenbedingungen (Urheberrecht, Personenschutz) aufbereiten und an andere kommunizieren
@@ -58,14 +60,14 @@
   examples:
   - Verwenden von digitalen Medien, um selbst Medieninhalte zu erstellen
   values: Ja (1) nur, wenn auch 2.1.1 = 1; Nein (0)
-2.2.5 erkennen von Lernpotenzialen und Entwickeln von Strategien:
+2.2.5 Erkennen von Lernpotenzialen und Entwickeln von Strategien:
   criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte
     lernförderliche Aspekte und Einsatzmöglichkeiten digitaler Medien kennen und in
     der Lage sind, diese gezielt und effektiv für den eigenen Kompetenzerwerb zu nutzen.'
   examples:
   - 'Verwenden von digitalen Medien für das eigene Lernen '
   values: Ja (1) nur, wenn auch 2.1.1 = 1; Nein (0)
-2.2.6 erwerben und anwenden von Wissen:
+2.2.6 Erwerben und Anwenden von Wissen:
   criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte
     über Wissen im Hinblick auf digitale Medien und deren informatische Grundlage
     verfügen und es für den eigenen fachlichen und fachübergreifenden Kompetenzerwerb
@@ -73,19 +75,19 @@
   examples:
   - 'Nutzen von Algorithmen für die Lösung von Problemen'
   values: Ja (1) nur, wenn auch 2.1.1 = 1; Nein (0)
-2.2.7 analysieren, reflektieren und diskutieren:
+2.2.7 Analysieren, reflektieren und diskutieren:
   criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte
     die Chancen und Risiken der digitalen Medien für Individuum und Gesellschaft kennen,
     die Inhalte, Gestaltungsmittel und Wirkungsweisen von Medienangeboten im Hinblick
     auf Wertvorstellungen, Rollen- und Weltbilder analysieren können und in der Lage
     sind deren Auswirkungen auf sich selbst und andere zu reflektieren und diskutieren.'
   examples:
-  - Kennen von  Chancen und Risiken digitaler Medien
+  - Kennen von Chancen und Risiken digitaler Medien
   - Fähigkeit, Medieninhalte kritisch hinterfragen.
   - Fähigkeit, die Wirkung digitaler Medien auf einen selbst und andere zu reflektieren
     und diskutieren.
   values: Ja (1) nur, wenn auch 2.1.1 = 1; Nein (0)
-2.2.8 selbstreguliert und verantwortungsbewusst handeln:
+2.2.8 Selbstreguliert und verantwortungsbewusst handeln:
   criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte
     in der Lage sind ihre Aufmerksamkeit, Emotionen, Impulse und Handlungen im Hinblick
     auf die Nutzung digitaler Medien selbst zu steuern und sich reflektiert unter
@@ -124,7 +126,7 @@
 '2.3.2 Realisierung ':
   criteria: 'Kriterium: Die Äußerung/das Segment enthält, dass Lehrkräfte die Zielkompetenzniveaus
     der Schülerinnen und Schüler diagnostizieren können/ Effizienz und Effektivität
-    digitaler Unterrichtsszenarien einschätzen können/ Lernprozesse „in Echtzeit“
+    digitaler Unterrichtsszenarien einschätzen können/ Lernprozesse "in Echtzeit"
     durch adaptive Hilfe fördern können/ typische medientechnische Probleme im Unterricht
     lösen können/ Strategien zum Umgang mit medienbezogenen Verhaltensproblemen kennen.'
   examples:

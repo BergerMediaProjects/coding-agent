@@ -1,0 +1,223 @@
+Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt explizit:
+  criteria: 'Die Äußerung/das Segment enthält, dass es der Lerninhalt oder das Lernziel
+    ist, Medienkompetenz/digitale Bildung/weitere Synonyme zu fördern. Mögliche Synonyme:
+    medienbezogene Kompetenz, digitale Kompetenz, mediale Bildung, Mediendidaktik,
+    medienbezogene Kompetenz, mediendidaktische Kompetenz, medienerzieherische Kompetenz,
+    Medienerziehung. Medien-und Informationsethik; jede Fähigkeit, mit Medien umzugehen
+    (z.B. Fähigkeit ,mit Datenbanken umzugehen; Fähigkeit mit Medien X umzugehen;
+    Gestalten mit digitalen Medien'')'
+  examples:
+  - '"Die Lehrkräfte erwerben Kompetenzen im Bereich der Medien"'
+  - '"Die Lehrkräfte sind in der Lage… mit Medien umzugehen"'
+  values: '"Ja (1), Nein (0)"'
+Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt implizit:
+  criteria: Die Äußerung/das Segment enthält Komponenten digitaler Bildung/Medienkompetenz
+  examples:
+  - '"Digitale Medien im Unterricht"'
+  - '"Online-Lernplattformen"'
+  - '"Medienkompetenz"'
+  values: '"Ja (1), Nein (0)"'
+Zielkompetenz:
+  criteria: Meint die eigenen Medienkompetenzen der Lehrkräfte
+  examples:
+  - '"Die Lehrkräfte erwerben Kompetenzen im Bereich der Medien"'
+  values: '"Ja (1), Nein (0)"'
+Handlungskomponente:
+  criteria: Handlungskomponente medienbezogener Lehrkompetenzen. Hängt konkret mit
+    dem Unterrichten zusammen.
+  examples:
+  - '"Begriffe: Fähigkeit; Workshop, Praktikum -> wenn auf Unterricht bezogen!"'
+  values: '"Ja (1), Nein (0)"'
+Wissenskomponente:
+  criteria: Wissenskomponente medienbezogener Lehrkompetenzen. Alle Dimensionen außer
+    eine (TK) hängen konkret mit dem Unterrichten zusammen.
+  examples:
+  - '"Begriffe: Kenntnisse"'
+  values: '"Ja (1), Nein (0)"'
+Bedienen und anwenden:
+  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte Medien bedienen
+    und anwenden können.
+  examples:
+  - '"Die Teilnehmerinnen und Teilnehmer werden in zwei eSessions vor dem Lehrgang
+    im Umgang mit dem tablet (hier ipad), WorksheetsCrafter und mit dem bookcreator
+    ''technisch geschult''."'
+  values: '"Ja (1), Nein (0)"'
+Suchen und verarbeiten:
+  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte Informationen
+    mithilfe digitaler Medien gezielt recherchieren, relevante Informationen identifizieren,
+    analysieren, auswerten, interpretieren und kritisch beurteilen können.
+  examples:
+  - '"Verwenden von digitalen Medien, um sich zu informieren"'
+  values: '"Ja (1), Nein (0)"'
+Kommunizieren und kooperieren:
+  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte mittels
+    digitaler Anwendungen situations- und adressatengerecht kommunizieren und/oder
+    in digitalen Umgebungen zu kooperativen Prozessen und Problemlösungen beitragen
+    können.
+  examples:
+  - '"Verwenden von digitalen Medien, um mit anderen zu kommunizieren und in Projekten
+    zusammenzuarbeiten"'
+  values: '"Ja (1), Nein (0)"'
+Produzieren und präsentieren:
+  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte mithilfe
+    digitaler Medien Informationen multimedial unter Berücksichtigung rechtlicher
+    Rahmenbedingungen (Urheberrecht, Personenschutz) aufbereiten und an andere kommunizieren
+    können.
+  examples:
+  - '"Verwenden von digitalen Medien, um selbst Medieninhalte zu erstellen"'
+  values: '"Ja (1), Nein (0)"'
+Erkennen von Lernpotenzialen und Entwickeln von Strategien:
+  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte lernförderliche
+    Aspekte und Einsatzmöglichkeiten digitaler Medien kennen und in der Lage sind,
+    diese gezielt und effektiv für den eigenen Kompetenzerwerb zu nutzen.
+  examples:
+  - '"Verwenden von digitalen Medien für das eigene Lernen"'
+  values: '"Ja (1), Nein (0)"'
+Erwerben und Anwenden von Wissen:
+  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte über Wissen
+    im Hinblick auf digitale Medien und deren informatische Grundlage verfügen und
+    es für den eigenen fachlichen und fachübergreifenden Kompetenzerwerb nutzen können.
+  examples:
+  - '"Nutzen von Algorithmen für die Lösung von Problemen"'
+  values: '"Ja (1), Nein (0)"'
+Analysieren, reflektieren und diskutieren:
+  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte die Chancen
+    und Risiken der digitalen Medien für Individuum und Gesellschaft kennen, die Inhalte,
+    Gestaltungsmittel und Wirkungsweisen von Medienangeboten im Hinblick auf Wertvorstellungen,
+    Rollen- und Weltbilder analysieren können und in der Lage sind deren Auswirkungen
+    auf sich selbst und andere zu reflektieren und diskutieren.
+  examples:
+  - '"Kennen von Chancen und Risiken digitaler Medien"'
+  - '"Fähigkeit, Medieninhalte kritisch hinterfragen."'
+  - '"Fähigkeit, die Wirkung digitaler Medien auf einen selbst und andere zu reflektieren
+    und diskutieren."'
+  values: '"Ja (1), Nein (0)"'
+Selbstreguliert und verantwortungsbewusst handeln:
+  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte in der Lage
+    sind ihre Aufmerksamkeit, Emotionen, Impulse und Handlungen im Hinblick auf die
+    Nutzung digitaler Medien selbst zu steuern und sich reflektiert unter Berücksichtigung
+    ethischer Gesichtspunkte in ihrer medialen Lebenswelt bewegen können und dabei
+    ein sozial- und selbstverantwortliches Verhalten zeigen.
+  examples:
+  - '"Fähigkeit, verantwortungsbewusst mit digitalen Medien umzugehen."'
+  - '"Fähigkeit, die Kontrolle über den eigenen Medienkonsum zu behalten."'
+  values: '"Ja (1), Nein (0)"'
+Planung und Entwicklung:
+  criteria: Die Äußerung/das Segment enthält, dass Lehrkräfte den Einsatz digitaler
+    Medien im Unterricht planen können und/oder Lehrkräfte passende digitale Medien
+    für den Unterricht identifizieren und einbinden können und/oder Lehrkräfte Lehr-Lernszenarien
+    mediengestützt gestalten können und/oder Lehrkräfte  selbstbestimmte, kreative
+    und eigenaktive Mediennutzung der Schülerinnen und Schüler ermöglichen und/oder
+    Lehrkräfte die mediale Erfahrung der Schülerinnen und Schüler berücksichtigen
+    können und/oder Lehrkräfte medienethische und medienrechtliche Konzepte berücksichtigen
+    können und/oder Lehrkräfte motivationale und emotionale Faktoren berücksichtigen
+    können und/oder Lehrkräfte Lehr-Lern-Arrangements zur Förderung der Reflexionsfähigkeit
+    entwickeln können und/oder Lehrkräfte Lehr-Lern-Arrangements zur Förderung von
+    Selbststeuerungskompetenz entwickeln können.
+  examples:
+  - '"Fähigkeit digital gestützte Lehr-Lernszenarien selbstständig oder zusammen mit
+    anderen Lehrkräften zu planen."'
+  - '"Fähigkeit passende digitale Medien für eine pädagogische Aktivität zu finden
+    und in die Planung miteinzubeziehen."'
+  - '"Fähigkeit, den Einsatz digitaler Medien im Unterricht passend zu den pädagogischen
+    Zielen zu planen."'
+  - '"Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung der bisherigen
+    medialen Erfahrungen und Interessen der SchülerInnen zu planen."'
+  - '"Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung von medienrechtlichen
+    und medienethischen Aspekten (z. B. Datenschutz) zu planen."'
+  - '"Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung von motivationalen
+    und emotionalen Faktoren der SchülerInnen zu planen"'
+  values: '"Ja (1), Nein (0)"'
+Realisierung:
+  criteria: Die Äußerung/das Segment enthält, dass Lehrkräfte die Zielkompetenzniveaus
+    der Schülerinnen und Schüler diagnostizieren können/ Effizienz und Effektivität
+    digitaler Unterrichtsszenarien einschätzen können/ Lernprozesse 'in Echtzeit'
+    durch adaptive Hilfe fördern können/ typische medientechnische Probleme im Unterricht
+    lösen können/ Strategien zum Umgang mit medienbezogenen Verhaltensproblemen kennen.
+  examples:
+  - '"Fähigkeit zu erkennen und zu beurteilen, wie medienkompetent die einzelnen SchülerInnen
+    sind"'
+  - '"Fähigkeit, medientechnische Probleme selbst zu lösen, die sich beim Einsatz
+    digitaler Medien ergeben"'
+  - '"Fähigkeit, während des Einsatzes digitaler Medien festzustellen, inwiefern damit
+    den gesetzten pädagogischen (Lern-) Zielen näher gekommen wird"'
+  - '"Fähigkeit, den SchülerInnen passende Hilfestellungen beim Nutzen digitaler Medien
+    zu geben"'
+  - '"Fähigkeit,  medienbezogene Auffälligkeiten im individuellen und sozialen Verhalten
+    der SchülerInnen zu erkennen und angemessen zu reagieren"'
+  values: '"Ja (1), Nein (0)"'
+Evaluation:
+  criteria: Die Äußerung/das Segment enthält, dass Lehrkräfte Informationen zu Unterrichtsprozessen
+    und Lernerfolg systematisch sammeln und auswerten können/den Einsatz digitaler
+    Unterrichtsszenarien reflektieren können.
+  examples:
+  - '"Fähigkeit, Informationen dazu zu sammeln, ob und wie der Einsatz digitaler Medien
+    im Unterricht funktioniert hat."'
+  - '"Fähigkeit, den Einsatz digitaler Medien zu reflektieren, auf Basis der gesammelten
+    Informationen."'
+  - '"Fähigkeit, daraus Schlussfolgerungen für den nächsten Einsatz digitaler Medien
+    zu ziehen."'
+  values: '"Ja (1), Nein (0)"'
+Sharing:
+  criteria: Die Äußerung/das Segment enthält, dass Lehrkräfte digitale Unterrichtsszenarien
+    bezogen auf Ziele, Durchführung, Erfahrungen und Schlussfolgerungen strukturiert
+    beschreiben können/ digitale Unterrichtsszenarien im Rahmen der kollegialen Kooperation
+    an andere kommunizieren und weitergeben können/ digitale Unterrichtsszenarien,
+    die andere entwickelt haben, recherchieren und diese im Hinblick auf die Passung
+    zu den eigenen Unterrichtszielen beurteilen sowie für den eigenen Unterricht adaptieren.
+  examples:
+  - '"Fähigkeit, den eigenen Einsatz digitaler Medien strukturiert zu dokumentieren."'
+  - '"Fähigkeit, eigene Erfahrungen oder auch verwendeten Materialien mit anderen
+    Fachkräften zu teilen."'
+  - '"Fähigkeit, auf Methoden und Inhalte für den Einsatz digitaler Medien zurückzugreifen,
+    die andere entwickelt haben und diese für die eigenen Ziele anzupassen."'
+  values: '"Ja (1), Nein (0)"'
+Technisches Wissen:
+  criteria: Medientechnische und informatische Kenntnisse (Technological Knowledge
+    (TK)
+  examples:
+  - '"Umgang mit Hardware und Software (im Unterricht), Konzeptwissen über Datenbanken
+    und Algorithmen"'
+  - '"Umgang mit Windows. Umgang mit Fotoprogramm"'
+  - '"Wissen, wie man sich in neue digitale Medien und Programme einarbeitet."'
+  - '"Wissen, wie man technische Probleme lösen kann."'
+  - '"Wissen, wie man mit verschiedenen digitalen Medien umgeht."'
+  values: '"Ja (1), Nein (0)"'
+Technisch-Pädagogisches Wissen:
+  criteria: Medientechnische pädagogisch-psychologische Kenntnisse (Technological
+    Pedagogical Knowledge (TPK)
+  examples:
+  - '"Wissen über lernförderliche Aspekte digitaler Medien und wie man diese für die
+    Unterrichtsgestaltung in spezifischen unterrichtlichen Szenarien nutzbar machen
+    kann)"'
+  - '"Wissen darüber, welche digitalen Medien dazu geeignet sind, die eigenen pädagogischen
+    Methoden in der Arbeit mit den SchülerInnen zu verstärken."'
+  - '"Wissen darüber, wie der Einsatz von digitalen Medien an die jeweiligen pädagogischen
+    Zielen angepasst werden kann."'
+  - '"Medien und Methoden"'
+  values: '"Ja (1), Nein (0)"'
+Technisch-Fachliches Wissen:
+  criteria: Medientechnisch-fachliche Kenntnisse (Technological Content Knowledge
+    (TCK)
+  examples:
+  - '"Wissen über Stellenwert und Funktionsweise von Rechensystemen bei der Simulation
+    neuronaler Netzwerke in der Biologie"'
+  - '"Wissen darüber, wie Lerninhalte in bestimmten Bereichen/Fächern mit Medien neu/besser
+    repräsentiert werden können, z.B. durch das Anwenden von einem Matheprogramm am
+    Computer kann ich besser das Thema Funktionen/Graphen veranschaulichen"'
+  - '"Wissen darüber, welche digitalen Medien dafür geeignet sind, den SchülerInnen
+    bestimmte Inhalte zu vermitteln (z.B. Medienkompetenz, Sprachen, Mathematik)"'
+  - '"Medien in Fach/Lernfeld X"'
+  values: '"Ja (1), Nein (0)"'
+Technisch-Fachdidaktisches Wissen:
+  criteria: Medientechnisch-fachdidaktische Kenntnisse (Technological Pedagogical
+    Content Knowledge (TPCK)
+  examples:
+  - '"Wissen über den lernförderlichen Einsatz von Schreibprogrammen im Aufsatzunterricht
+    im Fach Deutsch"'
+  - '"Wissen darüber, wie Medien für den Unterricht/ in Lehr-Lernszenarien eingesetzt
+    werden können und dadurch pädagogische Methoden, Medien und bestimmte Lerninhalte
+    passend miteinander kombiniert werden."'
+  - '"Methoden und Medien im Lernfeld/Fach X"'
+  - '"Praktikum zur Anwendung von Informatiksystemen aus fachdidaktischer Sicht.''"'
+  values: '"Ja (1), Nein (0)"'

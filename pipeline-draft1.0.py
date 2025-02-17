@@ -22,28 +22,25 @@ import yaml
 from sklearn.metrics import cohen_kappa_score
 import os
 import json
-from typing import Dict, List, AsyncGenerator, Optional
+from typing import Dict, List, AsyncGenerator, Optional, Any
 from pydantic import BaseModel, Field
 import asyncio
 import logging
-from atomic_agents import (
-    AtomicAgent,
-    AgentContext,
-    AgentInput,
-    AgentOutput,
-    AgentError
-)
 from datetime import datetime
 from enum import Enum
+from dotenv import load_dotenv
+
+load_dotenv()  # Add this at the top of the file
 
 # Configuration for file paths, logging, and GPT settings
 CONFIG = {
     'paths': {
         'data_csv': "teacher_training_data.csv",        # Input training data
-        'human_codes': "human_codes.csv",               # Human-assigned codes for comparison
-        'coding_scheme': "coding_scheme.yml",           # Category definitions and criteria
+        'human_codes': "human_codes.xlsx",              # Updated: now using Excel
+        'coding_scheme': "coding_scheme.yml",           # Category definitions
         'prompt_template': "prompt.txt",                # Template for GPT prompts
-        'output_base': "ai_coded_results"               # Base name for output files
+        'output_dir': "results",                        # Directory for results
+        'output_base': "results/ai_coded_results"       # Base name for output files
     },
     'logging': {
         'level': 'INFO',
@@ -52,6 +49,11 @@ CONFIG = {
     'gpt': {
         'model': 'gpt-4',                              # GPT model to use
         'temperature': 0.0                             # 0.0 for most consistent results
+    },
+    'test_mode': {
+        'enabled': True,
+        'max_entries': 2,  # Process only 2 entries
+        'max_categories': 2  # Process only 2 categories
     }
 }
 
@@ -118,43 +120,23 @@ class ValidationResult(BaseModel):
     reasoning: str = Field(..., description="Classification reasoning")
 
 class CodingSchemeCategory(BaseModel):
-    """
-    Structure for a single category in the coding scheme
-    
-    Fields:
-    - criteria: Description of what qualifies for this category
-    - examples: List of example cases that would be coded as 1
-    - values: String describing the coding values (typically 'Ja (1), Nein (0)')
-    """
-    criteria: str = Field(..., description="Criteria for coding this category")
-    examples: List[str] = Field(..., description="Example cases for value 1")
-    values: str = Field(..., description="Allowed values (e.g., 'Ja (1), Nein (0)')")
+    """Structure for a single category in the coding scheme"""
+    criteria: str
+    examples: List[str]
+    values: str
 
 class CodingScheme(BaseModel):
-    """Complete coding scheme structure with validation"""
+    """Structure for coding scheme"""
     categories: Dict[str, CodingSchemeCategory]
 
     @classmethod
-    def from_yaml(cls, yaml_dict: Dict) -> 'CodingScheme':
-        """
-        Create validated scheme from raw YAML dict
-        
-        Args:
-            yaml_dict: Raw dictionary from YAML file
-            
-        Returns:
-            Validated CodingScheme
-            
-        Raises:
-            ValueError: If scheme structure is invalid
-        """
-        try:
-            return cls(categories={
-                category_name: CodingSchemeCategory(**category_data)
-                for category_name, category_data in yaml_dict.items()
-            })
-        except Exception as e:
-            raise ValueError(f"Invalid coding scheme structure: {str(e)}")
+    def from_yaml(cls, data: Dict) -> 'CodingScheme':
+        """Create CodingScheme from YAML data"""
+        categories = {
+            key: CodingSchemeCategory(**value) 
+            for key, value in data.items()
+        }
+        return cls(categories=categories)
 
 # ============================================================================
 # Management Components
@@ -171,9 +153,13 @@ class DataManager:
     """
     @staticmethod
     async def load_data(path: str) -> pd.DataFrame:
-        """Load and validate CSV data file"""
+        """Load and validate data file (CSV or XLSX)"""
         try:
-            return pd.read_csv(path)
+            # Determine file type from extension
+            if path.endswith('.xlsx'):
+                return pd.read_excel(path)
+            else:  # default to CSV
+                return pd.read_csv(path)
         except FileNotFoundError:
             raise FileNotFoundError(f"Data file not found: {path}")
         except pd.errors.EmptyDataError:
@@ -183,15 +169,30 @@ class DataManager:
     
     @staticmethod
     async def merge_datasets(main_df: pd.DataFrame, codes_df: pd.DataFrame) -> pd.DataFrame:
-        return main_df.merge(codes_df, how='left', on='title')
+        """Merge training data with human codes"""
+        # Merge on title
+        merged = main_df.merge(codes_df, on='title', how='left')
+        # Fill missing codes with "0"
+        code_columns = [col for col in merged.columns if col.startswith('human_code_')]
+        for col in code_columns:
+            merged[col] = merged[col].fillna("0").astype(str)
+        return merged
     
     @staticmethod
-    async def iterate_entries(df: pd.DataFrame) -> AsyncGenerator[DataEntry, None]:
+    async def iterate_entries(df: pd.DataFrame, category: str) -> AsyncGenerator[DataEntry, None]:
+        """
+        Iterate through entries with correct human code for each category
+        
+        Args:
+            df: DataFrame with entries and human codes
+            category: Current category being processed
+        """
+        human_code_col = f"human_code_{category}"
         for _, row in df.iterrows():
             yield DataEntry(
                 title=row["title"],
                 description=row["description"],
-                human_code=row.get("human_code", "Unknown")
+                human_code=str(row.get(human_code_col, "0"))
             )
 
 class ResourceManager:
@@ -234,45 +235,23 @@ class ResourceManager:
     
     @staticmethod
     async def construct_prompt(template: str, entry: DataEntry, scheme: CodingScheme, category_key: str) -> str:
-        """
-        Constructs prompt for a specific category from the coding scheme
-        
-        Process:
-        1. Get category details from scheme
-        2. Replace placeholders in template:
-           - [title] with entry title
-           - [description] with entry description
-           - [category_name] with category key
-           - [criteria] with category criteria
-           - [values] with allowed values
-           - [examples] with formatted example list
-        
-        Args:
-            template: Base prompt template
-            entry: Training data entry
-            scheme: Validated coding scheme
-            category_key: Category to evaluate
+        """Construct category-specific prompt"""
+        try:
+            print(f"\nConstructing prompt for YAML category: {category_key}")
+            if not category_key in scheme.categories:
+                raise ValueError(f"Category {category_key} not found in coding scheme")
             
-        Returns:
-            Formatted prompt for GPT
-        """
-        # Get the category details from validated scheme
-        category_data = scheme.categories[category_key]
-        
-        # Replace basic placeholders
-        prompt = template.replace("[title]", entry.title)
-        prompt = prompt.replace("[description]", entry.description)
-        
-        # Replace scheme-specific placeholders
-        prompt = prompt.replace("[category_name]", category_key)
-        prompt = prompt.replace("[criteria]", category_data.criteria)
-        prompt = prompt.replace("[values]", category_data.values)
-        
-        # Format examples list with proper indentation
-        examples_text = "\n".join(f"- {example}" for example in category_data.examples)
-        prompt = prompt.replace("[examples]", examples_text)
-        
-        return prompt
+            category = scheme.categories[category_key]
+            prompt = template.replace('[title]', entry.title)
+            prompt = prompt.replace('[description]', entry.description)
+            prompt = prompt.replace('[category_name]', category_key)  # Use exact YAML key
+            prompt = prompt.replace('[criteria]', category.criteria)
+            prompt = prompt.replace('[examples]', '\n'.join(f'- {ex}' for ex in category.examples))
+            prompt = prompt.replace('[values]', category.values)
+            return prompt
+        except Exception as e:
+            print(f"Error constructing prompt: {str(e)}")
+            raise
 
 class ResultsManager:
     """
@@ -286,17 +265,81 @@ class ResultsManager:
        - Cohen's Kappa scores
     """
     @staticmethod
-    def get_timestamped_filename(base_name: str) -> str:
+    def get_timestamped_filename(base_name: str, extension: str) -> str:
         """Generate filename with timestamp"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        return f"{base_name}_{timestamp}.csv"
+        return f"{base_name}_{timestamp}.{extension}"
     
     @staticmethod
     async def save_results(results: List[ProcessingResult], output_base: str):
-        df = pd.DataFrame([result.dict() for result in results])
-        output_path = ResultsManager.get_timestamped_filename(output_base)
-        df.to_csv(output_path, index=False)
-        return output_path
+        """Save results in both CSV and XLSX formats"""
+        # Group results by title
+        entries = {}
+        categories = set()
+        
+        for result in results:
+            if result.title not in entries:
+                # Clean up description by removing extra newlines and whitespace
+                clean_description = ' '.join(
+                    result.description
+                    .replace('\n', ' ')  # Replace newlines with spaces
+                    .split()  # Split on whitespace and rejoin to normalize spaces
+                )
+                entries[result.title] = {
+                    'title': result.title,
+                    'description': clean_description
+                }
+            # Store AI code, human code, and confidence for each category
+            cat = result.category
+            entries[result.title][f'ai_{cat}'] = result.ai_code
+            entries[result.title][f'human_{cat}'] = result.human_code
+            entries[result.title][f'confidence_{cat}'] = f"{result.confidence:.2f}"
+            categories.add(cat)
+        
+        # Convert to DataFrame
+        df = pd.DataFrame.from_dict(entries, orient='index')
+        
+        # Organize columns in desired order
+        ai_cols = [f'ai_{cat}' for cat in sorted(categories)]
+        human_cols = [f'human_{cat}' for cat in sorted(categories)]
+        confidence_cols = [f'confidence_{cat}' for cat in sorted(categories)]
+        
+        columns = ['title', 'description'] + ai_cols + human_cols + confidence_cols
+        df = df.reindex(columns=columns)
+        
+        # Save to CSV
+        csv_path = ResultsManager.get_timestamped_filename(output_base, "csv")
+        df.to_csv(csv_path, index=False)
+        
+        # Save to Excel with formatting
+        xlsx_path = ResultsManager.get_timestamped_filename(output_base, "xlsx")
+        with pd.ExcelWriter(xlsx_path, engine='openpyxl') as writer:
+            df.to_excel(writer, sheet_name='Results', index=False)
+            
+            # Get workbook and worksheet
+            workbook = writer.book
+            worksheet = writer.sheets['Results']
+            
+            # Auto-adjust column widths
+            for column in worksheet.columns:
+                max_length = 0
+                column = [cell for cell in column]
+                for cell in column:
+                    try:
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(str(cell.value))
+                    except:
+                        pass
+                adjusted_width = (max_length + 2)
+                worksheet.column_dimensions[column[0].column_letter].width = adjusted_width
+        
+        print(f"\nResults saved to:")
+        print(f"CSV: {csv_path}")
+        print(f"Excel: {xlsx_path}")
+        print("\nOutput format:")
+        print(df.head(2).to_string())
+        
+        return csv_path, xlsx_path
     
     @staticmethod
     async def calculate_metrics(results: List[ProcessingResult]) -> Dict:
@@ -357,147 +400,107 @@ class ResultsManager:
 # AI and Validation Components
 # ============================================================================
 
-class GPTClassificationInput(AgentInput):
-    """
-    Input structure for GPT classification requests
-    
-    Fields:
-    - prompt: Constructed prompt with category details
-    - model: GPT model to use (default: gpt-4)
-    - temperature: Controls randomness (0.0 for consistent results)
-    """
-    prompt: str = Field(..., description="Prompt to send to GPT")
-    model: str = Field(default="gpt-4", description="GPT model to use")
-    temperature: float = Field(default=0.0, description="Temperature setting")
+class GPTClassificationInput(BaseModel):
+    """Input structure for GPT classification"""
+    prompt: str
+    model: str
+    temperature: float
 
-class GPTClassificationOutput(AgentOutput):
-    """
-    Output structure from GPT classification
-    
-    Fields:
-    - response: Raw JSON response from GPT containing:
-      - value: Classification (0 or 1)
-      - confidence: Confidence score
-      - reasoning: Explanation for classification
-    """
-    response: str = Field(..., description="Raw GPT response")
+class GPTClassificationOutput(BaseModel):
+    """Output structure for GPT classification"""
+    response: str
 
 class ResponseValidator:
-    """
-    Validates and interprets GPT classification responses
+    """Validates and interprets GPT responses"""
     
-    Responsibilities:
-    1. Parse JSON responses from GPT
-    2. Validate classification values (0 or 1)
-    3. Validate and interpret confidence scores
-    4. Handle parsing and validation errors
-    """
-    
-    @staticmethod
-    def get_confidence_level(confidence: float) -> ConfidenceLevel:
-        """
-        Convert numerical confidence to interpretable level
-        
-        Thresholds:
-        - < 0.34: LOW confidence
-        - 0.34-0.66: MEDIUM confidence
-        - > 0.66: HIGH confidence
-        """
-        if confidence < 0.34:
-            return ConfidenceLevel.LOW
-        elif confidence < 0.67:
-            return ConfidenceLevel.MEDIUM
-        return ConfidenceLevel.HIGH
-    
-    def validate_response(self, response: str, logger: logging.Logger = None) -> ValidationResult:
-        """
-        Validate and interpret GPT's classification response
-        
-        Process:
-        1. Parse JSON response
-        2. Validate classification value (0 or 1)
-        3. Validate confidence score (0.0 to 1.0)
-        4. Interpret confidence level
-        5. Extract reasoning
-        
-        Args:
-            response: Raw JSON response from GPT
-            logger: Optional logger for validation issues
-            
-        Returns:
-            ValidationResult with validated and interpreted values
-        """
+    def validate_response(self, response: str, logger: logging.Logger) -> ValidationResult:
+        """Validate and interpret GPT response in JSON format"""
         try:
             # Parse JSON response
-            result = json.loads(response)
+            response_data = json.loads(response)
             
-            # Validate value (must be "0" or "1")
-            value = str(result.get("value", "0"))
-            if value not in ["0", "1"]:
-                raise ValueError(f"Invalid value: {value}. Must be '0' or '1'")
+            # Convert value from "Ja (1)" / "Nein (0)" to "1" / "0"
+            raw_value = response_data.get('value', '0')
+            value = "0"  # default
             
-            # Validate and interpret confidence
-            confidence = float(result.get("confidence", 0.0))
-            if not 0 <= confidence <= 1:
-                raise ValueError(f"Confidence must be between 0 and 1, got: {confidence}")
+            if isinstance(raw_value, str):
+                if 'ja' in raw_value.lower() or '(1)' in raw_value:
+                    value = "1"
+                elif 'nein' in raw_value.lower() or '(0)' in raw_value:
+                    value = "0"
             
-            confidence_level = self.get_confidence_level(confidence)
+            # Debug output for value conversion
+            print(f"\n🔄 Value conversion:")
+            print(f"Raw value from GPT: {raw_value}")
+            print(f"Converted value: {value}")
             
-            # Get reasoning
-            reasoning = str(result.get("reasoning", "No reasoning provided"))
+            # Get confidence and reasoning
+            confidence = float(response_data.get('confidence', 0.0))
+            reasoning = str(response_data.get('reasoning', ''))
             
-            if logger:
-                logger.debug(f"Validated response with {confidence_level} confidence")
+            # Determine confidence level
+            if confidence < 0.33:
+                level = ConfidenceLevel.LOW
+            elif confidence < 0.67:
+                level = ConfidenceLevel.MEDIUM
+            else:
+                level = ConfidenceLevel.HIGH
+            
+            # Debug output
+            logger.debug(f"Parsed response: value={value}, confidence={confidence}")
             
             return ValidationResult(
                 value=value,
                 confidence=confidence,
-                confidence_level=confidence_level,
+                confidence_level=level,
                 reasoning=reasoning
             )
             
-        except (json.JSONDecodeError, ValueError) as e:
-            if logger:
-                logger.warning(f"Validation error: Failed to parse response - {str(e)}")
-            
-            # Return safe defaults on error
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse JSON response: {str(e)}")
             return ValidationResult(
                 value="0",
                 confidence=0.0,
                 confidence_level=ConfidenceLevel.LOW,
-                reasoning=f"Error parsing response: {str(e)}"
+                reasoning=f"Error parsing JSON response: {str(e)}"
             )
 
 # GPT agent handles the AI interaction
-class GPTClassificationAgent(AtomicAgent):
-    """
-    AI agent for classifying training data entries
-    
-    Responsibilities:
-    1. Manage OpenAI API connection
-    2. Send prompts to GPT
-    3. Handle API errors and retries
-    4. Return structured responses
-    
-    Note: Uses AtomicAgent for consistent async processing
-    """
+class GPTClassificationAgent:
+    """GPT agent for classifying training data entries"""
     def __init__(self):
-        super().__init__()
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY", "your-api-key-here"))
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    async def _process(self, input_data: GPTClassificationInput, context: AgentContext) -> GPTClassificationOutput:
-        """
-        Process a single classification request
-        
-        Steps:
-        1. Prepare GPT messages (system + user prompt)
-        2. Send request to OpenAI API
-        3. Extract and return response
-        
-        Raises:
-            AgentError: If API call fails or response is invalid
-        """
+    async def process(self, input_data: GPTClassificationInput) -> GPTClassificationOutput:
         try:
+            # Debug output - safer parsing
+            print("\n🔍 Sending to GPT:")
+            print("=" * 50)
+            try:
+                # Extract title from prompt
+                prompt_lines = input_data.prompt.split('\n')
+                title = next((line.split('Titel: ')[1] for line in prompt_lines 
+                             if 'Titel: ' in line), 'No title found')
+                
+                # Extract category from JSON template - look for the exact YAML key format (e.g., "2.0_a")
+                category = next((line.split('category": "')[1].split('"')[0] 
+                               for line in prompt_lines if '"category": "' in line), 
+                              next((line for line in prompt_lines 
+                                   if any(cat_pattern in line for cat_pattern in ['2.0_', '2.1_', '2.2_', '2.3_', '2.4_'])),
+                              'No category found'))
+                
+                print(f"Title: {title}")
+                print(f"Category from YAML: {category}")
+            except Exception as e:
+                print(f"Error parsing prompt for debug output: {str(e)}")
+                print("Raw prompt:")
+                print(input_data.prompt)
+            
+            print("-" * 50)
+            print("Full Prompt:")
+            print(input_data.prompt)
+            print("=" * 50)
+
             response = self.client.chat.completions.create(
                 model=input_data.model,
                 temperature=input_data.temperature,
@@ -509,9 +512,30 @@ class GPTClassificationAgent(AtomicAgent):
                     {"role": "user", "content": input_data.prompt}
                 ]
             )
-            return GPTClassificationOutput(response=response.choices[0].message.content)
+
+            # Check if we got a valid response
+            if not response.choices:
+                raise Exception("No response received from GPT")
+            
+            response_content = response.choices[0].message.content
+            if not response_content:
+                raise Exception("Empty response from GPT")
+
+            # Debug output for response
+            print("\n📝 GPT Response:")
+            print("=" * 50)
+            print(response_content)
+            print("=" * 50)
+
+            return GPTClassificationOutput(response=response_content)
+
         except Exception as e:
-            raise AgentError(f"Classification error: Failed to get GPT response - {str(e)}")
+            print(f"\n❌ Error in GPT request: {str(e)}")
+            print("Request details:")
+            print(f"Model: {input_data.model}")
+            print(f"Temperature: {input_data.temperature}")
+            print(f"API Key (first 8 chars): {os.getenv('OPENAI_API_KEY')[:8]}...")
+            raise
 
 # ============================================================================
 # Classification Coordinator
@@ -556,7 +580,7 @@ class TrainingDataClassifier:
         self.resource_manager = ResourceManager()
         self.results_manager = ResultsManager()
         self.classification_agent = GPTClassificationAgent()
-        self.response_validator = ResponseValidator()  # Now a regular validator
+        self.response_validator = ResponseValidator()
 
     async def process_entry(self, entry: DataEntry, template: str, scheme: CodingScheme) -> List[ProcessingResult]:
         """
@@ -579,8 +603,20 @@ class TrainingDataClassifier:
         """
         results = []
         
-        for category_key in scheme.categories.keys():
-            self.logger.info(f"Processing category: {category_key}")
+        # Debug output
+        print(f"\n📊 Processing Entry:")
+        print(f"Title: {entry.title}")
+        print(f"Description: {entry.description[:100]}...")  # Show first 100 chars
+        
+        # If in test mode, limit categories
+        categories = list(scheme.categories.keys())
+        if self.config.get('test_mode', {}).get('enabled', False):
+            max_cats = self.config['test_mode']['max_categories']
+            categories = categories[:max_cats]
+            print(f"\n🔬 Test Mode: Processing {max_cats} categories")
+        
+        for category_key in categories:
+            print(f"\n📋 Category: {category_key}")
             
             # Generate prompt and get classification
             prompt = await self.resource_manager.construct_prompt(
@@ -606,6 +642,12 @@ class TrainingDataClassifier:
             )
             
             # Store result
+            print(f"\n Storing result:")
+            print(f"Category: {category_key}")
+            print(f"AI code: {validation_result.value}")
+            print(f"Human code: {entry.human_code}")
+            print(f"Confidence: {validation_result.confidence:.2f}")
+
             results.append(ProcessingResult(
                 title=entry.title,
                 description=entry.description,
@@ -628,24 +670,23 @@ class TrainingDataClassifier:
                 codes = await self.data_manager.load_data(self.config['paths']['human_codes'])
                 dataset = await self.data_manager.merge_datasets(dataset, codes)
             
-            # Load scheme with validation
-            try:
-                scheme = await self.resource_manager.load_scheme(self.config['paths']['coding_scheme'])
-                self.logger.info(f"Loaded coding scheme with {len(scheme.categories)} categories")
-            except ValueError as e:
-                self.logger.error(f"Failed to load coding scheme: {str(e)}")
-                raise
-            
+            # Load scheme
+            scheme = await self.resource_manager.load_scheme(self.config['paths']['coding_scheme'])
             template = await self.resource_manager.load_template(self.config['paths']['prompt_template'])
             
-            # Process entries with validated scheme
+            # Process each category
             all_results = []
-            entry_count = 0
-            async for entry in self.data_manager.iterate_entries(dataset):
-                entry_count += 1
-                self.logger.info(f"Processing entry {entry_count}: {entry.title}")
-                results = await self.process_entry(entry, template, scheme)
-                all_results.extend(results)
+            categories = list(scheme.categories.keys())
+            if self.config.get('test_mode', {}).get('enabled', False):
+                categories = categories[:self.config['test_mode']['max_categories']]
+            
+            for category in categories:
+                entry_count = 0
+                async for entry in self.data_manager.iterate_entries(dataset, category):
+                    entry_count += 1
+                    self.logger.info(f"Processing entry {entry_count} for category {category}")
+                    results = await self.process_entry(entry, template, scheme)
+                    all_results.extend(results)
             
             # Save results with timestamp
             output_path = await self.results_manager.save_results(
@@ -663,9 +704,43 @@ class TrainingDataClassifier:
             
             self.logger.info("Pipeline completed successfully")
             
+        except KeyboardInterrupt:
+            print("\n\n🛑 Process interrupted by user")
+            print("Cleaning up and shutting down...")
+            # Add any cleanup code here
+            return
         except Exception as e:
             self.logger.error(f"Pipeline failed: {str(e)}")
             raise
+        finally:
+            print("\n✨ Pipeline finished")
+
+    async def validate_data_consistency(self):
+        """Validate consistency between data files"""
+        try:
+            # Load files
+            training_data = await self.data_manager.load_data(self.config['paths']['data_csv'])
+            human_codes = await self.data_manager.load_data(self.config['paths']['human_codes'])
+            scheme = await self.resource_manager.load_scheme(self.config['paths']['coding_scheme'])
+            
+            # Check column presence
+            print("\nValidating data consistency:")
+            print("1. Training data columns:", training_data.columns.tolist())
+            print("2. Human codes columns:", human_codes.columns.tolist())
+            print("3. Categories in scheme:", list(scheme.categories.keys()))
+            
+            # Check matching entries
+            training_titles = set(training_data['title'])
+            human_code_titles = set(human_codes['title'])
+            if training_titles != human_code_titles:
+                print("\n⚠️ Warning: Mismatched titles between training data and human codes")
+                print("Missing in human codes:", training_titles - human_code_titles)
+                print("Extra in human codes:", human_code_titles - training_titles)
+            
+            return True
+        except Exception as e:
+            print(f"\n❌ Data consistency error: {str(e)}")
+            return False
 
 async def main():
     """
@@ -681,8 +756,9 @@ async def main():
        - Run classification process
        - Handle any errors
     """
-    # Ensure logs directory exists
+    # Ensure required directories exist
     os.makedirs('logs', exist_ok=True)
+    os.makedirs(CONFIG['paths']['output_dir'], exist_ok=True)  # Create results directory
     
     # Setup logging with both console and file output
     logging.basicConfig(
@@ -693,6 +769,29 @@ async def main():
             logging.FileHandler(CONFIG['logging']['file'])  # File output
         ]
     )
+    
+    # Check if required files exist
+    required_files = [
+        CONFIG['paths']['data_csv'],
+        CONFIG['paths']['human_codes'],
+        CONFIG['paths']['coding_scheme'],
+        CONFIG['paths']['prompt_template']
+    ]
+    
+    missing_files = [f for f in required_files if not os.path.exists(f)]
+    if missing_files:
+        print("Error: Missing required files:")
+        for file in missing_files:
+            print(f"- {file}")
+        print("\nTo generate test data, run:")
+        print("python utils/generate_test_data.py")
+        return
+    
+    # Add this debug line
+    if not os.getenv("OPENAI_API_KEY"):
+        print("Error: OPENAI_API_KEY not found in environment variables")
+        print("Please add your API key to the .env file")
+        return
     
     # Run classifier
     classifier = TrainingDataClassifier(CONFIG)
