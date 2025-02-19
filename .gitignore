@@ -1,0 +1,20 @@
+# Logs
+log/
+*.log
+
+# Results
+results/
+*.csv
+*.xlsx
+
+# Data files
+teacher_training_data.csv
+human_codes.xlsx
+generate_test_data.py
+utils/yaml_generator.py
+
+# Environment
+.env
+config.yml
+*.pyc
+__pycache__/
