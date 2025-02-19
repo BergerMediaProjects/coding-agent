@@ -29,6 +29,7 @@ import logging
 from datetime import datetime
 from enum import Enum
 from dotenv import load_dotenv
+import sys
 
 load_dotenv()  # Add this at the top of the file
 
@@ -40,6 +41,7 @@ CONFIG = {
         'coding_scheme': "coding_scheme.yml",           # Category definitions
         'prompt_template': "prompt.txt",                # Template for GPT prompts
         'output_dir': "results",                        # Directory for results
+        'log_dir': "log",  # Added log directory config
         'output_base': "results/ai_coded_results"       # Base name for output files
     },
     'logging': {
@@ -470,36 +472,35 @@ class GPTClassificationAgent:
     """GPT agent for classifying training data entries"""
     def __init__(self):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.logger = logging.getLogger('gpt_agent')  # Get a logger for GPT agent
 
     async def process(self, input_data: GPTClassificationInput) -> GPTClassificationOutput:
         try:
             # Debug output - safer parsing
-            print("\n🔍 Sending to GPT:")
-            print("=" * 50)
+            self.logger.info("\n🔍 Sending to GPT:")
+            self.logger.info("=" * 50)
             try:
                 # Extract title from prompt
                 prompt_lines = input_data.prompt.split('\n')
                 title = next((line.split('Titel: ')[1] for line in prompt_lines 
-                             if 'Titel: ' in line), 'No title found')
+                            if 'Titel: ' in line), 'No title found')
                 
-                # Extract category from JSON template - look for the exact YAML key format (e.g., "2.0_a")
+                # Extract category from JSON template
                 category = next((line.split('category": "')[1].split('"')[0] 
                                for line in prompt_lines if '"category": "' in line), 
-                              next((line for line in prompt_lines 
-                                   if any(cat_pattern in line for cat_pattern in ['2.0_', '2.1_', '2.2_', '2.3_', '2.4_'])),
-                              'No category found'))
+                              'No category found')
                 
-                print(f"Title: {title}")
-                print(f"Category from YAML: {category}")
+                self.logger.info(f"Title: {title}")
+                self.logger.info(f"Category: {category}")
             except Exception as e:
-                print(f"Error parsing prompt for debug output: {str(e)}")
-                print("Raw prompt:")
-                print(input_data.prompt)
+                self.logger.error(f"Error parsing prompt for debug output: {str(e)}")
+                self.logger.info("Raw prompt:")
+                self.logger.info(input_data.prompt)
             
-            print("-" * 50)
-            print("Full Prompt:")
-            print(input_data.prompt)
-            print("=" * 50)
+            self.logger.info("-" * 50)
+            self.logger.info("Full Prompt:")
+            self.logger.info(input_data.prompt)
+            self.logger.info("=" * 50)
 
             response = self.client.chat.completions.create(
                 model=input_data.model,
@@ -522,19 +523,19 @@ class GPTClassificationAgent:
                 raise Exception("Empty response from GPT")
 
             # Debug output for response
-            print("\n📝 GPT Response:")
-            print("=" * 50)
-            print(response_content)
-            print("=" * 50)
+            self.logger.info("\n📝 GPT Response:")
+            self.logger.info("=" * 50)
+            self.logger.info(response_content)
+            self.logger.info("=" * 50)
 
             return GPTClassificationOutput(response=response_content)
 
         except Exception as e:
-            print(f"\n❌ Error in GPT request: {str(e)}")
-            print("Request details:")
-            print(f"Model: {input_data.model}")
-            print(f"Temperature: {input_data.temperature}")
-            print(f"API Key (first 8 chars): {os.getenv('OPENAI_API_KEY')[:8]}...")
+            self.logger.error(f"\n❌ Error in GPT request: {str(e)}")
+            self.logger.error("Request details:")
+            self.logger.error(f"Model: {input_data.model}")
+            self.logger.error(f"Temperature: {input_data.temperature}")
+            self.logger.error(f"API Key (first 8 chars): {os.getenv('OPENAI_API_KEY')[:8]}...")
             raise
 
 # ============================================================================
@@ -743,59 +744,90 @@ class TrainingDataClassifier:
             return False
 
 async def main():
-    """
-    Main entry point for the classification pipeline
+    """Main entry point for the classification pipeline"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    Process:
-    1. Setup environment:
-       - Create logs directory
-       - Configure logging
-       
-    2. Initialize and run classifier:
-       - Create TrainingDataClassifier with config
-       - Run classification process
-       - Handle any errors
-    """
-    # Ensure required directories exist
-    os.makedirs('logs', exist_ok=True)
-    os.makedirs(CONFIG['paths']['output_dir'], exist_ok=True)  # Create results directory
+    # Create directory structure
+    os.makedirs('log', exist_ok=True)
+    os.makedirs(CONFIG['paths']['output_dir'], exist_ok=True)
     
-    # Setup logging with both console and file output
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.StreamHandler(),  # Console output
-            logging.FileHandler(CONFIG['logging']['file'])  # File output
+    # Create run-specific log file
+    log_file = os.path.join('log', f'pipeline_run_{timestamp}.log')
+    
+    # Setup logging with custom formatting
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    
+    # File handler
+    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    file_handler.setFormatter(formatter)
+    
+    # Console handler
+    console_handler = logging.StreamHandler(sys.stdout)  # Explicitly use stdout
+    console_handler.setFormatter(formatter)
+    
+    # Setup root logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    root_logger.addHandler(file_handler)
+    root_logger.addHandler(console_handler)
+    
+    # Get our specific logger
+    logger = logging.getLogger('pipeline_run')
+    
+    try:
+        # Log configuration details
+        logger.info("=== Pipeline Run Configuration ===")
+        logger.info(f"Timestamp: {timestamp}")
+        logger.info(f"GPT Model: {CONFIG['gpt']['model']}")
+        logger.info(f"Temperature: {CONFIG['gpt']['temperature']}")
+        
+        # Log complete coding scheme
+        logger.info("\n=== APPENDIX: Complete Coding Scheme ===")
+        with open(CONFIG['paths']['coding_scheme'], 'r', encoding='utf-8') as f:
+            scheme = yaml.safe_load(f)
+            scheme_str = yaml.dump(scheme, allow_unicode=True, default_flow_style=False)
+            logger.info("\nCoding Scheme Structure:")
+            logger.info("-" * 80)
+            for line in scheme_str.split('\n'):
+                logger.info(line)
+            logger.info("-" * 80)
+            
+            # Also log summary of categories
+            logger.info("\nCategories Summary:")
+            for category in scheme.keys():
+                logger.info(f"- {category}")
+        
+        # Check required files
+        required_files = [
+            CONFIG['paths']['data_csv'],
+            CONFIG['paths']['human_codes'],
+            CONFIG['paths']['coding_scheme'],
+            CONFIG['paths']['prompt_template']
         ]
-    )
-    
-    # Check if required files exist
-    required_files = [
-        CONFIG['paths']['data_csv'],
-        CONFIG['paths']['human_codes'],
-        CONFIG['paths']['coding_scheme'],
-        CONFIG['paths']['prompt_template']
-    ]
-    
-    missing_files = [f for f in required_files if not os.path.exists(f)]
-    if missing_files:
-        print("Error: Missing required files:")
-        for file in missing_files:
-            print(f"- {file}")
-        print("\nTo generate test data, run:")
-        print("python utils/generate_test_data.py")
-        return
-    
-    # Add this debug line
-    if not os.getenv("OPENAI_API_KEY"):
-        print("Error: OPENAI_API_KEY not found in environment variables")
-        print("Please add your API key to the .env file")
-        return
-    
-    # Run classifier
-    classifier = TrainingDataClassifier(CONFIG)
-    await classifier.run()
+        
+        missing_files = [f for f in required_files if not os.path.exists(f)]
+        if missing_files:
+            logger.error("Missing required files:")
+            for file in missing_files:
+                logger.error(f"- {file}")
+            return
+        
+        # Check API key
+        if not os.getenv("OPENAI_API_KEY"):
+            logger.error("OPENAI_API_KEY not found in environment variables")
+            return
+        
+        # Create and run classifier
+        classifier = TrainingDataClassifier(CONFIG)
+        await classifier.run()
+        
+        logger.info("=== Pipeline Run Completed ===")
+        
+    except Exception as e:
+        logger.error(f"Pipeline failed: {str(e)}", exc_info=True)
+    finally:
+        # Log final timestamp
+        logger.info(f"Run finished at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 if __name__ == "__main__":
     asyncio.run(main())
