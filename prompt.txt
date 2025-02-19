@@ -10,13 +10,13 @@ Beschreibung: [description]
 Codieranweisungen:
 Für die folgende Kategorie sollst du:
 1. Einen Wert ([values]) basierend auf Titel und Beschreibung zuweisen
-2. Das Kriterium für die Vergabe des Wertes 1 beachten
+2. Das Kriterium beachten
 3. Sorgfältig mit den Ankerbeispielen vergleichen
 
-Kriterium für Wert 1:
+Kriterium:
 [criteria]
 
-Ankerbeispiele für den Wert 1:
+Ankerbeispiele:
 [examples]
 
 Bitte gib deine Analyse im JSON-Format zurück:

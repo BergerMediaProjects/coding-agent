@@ -3,4 +3,5 @@ pandas
 pyyaml
 pydantic
 openpyxl
-python-dotenv 
+python-dotenv
+python-docx 

@@ -1,113 +1,103 @@
 """
-Utility script for generating test data with illustrative examples
+Test data generator for the AI pipeline
+Generates example course descriptions and their corresponding codes
 """
 import pandas as pd
 import yaml
 import os
 import random
 
-def load_categories():
-    """Load categories from coding scheme"""
+def load_coding_scheme(file_path='coding_scheme.yml'):
+    """Load the coding scheme from YAML file"""
     try:
-        with open('coding_scheme.yml', 'r', encoding='utf-8') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             scheme = yaml.safe_load(file)
-            print("\nCategories found in YAML:")
-            for key in scheme.keys():
-                print(f"- {key}")
-            return list(scheme.keys())
+            print(f"\nLoaded {len(scheme)} categories from coding scheme")
+            return scheme
     except Exception as e:
         print(f"Error loading coding scheme: {e}")
-        return []
+        return {}
 
 def generate_test_entries():
-    """Generate two illustrative test entries"""
+    """Generate example course entries"""
     entries = [
         {
-            'title': "Digitale Medien im Mathematikunterricht",
-            'description': """In diesem Workshop lernen Lehrkräfte den Einsatz digitaler 
-            Werkzeuge für den Mathematikunterricht. Schwerpunkte sind: GeoGebra für 
-            geometrische Konstruktionen, Tabellenkalkulationen für Statistik, und 
-            Online-Lernplattformen für individualisiertes Üben. Teilnehmende entwickeln 
-            eigene digitale Unterrichtsmaterialien."""
+            'title': "Lerninhalte nutzerfreundlich aufbereiten - Kursgestaltung mit Moodle",
+            'description': """04.05.2021
+14:00 - 16:00
+Diese Fortbildung wird online stattfinden.
+
+Zielgruppe
+Die Fortbildung richtet sich an Lehrende, Mitarbeitende, TutorInnen und die Lehre unterstützende Studierende der Hochschule München sowie anderer bayerischer Hochschulen.
+
+Voraussetzungen
+"Erste Schritte in Moodle" oder vergleichbare Erfahrungen mit Moodle
+
+Lernziele
+Inhalte
+In dieser Fortbildung setzen Sie sich mit den aktuell in Moodle verfügbaren Kursformaten auseinander. Ein besonderer Fokus liegt hierbei auf den vielfältigen Konfigurationsmöglichkeiten des Grid Formats."""
         },
         {
-            'title': "Klassenführung und Konfliktmanagement",
-            'description': """Dieser Grundlagenkurs vermittelt traditionelle Methoden 
-            der Klassenführung. Themen sind: Regeln aufstellen und durchsetzen, 
-            Störungen vorbeugen, konstruktiver Umgang mit Konflikten, Gestaltung eines 
-            positiven Lernklimas. Praxisnahe Übungen und Fallbeispiele."""
+            'title': "Lehrvideos leicht gemacht - Umsetzung und Einsatz bei Dokumentation, Reflexion und Feedback",
+            'description': """02.12.2021
+09:30 - 12:30
+In dieser Fortbildung lernen Sie die praktische Umsetzung didaktischer Einsatzszenarien mittels Lehrvideos rund um die Themen Dokumentation, Reflexion und Feedback in der Lehre kennen.
+
+Raum T0.012
+T-Bau (Dachauer Straße 100a, EG links)
+
+Zielgruppe
+Die Fortbildung richtet sich an Lehrende der Hochschule München sowie anderer bayerischer Hochschulen."""
         }
     ]
     
+    # Save entries to CSV
     df = pd.DataFrame(entries)
-    df.to_csv('teacher_training_data.csv', index=False)
-    print("Generated 2 test entries:")
-    print("\nEntry 1: Digital example")
-    print(f"Title: {entries[0]['title']}")
-    print(f"Description: {entries[0]['description'][:100]}...")
-    print("\nEntry 2: Traditional example")
-    print(f"Title: {entries[1]['title']}")
-    print(f"Description: {entries[1]['description'][:100]}...")
-
-def get_code_probability(category: str, is_digital: bool) -> float:
-    """
-    Get probability of code being 1 based on category and content type
-    """
-    # Digital competence categories (higher chance of 1 for digital content)
-    if category.startswith(('2.2.', '2.4.')):
-        return 0.9 if is_digital else 0.1
+    df.to_csv('training_data.csv', index=False)
     
-    # Teaching methodology categories (can be either)
-    elif category.startswith('2.3.'):
-        return 0.6 if is_digital else 0.4
+    print("\nGenerated test entries:")
+    for i, entry in enumerate(entries, 1):
+        print(f"\nEntry {i}:")
+        print(f"Title: {entry['title']}")
+        print(f"Description excerpt: {entry['description'][:100]}...")
     
-    # General categories (random)
-    else:
-        return 0.5
+    return df
 
-def generate_human_codes():
-    """Generate human codes for test entries with realistic variation"""
-    try:
-        # Read training data with both title and description
-        df = pd.read_csv('teacher_training_data.csv')
-        categories = load_categories()  # Get categories from YAML
+def generate_codes(entries_df, coding_scheme):
+    """Generate codes for each entry according to the coding scheme"""
+    # Start with titles
+    codes_df = pd.DataFrame({'title': entries_df['title']})
+    
+    # Generate codes for each category
+    for category, details in coding_scheme.items():
+        codes = []
+        for _, entry in entries_df.iterrows():
+            # Simple rule: 1 if digital-related, 0 otherwise
+            is_digital = any(word in entry['title'].lower() 
+                           for word in ['digital', 'online', 'moodle', 'video'])
+            code = "1" if is_digital else "0"
+            codes.append(code)
         
-        # Initialize DataFrame with title only (description not needed in human codes)
-        codes_df = pd.DataFrame({'title': df['title']})
+        codes_df[category] = codes
+    
+    # Save to Excel
+    codes_df.to_excel('human_codes.xlsx', index=False)
+    print(f"\nGenerated codes for {len(coding_scheme)} categories")
+    return codes_df
+
+def main():
+    print("Generating test dataset...")
+    
+    # Load coding scheme
+    scheme = load_coding_scheme()
+    if not scheme:
+        return
         
-        # Generate codes for each category
-        for category in categories:
-            codes = []
-            for _, row in df.iterrows():
-                is_digital = 'digital' in row['title'].lower()
-                prob = get_code_probability(category, is_digital)
-                code = "1" if random.random() < prob else "0"
-                codes.append(code)
-            
-            column_name = f"human_code_{category}"
-            codes_df[column_name] = codes
-        
-        # Save to Excel with formatting
-        with pd.ExcelWriter('human_codes.xlsx', engine='openpyxl') as writer:
-            codes_df.to_excel(writer, index=False)
-            
-            # Auto-adjust column widths
-            worksheet = writer.sheets['Sheet1']
-            for idx, col in enumerate(codes_df.columns):
-                max_length = max(
-                    codes_df[col].astype(str).apply(len).max(),
-                    len(col)
-                )
-                worksheet.column_dimensions[chr(65 + idx)].width = min(max_length + 2, 50)
-        
-        print(f"\nGenerated human codes for {len(categories)} categories")
-        print("\nCodes for both entries:")
-        print(codes_df.to_string())
-        
-    except Exception as e:
-        print(f"Error generating human codes: {e}")
+    # Generate test entries
+    entries_df = generate_test_entries()
+    
+    # Generate codes
+    codes_df = generate_codes(entries_df, scheme)
 
 if __name__ == "__main__":
-    print("Generating illustrative test dataset...")
-    generate_test_entries()
-    generate_human_codes() 
+    main() 

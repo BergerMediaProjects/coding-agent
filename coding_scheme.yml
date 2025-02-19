@@ -1,223 +1,537 @@
+Kursname:
+  criteria: Vorsätze wie „Neu:“, … sind nicht Teil des Titels und werden nicht übernommen.
+  examples:
+  - '""'
+  values: '"(kopiere hier den Titel des Kurses)"'
+Anbieter:
+  criteria: '1: Hochschulen und einzelne Abteilungen von Hochschulen, die sich mit
+    der Fortbildung von Lehrenden beschäftigen (z.B. ProfilLehre(Plus) Augsburg/LMU/…)
+
+
+    2: externe Einrichtungen, die sich mit der Fortbildung von Lehrenden beschäftigen
+    und nicht mit einer konkreten Hochschule assoziiert sind (z.B. DIZ, BayLern, …)'
+  examples:
+  - '""'
+  values: '"Hochschule (1), externer Anbieter (2)"'
+Name der Hochschule:
+  criteria: "Hier geht es nur um die Hochschulen, die in unserer Stichprobe sind,\
+    \ das heißt es geht hier NICHT um den Anbieter (z.B. vhb). \n\nDie Namen immer\
+    \ voll ausschreiben, bzw. die Abkürzungen in () angeben.\n\nHochschule für angewandte\
+    \ Wissenschaft mit HAW abkürzen."
+  examples:
+  - '""'
+  values: "\"Universität Augsburg\nOtto-Friedrich-Universität Bamberg\nUniversität\
+    \ Bayreuth\nFriedrich-Alexander-Universität (FAU) Erlangen-Nürnberg \nLudwig-Maximilians-Universität\
+    \ (LMU) München \nTechnische Universität München (TUM)\nUniversität Passau\nUniversität\
+    \ Regensburg\nJulius-Maximilians-Universität Würzburg\nOstbayerische Technische\
+    \ Hochschule Amberg-Weiden\nHochschule Ansbach\nTechnische Hochschule Aschaffenburg\n\
+    Hochschule Augsburg\nHochschule Coburg\nTechnische Hochschule Deggendorf (THD)\n\
+    Hochschule Hof\nTechnische Hochschule Ingolstadt (THI)\nHochschule Kempten\nHochschule\
+    \ Landshut\nHochschule für angewandte Wissenschaften München\nHochschule Neu-Ulm\n\
+    Technische Hochschule Nürnberg Georg Simon Ohm \nName der Hochschule unklar (externer\
+    \ Anbieter)\nOstbayerische Technische Hochschule (OTH) Regensburg \nTechnische\
+    \ Hochschule Rosenheim\nHochschule Weihenstephan-Triesdorf\nHochschule Würzburg-Schweinfurt\n\
+    (ggf. Weitere)\n-99\""
+Annehmerhochschulen des Hochschulanbieters:
+  criteria: 'Weitere zusätzliche bayrische Hochschulen (siehe Liste 1.2.1.), die das
+    Angebot des unter 1.2.1. genannten Hochschulanbieters nutzen können
+
+
+    Offen: konkret genannte weitere Hochschule(n)
+
+
+    Mehrere Hochschulen: Nutzbarkeit gegeben für weitere Hochschulen, ohne dass diese
+    einzeln namentlich genannt sind.'
+  examples:
+  - '"Mehrere Hochschulen = z.B. „gilt für bayerische Hochschulen“, „alle bayrischen
+    Universitäten“, …"'
+  values: '"offen"'
+Anzahl:
+  criteria: "Meint hauptsächlich, wenn ein inhaltlich identisches Angebot an mehreren\
+    \ unterschiedlichen Terminen angeboten und aufgelistet wird (s. Frage 9 FAQ)\n\
+    \nWichtig als Info festzuhalten (wenn mehrmals angeboten können den Kurs auch\
+    \ mehr Leute nutzen), für Auswertung aber nicht relevant. \n\nMeint keine Duplikate"
+  examples:
+  - '"1,2,3,4,5,6"'
+  values: '"Anzahl der Termine, falls mehrere Angeboten werden (n)"'
+Dozent_in:
+  criteria: ''
+  examples:
+  - '""'
+  values: '"(kopiere hier den Vor- und Nachnamen der Lehrperson); Information nicht
+    verfügbar (-99)"'
+Veranstaltungsart:
+  criteria: 'Seminar: Seminar, Kurs, Workshop, Vorlesung, Schulung, Fortbildung
+
+
+    Coaching: Coaching, Beratung, Teaching Analysis Poll]
+
+
+    Event: Event, Forum, Arbeitskreis(AK), Fachdidaktischer Arbeitskreis (FDAK), Lehrtreff,
+    Tag der Lehre, Konferenz
+
+
+    Weitere: keine der oben genannten
+
+
+    -99: Information ist nicht aus dem Text erkennbar
+
+
+    CAVE: Kontext mitberücksichtigen und sorgfältig am Fall prüfen, statt direkter
+    Begriffszuordnung. Vorlesung kann z.B. sowohl Seminar als auch Event sein.'
+  examples:
+  - '"Bsp. für weitere (offen): „weitere Fortbildung“; „weitere Multiplikatorenprogramm“"'
+  values: '"Seminar (1); Event (2);  Coaching (3); Weitere (4); Information nicht
+    verfügbar (-99)"'
+Format der Veranstaltung Präsenz/Online:
+  criteria: 'Präsenz, Online und Hybrid setzen eine explizite oder eine offensichtlich
+    implizite Beschreibung voraus
+
+
+    Angabe eines Raumes/Ortes als Indiz für Präsenz
+
+
+    -99, wenn das Veranstaltungsformat nicht thematisiert ist'
+  examples:
+  - '"Lehrvideos leicht gemacht, HAW München"'
+  values: '"Präsenz; Online; Hybrid; Information nicht verfügbar (-99)"'
+Format der Veranstaltung synchron:
+  criteria: 'Synchron, Asynchron und Kombination setzen eine explizite oder eine offensichtlich
+    implizite Beschreibung voraus
+
+
+    Wenn die Beschreibung enthält, dass der Kurs in Präsenz stattfindet, wird mit
+    -99 kodiert.'
+  examples:
+  - '"Zoom-Video-Konferenz(-Link) als Indiz für synchron, außer weitere asynchrone
+    Elemente sind thematisiert"'
+  - '""'
+  - '"Workshop „an einem Tag“ implizieren synchron (Bsp. Audio in der Hochschullehre,
+    TUM)"'
+  values: '"Synchron; Asynchron;  Kombination;  Information nicht relevant (-99)"'
+Stattfinden der Veranstaltung:
+  criteria: 'Nein = Angabe “Kurs wurde abgesagt” o.ä.
+
+
+    Wenn nicht explizit mit dabei steht, dass die Veranstaltung abgesagt/verschoben/…
+    wurde, nehmen wir „Ja (1)“ an.'
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Termin der Veranstaltung:
+  criteria: ''
+  examples:
+  - '""'
+  values: '"Festgelegt (1); Auf Nachfrage/Anfrage (2); -99"'
+Dauer:
+  criteria: 'Summe der Angebotsdauer
+
+
+    Möglichst zwei Mal ausrechnen.'
+  examples:
+  - '""'
+  values: '"offen"'
+Semester:
+  criteria: 'Zeitraum SoSe21: 1.April.2021 bis einschließlich 30. September 2021
+
+    WiSe 2122: 1.Oktober.2021 bis einschließlich 31.März 2022.
+
+
+    Wenn wir einen Kurs finden, für den kein konkretes Datum angegeben wird, und auch
+    kein expliziter Bezug aufs WiSe oder SoSe klar ist; Angebote, die nach Bedarf/Nachfrage
+    stattfinden -> kodieren wir trotzdem, da wir eine „Momentaufnahme“ der Suche machen
+    -> -99'
+  examples:
+  - '""'
+  values: '"SoSe25; WiSe24/25; -99"'
+Zielgruppe:
+  criteria: "Sollte eigentlich immer L beinhalten + ggf. eine der anderen Optionen\n\
+    \nnfrage hremde fallen alle ge (2)  r kodieren und dann ggf. en er Stichprobe\
+    \ sind, das heißt es geht hier NICHT um den Anbieter \nUnter Lehrende fallen alle\
+    \ Zielgruppen, die klar Dozierende sind, bzw. bei denen wir nicht ausschließen\
+    \ können, dass sie keine Dozierenden sind. \n\nSollte in vielen Fällen explizit\
+    \ dabeistehen vs. L kann aufgrund der Vorauswahl vorausgesetzt werden."
+  examples:
+  - '"Lehrende = Professor:in, Dozierende, Kopfstellenadministratoren; Multiplikator*innen
+    für E-Learning der vhb-Trägerschulen"'
+  values: '"Lehrende (L); Tutor:in (T); Mitarbeiter:in (M); Hiwi (S); Berater:in (B)"'
+Fachbereich:
+  criteria: ''
+  examples:
+  - '""'
+  values: '"Naturwissenschaften (1)
+
+    Ingenieurwissenschaften (2)
+
+    Rechtswissenschaften (3)
+
+    Wirtschaftswissenschaften (4)
+
+    Sozialwissenschaften (5)
+
+    Geisteswissenschaften (6)
+
+    Kulturwissenschaften (7)
+
+    Sprachwissenschaften (8)
+
+    Medizin (9)
+
+    Allgemeine Didaktik (10)
+
+    Nicht zuzuordnen/unklar: _____ (-99)"'
+Fachbereich offen:
+  criteria: ''
+  examples:
+  - '""'
+  values: '"offen"'
+Kompetenzbereich des Zertifikats Hochschullehre:
+  criteria: "explizit genannt/Bezug genommen \n\nz.T. wird allein über die Buchstaben\
+    \ (A-E) die Verbindung hergestellt: \nLehrkategorie „ProfilLehre a“ (Bsp. Uni\
+    \ Augsburg)\nBuchstabennummerierung vor dem Titel des Angebots (Bsp. A19: Online-Lehre\
+    \ attraktiv gestalten)"
+  examples:
+  - '"Gemischtes Angebot (G) z.B., wenn bei einem Fortbildungsangebot Punkte für „Lehr-
+    und Lernkonzepte (A)“ und „Prüfen (C)“ erwerben werden können, kodieren wir: „A;
+    C; G“"'
+  values: '"Lehr- und Lernkonzepte (A); Präsentation und Kommunikation (B); Prüfen
+    (C); Reflexion und Evaluation (D); Beraten und Begleiten (E); Bezug aufs Zertifikat
+    allgemein (Z); Gemischtes Angebot (G); -99"'
+Pädagogisch-didaktisches Angebot allgemeiner oder fachbereichsspezifischer Art/ Lehre:
+  criteria: Wir kodieren hier „1“, wenn ein Angebot explizit/implizit deklariert ist
+    als pädagogisch-didaktisches Angebot allgemeiner oder fachbereichsspezifischer
+    Art.  Bestimmte Stichwörter können darauf hinweisen, wir machen es aber nicht
+    nur konkret an bestimmten Stichpunkten fest, sondern erschließen uns den Bezug
+    auf pädagogisch-didaktisch/Lehre anhand des Textes. Die meisten Angebote sollten
+    so einen Bezug eigentlich haben.
+  examples:
+  - '"Stichwörter:"'
+  - '"„Lehre“, „Lehrmaterial“, „Studierende“, „Didaktik“, „Prüfungen“"'
+  - '""'
+  - '"Auch kodieren wenn Zertifikatsbereich vorhanden ist"'
+  values: '"Ja (1), Nein (0)"'
+Vorkenntnisse für Teilnahme erforderlich:
+  criteria: "Sollte vergleichbar/gleich bei Angeboten dabeistehen\n\nMeint Kompetenzen/Kenntnisse,\
+    \ welche die Teilnehmenden aufweisen sollten – nicht sachliche/infrastrukturelle\
+    \ Rahmenbedingungen \n\nCode 2 bei vertieften, guten … computerbezogenen Kenntnissen\
+    \ \n\nBsp. für Code 1: grundlegende Moodlekenntnisse, allgemeine Computerkentnisse\n\
+    \nCode 0, wenn Vorkenntnisse/Voraussetzungen thematisiert wurden und keine genannt\
+    \ wurden oder abstrakte Dinge wie „Forschungsfreude“ genannt wurden. \n\nCode\
+    \ -99, wenn Vorkenntnisse/Voraussetzungen nirgends thematisiert wurden"
+  examples:
+  - '"„Grundlagenseminar“ synonym für „Vorkenntnisse nicht erforderlich“ Bsp. Uni
+    Passau 2018"'
+  - '""'
+  - '"Synonym für Vorkenntnisse:  „Voraussetzung“ (s. TUM 2018 „  Digitale Medien
+    in der Lehre:Didaktische Konzepte,"'
+  - '"Formen, Praxisbeispiele“"'
+  values: '"Vorkenntnisse nicht erforderlich (0); Grundvorkenntnisse erforderlich
+    (1); Vertiefte Vorkenntnisse erforderlich (2); -99"'
+Stufen des Kompetenzbereichs:
+  criteria: Codes 0, 1 und 2 setzten eine explizite Bezeichnung, einen expliziten
+    Bezug voraus
+  examples:
+  - '"Bsp. Grundlagenseminar ist nicht unbedingt gleichzusetzen mit Grundstufe im
+    Sinne des Hochschulzertifikats -99"'
+  values: '"Grundstufe (0); Aufbaustufe (1); Vertiefungsstufe (2); -99"'
 Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt explizit:
-  criteria: 'Die Äußerung/das Segment enthält, dass es der Lerninhalt oder das Lernziel
-    ist, Medienkompetenz/digitale Bildung/weitere Synonyme zu fördern. Mögliche Synonyme:
-    medienbezogene Kompetenz, digitale Kompetenz, mediale Bildung, Mediendidaktik,
-    medienbezogene Kompetenz, mediendidaktische Kompetenz, medienerzieherische Kompetenz,
-    Medienerziehung. Medien-und Informationsethik; jede Fähigkeit, mit Medien umzugehen
-    (z.B. Fähigkeit ,mit Datenbanken umzugehen; Fähigkeit mit Medien X umzugehen;
-    Gestalten mit digitalen Medien'')'
+  criteria: 'Die Äußerung/das Segment enthält explizit, dass es der Lerninhalt oder
+    das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme der Lehrenden
+    zu fördern
+
+
+    Mögliche Synonyme: medienbezogene Kompetenz, digitale Kompetenz, mediale Bildung,
+    Mediendidaktik, medienbezogene Kompetenz, mediendidaktische Kompetenz, medienerzieherische
+    Kompetenz, Medienerziehung, Medien- und Informationsethik'
   examples:
-  - '"Die Lehrkräfte erwerben Kompetenzen im Bereich der Medien"'
-  - '"Die Lehrkräfte sind in der Lage… mit Medien umzugehen"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt implizit:
-  criteria: Die Äußerung/das Segment enthält Komponenten digitaler Bildung/Medienkompetenz
+Thematisierung von Künstlicher Intelligenz:
+  criteria: Künstliche Intelligenz wird in irgendeiner Form im Titel oder Segment
+    angesprochen
   examples:
-  - '"Digitale Medien im Unterricht"'
-  - '"Online-Lernplattformen"'
-  - '"Medienkompetenz"'
+  - '"“Lehrvideos und KI: Wie gestalte ich meine Lehre mit HAnS?”"'
   values: '"Ja (1), Nein (0)"'
-Zielkompetenz:
-  criteria: Meint die eigenen Medienkompetenzen der Lehrkräfte
+KI als Lerngegenstand:
+  criteria: Vermittlung von theoretischen Grundlagen zu Künstlicher Intelligenz wird
+    im Segment angesprochen
   examples:
-  - '"Die Lehrkräfte erwerben Kompetenzen im Bereich der Medien"'
-  values: '"Ja (1), Nein (0)"'
-Handlungskomponente:
-  criteria: Handlungskomponente medienbezogener Lehrkompetenzen. Hängt konkret mit
-    dem Unterrichten zusammen.
+  - '"Lehren und Lernen mit KI: ChatGPT in der Hochschullehre verantwortungsvoll einsetzen"'
+  - '""'
+  - '"„Wir klären darin, warum aktuelle KI-Modelle nach statistischen Wahrscheinlichkeiten
+    arbeiten, warum KI manchmal falsche Antworten gibt und wie man der KI Befehle
+    geben kann“"'
+  values: '"Ja (1); nicht zutreffend (-99)"'
+KI als Werkzeug:
+  criteria: Einsatz von KI-gestützten Anwendungen im Hochschul-Unterricht wird im
+    Segment angesprochen
   examples:
-  - '"Begriffe: Fähigkeit; Workshop, Praktikum -> wenn auf Unterricht bezogen!"'
-  values: '"Ja (1), Nein (0)"'
-Wissenskomponente:
-  criteria: Wissenskomponente medienbezogener Lehrkompetenzen. Alle Dimensionen außer
-    eine (TK) hängen konkret mit dem Unterrichten zusammen.
+  - '"Lehren und Lernen mit KI: ChatGPT in der Hochschullehre verantwortungsvoll einsetzen"'
+  - '""'
+  - '"„Wir erarbeiten, wie man gute Befehle für Chatbots entwickelt (Prompt Engineering)“"'
+  values: '"Ja (1),  nicht zutreffend (-99)"'
+Digitale Medien werden angesprochen:
+  criteria: 'Digitale Medien werden im Segment angesprochen.
+
+
+    Wir verstehen unter digitalen Medien: Synonyme wie „Digitales Medium“; konkrete
+    Medien wie Smartphone, Tablet, Computer o.Ä.; digitale Programme wie PowerPoint;
+    digitale didaktische Umsetzungen wie E-Learning (Materialien), Onlinekurse, Webinare,
+    (digitale) Fernprüfungen, hybride Veranstaltungen, flipped classroom, vhb-Kurs.
+    Wir fassen auch den Begriff „Medien“ als digitale Medien auf, wenn nicht explizit
+    ein analoges Medium (z.B. Buch) genannt wird. Auch künstliche Intelligenz und
+    Bestandteile der digitalen Infrastruktur zählen zu digitalen Medien.'
   examples:
-  - '"Begriffe: Kenntnisse"'
-  values: '"Ja (1), Nein (0)"'
-Bedienen und anwenden:
-  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte Medien bedienen
-    und anwenden können.
+  - '"Bsp für den Code „1“:"'
+  - '"Nennung von digitalen Medien z.B. eher im Introteil einer Fortbildung"'
+  - '"„Ziele: Die Teilnehmenden planen barrierefreie Lehrveranstaltungen unter Berücksichtigung
+    geeigneter Methoden und Medien“ (Uni Augsburg: A12 Behinderte und chronisch kranke
+    Studierende in meiner Veranstaltung)"'
+  - '""'
+  - '"Bsp. für den Code „0“:"'
+  - '"Die generelle Beschreibung: Auf der Grundlage von kurzen Input-Phasen überprüfen
+    Sie, welche bewährten und innovativen Lehr-/Lernmethoden Ihre Lehre zusätzlich
+    bereichern könnten (Uni Würzburg: Praxisworkshop – Hochschullehre)"'
+  values: '"Digitale Medien werden angesprochen (1); Digitale Medien werden nicht
+    angesprochen (0)"'
+Digitale Medien werden als Lernziel angesprochen:
+  criteria: 1 setzt voraus, dass es im Angebot primär um digitale Medien als Hauptziel
+    geht und/oder konkrete Medien (wie Moodle) im Hauptfokus sind – was mit einem
+    Satz beschrieben ist („digital Lehren“ allein ist nicht ausreichend genug)
   examples:
-  - '"Die Teilnehmerinnen und Teilnehmer werden in zwei eSessions vor dem Lehrgang
-    im Umgang mit dem tablet (hier ipad), WorksheetsCrafter und mit dem bookcreator
-    ''technisch geschult''."'
-  values: '"Ja (1), Nein (0)"'
-Suchen und verarbeiten:
-  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte Informationen
-    mithilfe digitaler Medien gezielt recherchieren, relevante Informationen identifizieren,
-    analysieren, auswerten, interpretieren und kritisch beurteilen können.
+  - '"Bsp für den Code „1“:"'
+  - '"Nennung von digitalen Medien oftmals als Lernziel im Bereich Kursziele o.ä.
+    (im Gegensatz zur Nennung in Introteil)"'
+  - '"Die Teilnehmer sollen im Seminar Konzepte von Blended Learning kennenlernen
+    und hinterfragen, wie diese sinnvoll für die eigene Lehre eingesetzt werden können.
+    Für die Best Practice Beispiele wird das an der Ludwig-Maximilians-Universität
+    eingesetzte LMS (Learning Management System) Moodle für Anschauungszwecke genutzt.
+    Veranschaulicht wird das didaktische Grunddesign von Blended Learning Veranstaltungen
+    und die damit verbundene spezifische Anforderungen an die Betreuung von Studierenden.(…)
+    Lernziele: Kennenlernen von Best Practice Beispiele und verschiedenen Blended
+    Learning Konzepten (LMU: Blended Learning in der Lehre)"'
+  - '"eigene medienunterstützte Lehrveranstaltung planen...; Einsatzmöglichkeiten
+    mediengestützter Lehre kennen.. (FAU Erlangen-Nürnberg 001: E-learning in der
+    Hochschullehre)"'
+  - '"Selbstlernphasen mit moodle-Tools didaktisch sinnvoll gestalten (Uni Regensburg
+    0007: Einstieg in Blended Learning (A4-1801))"'
+  - '"Sie selbst MiniWebinare zu Ihrem aktuellen Forschungsthema abhalten, zu überwinden
+    (Uni Würzburg: Kann man mich hören)"'
+  - '"ein individuelles Lehrprojekt mit digitalen Ressourcen didaktisch sinnvoll konzipiert,
+    durchgeführt und evaluiert (Uni Bayreuth 0024: Zertifikatsprogramm „Lehr-Lernprozesses
+    fördern...“)"'
+  - '"Der Versuchsraum ist eine Sammlung von Lehrthemen, die in der berufsbegleitenden
+    Lehre ausprobiert werden können. Dies kann Methoden der Unterrichtsgestaltung
+    betreffen, wie z.B. problembasierter Unterricht oder forschendes Lernen. Aber
+    auch Themen, die die Betreuung der Studierenden betreffen,wie die virtuelle Sprechstunde
+    oder der Einsatz eines Wikis. Ebenso Maßnahmen zur Förderung zeit- und ortsunabhängigen
+    Lernens wie Videoaufzeichnungen, E-Tutorials oder Vorlesungen über Adobe Connect
+    (HS Ingolstadt: Versuchsraum)"'
+  values: '"Digitale Medien sind Lernziel (1);  Digitale Medien sind kein Lernziel
+    (0)"'
+Organisatorische Kommunikation:
+  criteria: Nutzung digitaler Kommunikationsmittel innerhalb der Organisation wird
+    im Segment angesprochen
   examples:
-  - '"Verwenden von digitalen Medien, um sich zu informieren"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Kommunizieren und kooperieren:
-  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte mittels
-    digitaler Anwendungen situations- und adressatengerecht kommunizieren und/oder
-    in digitalen Umgebungen zu kooperativen Prozessen und Problemlösungen beitragen
-    können.
+Berufliche Zusammenarbeit:
+  criteria: Digitale Zusammenarbeit zwischen Lehrkräften wird im Segment angesprochen
   examples:
-  - '"Verwenden von digitalen Medien, um mit anderen zu kommunizieren und in Projekten
-    zusammenzuarbeiten"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Produzieren und präsentieren:
-  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte mithilfe
-    digitaler Medien Informationen multimedial unter Berücksichtigung rechtlicher
-    Rahmenbedingungen (Urheberrecht, Personenschutz) aufbereiten und an andere kommunizieren
-    können.
+Reflektierte Praxis:
+  criteria: Methoden zur digitalen Selbstreflexion
   examples:
-  - '"Verwenden von digitalen Medien, um selbst Medieninhalte zu erstellen"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Erkennen von Lernpotenzialen und Entwickeln von Strategien:
-  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte lernförderliche
-    Aspekte und Einsatzmöglichkeiten digitaler Medien kennen und in der Lage sind,
-    diese gezielt und effektiv für den eigenen Kompetenzerwerb zu nutzen.
+Digitale fortlaufende berufliche Entwicklung:
+  criteria: Förderung der digitalen Weiterbildung wird im Segment angesprochen
   examples:
-  - '"Verwenden von digitalen Medien für das eigene Lernen"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Erwerben und Anwenden von Wissen:
-  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte über Wissen
-    im Hinblick auf digitale Medien und deren informatische Grundlage verfügen und
-    es für den eigenen fachlichen und fachübergreifenden Kompetenzerwerb nutzen können.
+Auswahl digitaler Ressourcen:
+  criteria: Bewertung und Auswahl geeigneter digitaler Materialien wird im Segment
+    angesprochen
   examples:
-  - '"Nutzen von Algorithmen für die Lösung von Problemen"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Analysieren, reflektieren und diskutieren:
-  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte die Chancen
-    und Risiken der digitalen Medien für Individuum und Gesellschaft kennen, die Inhalte,
-    Gestaltungsmittel und Wirkungsweisen von Medienangeboten im Hinblick auf Wertvorstellungen,
-    Rollen- und Weltbilder analysieren können und in der Lage sind deren Auswirkungen
-    auf sich selbst und andere zu reflektieren und diskutieren.
+Erstellen und Anpassen digitaler Ressourcen:
+  criteria: Gestaltung und Anpassung digitaler Lernmaterialien wird im Segment angesprochen
   examples:
-  - '"Kennen von Chancen und Risiken digitaler Medien"'
-  - '"Fähigkeit, Medieninhalte kritisch hinterfragen."'
-  - '"Fähigkeit, die Wirkung digitaler Medien auf einen selbst und andere zu reflektieren
-    und diskutieren."'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Selbstreguliert und verantwortungsbewusst handeln:
-  criteria: Die Äußerung/das Segment enthält, dass (angehende) Lehrkräfte in der Lage
-    sind ihre Aufmerksamkeit, Emotionen, Impulse und Handlungen im Hinblick auf die
-    Nutzung digitaler Medien selbst zu steuern und sich reflektiert unter Berücksichtigung
-    ethischer Gesichtspunkte in ihrer medialen Lebenswelt bewegen können und dabei
-    ein sozial- und selbstverantwortliches Verhalten zeigen.
+Organisieren, Schützen und Teilen digitaler Ressourcen:
+  criteria: Organisation und Weitergabe digitaler Lehrmaterialien wird im Segment
+    angesprochen
   examples:
-  - '"Fähigkeit, verantwortungsbewusst mit digitalen Medien umzugehen."'
-  - '"Fähigkeit, die Kontrolle über den eigenen Medienkonsum zu behalten."'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Planung und Entwicklung:
-  criteria: Die Äußerung/das Segment enthält, dass Lehrkräfte den Einsatz digitaler
-    Medien im Unterricht planen können und/oder Lehrkräfte passende digitale Medien
-    für den Unterricht identifizieren und einbinden können und/oder Lehrkräfte Lehr-Lernszenarien
-    mediengestützt gestalten können und/oder Lehrkräfte  selbstbestimmte, kreative
-    und eigenaktive Mediennutzung der Schülerinnen und Schüler ermöglichen und/oder
-    Lehrkräfte die mediale Erfahrung der Schülerinnen und Schüler berücksichtigen
-    können und/oder Lehrkräfte medienethische und medienrechtliche Konzepte berücksichtigen
-    können und/oder Lehrkräfte motivationale und emotionale Faktoren berücksichtigen
-    können und/oder Lehrkräfte Lehr-Lern-Arrangements zur Förderung der Reflexionsfähigkeit
-    entwickeln können und/oder Lehrkräfte Lehr-Lern-Arrangements zur Förderung von
-    Selbststeuerungskompetenz entwickeln können.
+Lehren:
+  criteria: Einsatz digitaler Werkzeuge im Unterricht wird im Segment angesprochen
   examples:
-  - '"Fähigkeit digital gestützte Lehr-Lernszenarien selbstständig oder zusammen mit
-    anderen Lehrkräften zu planen."'
-  - '"Fähigkeit passende digitale Medien für eine pädagogische Aktivität zu finden
-    und in die Planung miteinzubeziehen."'
-  - '"Fähigkeit, den Einsatz digitaler Medien im Unterricht passend zu den pädagogischen
-    Zielen zu planen."'
-  - '"Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung der bisherigen
-    medialen Erfahrungen und Interessen der SchülerInnen zu planen."'
-  - '"Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung von medienrechtlichen
-    und medienethischen Aspekten (z. B. Datenschutz) zu planen."'
-  - '"Fähigkeit, den Einsatz digitaler Medien unter Berücksichtigung von motivationalen
-    und emotionalen Faktoren der SchülerInnen zu planen"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Realisierung:
-  criteria: Die Äußerung/das Segment enthält, dass Lehrkräfte die Zielkompetenzniveaus
-    der Schülerinnen und Schüler diagnostizieren können/ Effizienz und Effektivität
-    digitaler Unterrichtsszenarien einschätzen können/ Lernprozesse 'in Echtzeit'
-    durch adaptive Hilfe fördern können/ typische medientechnische Probleme im Unterricht
-    lösen können/ Strategien zum Umgang mit medienbezogenen Verhaltensproblemen kennen.
+Lernbegleitung:
+  criteria: Digitale Methoden zur Lernunterstützung werden im Segment angesprochen
   examples:
-  - '"Fähigkeit zu erkennen und zu beurteilen, wie medienkompetent die einzelnen SchülerInnen
-    sind"'
-  - '"Fähigkeit, medientechnische Probleme selbst zu lösen, die sich beim Einsatz
-    digitaler Medien ergeben"'
-  - '"Fähigkeit, während des Einsatzes digitaler Medien festzustellen, inwiefern damit
-    den gesetzten pädagogischen (Lern-) Zielen näher gekommen wird"'
-  - '"Fähigkeit, den SchülerInnen passende Hilfestellungen beim Nutzen digitaler Medien
-    zu geben"'
-  - '"Fähigkeit,  medienbezogene Auffälligkeiten im individuellen und sozialen Verhalten
-    der SchülerInnen zu erkennen und angemessen zu reagieren"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Evaluation:
-  criteria: Die Äußerung/das Segment enthält, dass Lehrkräfte Informationen zu Unterrichtsprozessen
-    und Lernerfolg systematisch sammeln und auswerten können/den Einsatz digitaler
-    Unterrichtsszenarien reflektieren können.
+Kollaboratives Lernen:
+  criteria: Förderung der digitalen Zusammenarbeit der Lernenden wird im Segment angesprochen
   examples:
-  - '"Fähigkeit, Informationen dazu zu sammeln, ob und wie der Einsatz digitaler Medien
-    im Unterricht funktioniert hat."'
-  - '"Fähigkeit, den Einsatz digitaler Medien zu reflektieren, auf Basis der gesammelten
-    Informationen."'
-  - '"Fähigkeit, daraus Schlussfolgerungen für den nächsten Einsatz digitaler Medien
-    zu ziehen."'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Sharing:
-  criteria: Die Äußerung/das Segment enthält, dass Lehrkräfte digitale Unterrichtsszenarien
-    bezogen auf Ziele, Durchführung, Erfahrungen und Schlussfolgerungen strukturiert
-    beschreiben können/ digitale Unterrichtsszenarien im Rahmen der kollegialen Kooperation
-    an andere kommunizieren und weitergeben können/ digitale Unterrichtsszenarien,
-    die andere entwickelt haben, recherchieren und diese im Hinblick auf die Passung
-    zu den eigenen Unterrichtszielen beurteilen sowie für den eigenen Unterricht adaptieren.
+Selbstgesteuertes Lernen:
+  criteria: Förderung autonomer Lernprozesse mit digitalen Medien wird im Segment
+    angesprochen
   examples:
-  - '"Fähigkeit, den eigenen Einsatz digitaler Medien strukturiert zu dokumentieren."'
-  - '"Fähigkeit, eigene Erfahrungen oder auch verwendeten Materialien mit anderen
-    Fachkräften zu teilen."'
-  - '"Fähigkeit, auf Methoden und Inhalte für den Einsatz digitaler Medien zurückzugreifen,
-    die andere entwickelt haben und diese für die eigenen Ziele anzupassen."'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Technisches Wissen:
-  criteria: Medientechnische und informatische Kenntnisse (Technological Knowledge
-    (TK)
+Lernstand erheben:
+  criteria: Digitale Methoden zur Leistungsbewertung wird im Segment angesprochen
   examples:
-  - '"Umgang mit Hardware und Software (im Unterricht), Konzeptwissen über Datenbanken
-    und Algorithmen"'
-  - '"Umgang mit Windows. Umgang mit Fotoprogramm"'
-  - '"Wissen, wie man sich in neue digitale Medien und Programme einarbeitet."'
-  - '"Wissen, wie man technische Probleme lösen kann."'
-  - '"Wissen, wie man mit verschiedenen digitalen Medien umgeht."'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Technisch-Pädagogisches Wissen:
-  criteria: Medientechnische pädagogisch-psychologische Kenntnisse (Technological
-    Pedagogical Knowledge (TPK)
+Lern-Evidenzen analysieren:
+  criteria: Nutzung digitaler Daten zur Lernstandsanalyse wird im Segment angesprochen
   examples:
-  - '"Wissen über lernförderliche Aspekte digitaler Medien und wie man diese für die
-    Unterrichtsgestaltung in spezifischen unterrichtlichen Szenarien nutzbar machen
-    kann)"'
-  - '"Wissen darüber, welche digitalen Medien dazu geeignet sind, die eigenen pädagogischen
-    Methoden in der Arbeit mit den SchülerInnen zu verstärken."'
-  - '"Wissen darüber, wie der Einsatz von digitalen Medien an die jeweiligen pädagogischen
-    Zielen angepasst werden kann."'
-  - '"Medien und Methoden"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Technisch-Fachliches Wissen:
-  criteria: Medientechnisch-fachliche Kenntnisse (Technological Content Knowledge
-    (TCK)
+Feedback und Planung:
+  criteria: Digitale Feedback-Mechanismen wird im Segment angesprochen
   examples:
-  - '"Wissen über Stellenwert und Funktionsweise von Rechensystemen bei der Simulation
-    neuronaler Netzwerke in der Biologie"'
-  - '"Wissen darüber, wie Lerninhalte in bestimmten Bereichen/Fächern mit Medien neu/besser
-    repräsentiert werden können, z.B. durch das Anwenden von einem Matheprogramm am
-    Computer kann ich besser das Thema Funktionen/Graphen veranschaulichen"'
-  - '"Wissen darüber, welche digitalen Medien dafür geeignet sind, den SchülerInnen
-    bestimmte Inhalte zu vermitteln (z.B. Medienkompetenz, Sprachen, Mathematik)"'
-  - '"Medien in Fach/Lernfeld X"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
-Technisch-Fachdidaktisches Wissen:
-  criteria: Medientechnisch-fachdidaktische Kenntnisse (Technological Pedagogical
-    Content Knowledge (TPCK)
+Digitale Teilhabe:
+  criteria: Förderung der digitalen Zugänglichkeit für alle wird im Segment angesprochen
   examples:
-  - '"Wissen über den lernförderlichen Einsatz von Schreibprogrammen im Aufsatzunterricht
-    im Fach Deutsch"'
-  - '"Wissen darüber, wie Medien für den Unterricht/ in Lehr-Lernszenarien eingesetzt
-    werden können und dadurch pädagogische Methoden, Medien und bestimmte Lerninhalte
-    passend miteinander kombiniert werden."'
-  - '"Methoden und Medien im Lernfeld/Fach X"'
-  - '"Praktikum zur Anwendung von Informatiksystemen aus fachdidaktischer Sicht.''"'
+  - '""'
   values: '"Ja (1), Nein (0)"'
+Differenzierung und Individualisierung:
+  criteria: Anpassung digitaler Inhalte an individuelle Lernbedürfnisse wird im Segment
+    angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Aktive Einbindung von Lernenden:
+  criteria: Einsatz digitaler Methoden zur Lernmotivation wird im Segment angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Informations- und Medienkompetenz:
+  criteria: Schulung im kritischen Umgang mit digitalen Informationen wird im Segment
+    angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Digitale Kommunikation und Zusammenarbeit:
+  criteria: Förderung digitaler Kommunikationsfähigkeiten wird im Segment angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Erstellung digitaler Inhalte:
+  criteria: Förderung kreativer digitaler Ausdrucksformen wird im Segment angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Verantwortungsvoller Umgang mit digitalen Medien:
+  criteria: Sensibilisierung für Datenschutz und digitale Ethik wird im Segment angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Digitales Problemlösen:
+  criteria: Entwicklung digitaler Problemlösungsfähigkeiten wird im Segment angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+_DERIVED_1.0.4 Genauer Name Anbieter Hochschule:
+  criteria: Wir übernehmen die Namen aus dem Dokument „Sammeln der Dokumente“. Und
+    geben den Namen der Hochschule noch extra an, auch wenn er nicht im Dokument selbst
+    steht.
+  examples:
+  - '"z.B. ProfiL LMU, Universitätsfrauenbeauftrage (ProfiL) LMU; ProfiLehre Uni Augsburg;
+    FBZHLUni Bamberg"'
+  values: '"offen"'
+_DERIVED_1.0.5 Hochschulart:
+  criteria: ''
+  examples:
+  - '""'
+  values: '"Wenn „1.2. Anbieter“ = 1; sonst -99 (Technische) Universität (Uni); Hochschule
+    für angewandte Wissenschaften (HAW)"'
+_DERIVED_1.0.7 Externer Anbieter Name:
+  criteria: ''
+  examples:
+  - '"z.B. DIZ, PinkUniversity, BayLern, vhb"'
+  values: '"offen"'
+_DERIVED_1.0.8 Annehmerhochschulen des externen Anbieters:
+  criteria: Hier die Hochschulen eintragen, auf deren Seite wir den Link gefunden
+    haben, s. Tabelle FAQ
+  examples:
+  - '""'
+  values: '"offen"'
+_DERIVED_2.0.2 Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt implizit:
+  criteria: 'Die Äußerung/das Segment enthält explizit, dass es der Lerninhalt oder
+    das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme der Lehrenden
+    zu fördern
+
+
+
+    Bei den Medienkompetenzen darauf achten, dass sie wirklich Lernziel sein müssen
+    (z.B. nicht nur in Introteil genannt „Medienkompetenzen heutzutage sind wichtig“);
+    steht wahrscheinlich oft unter konkreten Zielen der Fobi.
+
+
+    Dieser Code hat 2018 eher dem entsprochen, was wir unter implizite Medienkompetenz
+    verstehen.'
+  examples:
+  - '""'
+  values: '"Ja (1), nur,"'
+_DERIVED_2.0.4 DigCompEdu Kompetenzen, die in der VA angesprochen werden:
+  criteria: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen
+    angesprochen
+  examples:
+  - '"ANKERBEISPIELE folgen in der ersten Kodier-Testrunde"'
+  values: '"Ja (1)"'
+_DERIVED_2.1 Berufliches Engagement:
+  criteria: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen
+    des Bereichs Berufliches Engagement angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1)"'
+_DERIVED_2.2 Digitale Ressourcen:
+  criteria: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen
+    des Bereichs Digitale Ressourcen angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1)"'
+_DERIVED_2.3 Lehren und Lernen:
+  criteria: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen
+    des Bereichs Lehren und Lernen angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1)"'
+_DERIVED_2.4 Evaluation:
+  criteria: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen
+    des Bereichs Evaluation angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1)"'
+_DERIVED_2.5 Lernerorientierung:
+  criteria: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen
+    des Bereichs  Lernerorientierung angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1)"'
+_DERIVED_2.6 Förderung der digitalen Kompetenz der Lernenden:
+  criteria: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen
+    des Bereichs   Förderung der digitalen Kompetenz der Lernenden angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1)"'
+_DERIVED_3  DigComp Kompetenzen, die in der VA angesprochen werden:
+  criteria: Im Segment wird mindestens eine der (eigenen) digitalen Kompetenzen nach
+    DigComp der Dozierenden angesprochen
+  examples:
+  - '""'
+  values: '"Ja (1)"'

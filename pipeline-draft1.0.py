@@ -30,6 +30,7 @@ from datetime import datetime
 from enum import Enum
 from dotenv import load_dotenv
 import sys
+from collections import defaultdict
 
 load_dotenv()  # Add this at the top of the file
 
@@ -81,25 +82,13 @@ class DataEntry(BaseModel):
     )
 
 class ProcessingResult(BaseModel):
-    """
-    Structure for storing classification results
-    
-    Fields:
-    - title: Training entry title
-    - description: Training description
-    - category: Category from coding scheme being evaluated
-    - human_code: Human-assigned classification (0 or 1)
-    - ai_code: GPT-assigned classification (0 or 1)
-    - confidence: GPT's confidence in classification (0.0 to 1.0)
-    - reasoning: GPT's explanation for classification
-    """
+    """Model for classification results"""
     title: str
     description: str
-    category: str = Field(..., description="Category being evaluated")
-    human_code: str = Field(..., pattern="^[01]$", description="Human-assigned code (0 or 1)")
-    ai_code: str = Field(..., pattern="^[01]$", description="AI-assigned code (0 or 1)")
-    confidence: float = Field(..., ge=0.0, le=1.0, description="AI confidence score")
-    reasoning: str = Field(..., description="AI reasoning for the classification")
+    category: str
+    ai_code: str  # Keep as string to be more flexible
+    confidence: float
+    reasoning: str
 
 class ConfidenceLevel(str, Enum):
     """
@@ -116,7 +105,7 @@ class ConfidenceLevel(str, Enum):
 
 class ValidationResult(BaseModel):
     """Structure for validated classification results"""
-    value: str = Field(..., pattern="^[01]$", description="Classification value (0 or 1)")
+    value: str  # Remove pattern validation to accept any string
     confidence: float = Field(..., ge=0.0, le=1.0, description="Raw confidence score")
     confidence_level: ConfidenceLevel = Field(..., description="Interpreted confidence level")
     reasoning: str = Field(..., description="Classification reasoning")
@@ -291,11 +280,11 @@ class ResultsManager:
                     'title': result.title,
                     'description': clean_description
                 }
-            # Store AI code, human code, and confidence for each category
+            # Store AI code, confidence, and reasoning for each category
             cat = result.category
             entries[result.title][f'ai_{cat}'] = result.ai_code
-            entries[result.title][f'human_{cat}'] = result.human_code
             entries[result.title][f'confidence_{cat}'] = f"{result.confidence:.2f}"
+            entries[result.title][f'reasoning_{cat}'] = result.reasoning  # Add reasoning
             categories.add(cat)
         
         # Convert to DataFrame
@@ -303,10 +292,11 @@ class ResultsManager:
         
         # Organize columns in desired order
         ai_cols = [f'ai_{cat}' for cat in sorted(categories)]
-        human_cols = [f'human_{cat}' for cat in sorted(categories)]
         confidence_cols = [f'confidence_{cat}' for cat in sorted(categories)]
+        reasoning_cols = [f'reasoning_{cat}' for cat in sorted(categories)]  # Add reasoning columns
         
-        columns = ['title', 'description'] + ai_cols + human_cols + confidence_cols
+        # Update column order to include reasoning
+        columns = ['title', 'description'] + ai_cols + confidence_cols + reasoning_cols
         df = df.reindex(columns=columns)
         
         # Save to CSV
@@ -345,56 +335,22 @@ class ResultsManager:
     
     @staticmethod
     async def calculate_metrics(results: List[ProcessingResult]) -> Dict:
-        """Calculate metrics per category"""
-        # Group results by category
-        results_by_category = {}
-        for result in results:
-            if result.category not in results_by_category:
-                results_by_category[result.category] = []
-            results_by_category[result.category].append(result)
+        """Calculate basic statistics about AI classifications"""
+        by_category = defaultdict(list)
+        for r in results:
+            by_category[r.category].append(r)
         
-        # Calculate metrics for each category
-        metrics = {
-            "overall": {
-                "total_samples": len(results),
-                "categories": len(results_by_category)
-            },
-            "per_category": {}
-        }
+        metrics = {'by_category': {}, 'overall': {}}
         
-        for category, category_results in results_by_category.items():
-            human_labels = [int(r.human_code) for r in category_results]  # Convert to int
-            ai_labels = [int(r.ai_code) for r in category_results]  # Convert to int
-            total = len(category_results)
-            agreements = sum(h == a for h, a in zip(human_labels, ai_labels))
+        for category, category_results in by_category.items():
+            ai_codes = [r.ai_code for r in category_results]
+            confidence_scores = [r.confidence for r in category_results]
             
-            try:
-                kappa = cohen_kappa_score(human_labels, ai_labels)
-            except ValueError:
-                kappa = 0.0
-            
-            metrics["per_category"][category] = {
-                "kappa_score": kappa,
-                "total_samples": total,
-                "agreement_rate": agreements / total if total > 0 else 0.0,
-                "average_confidence": sum(r.confidence for r in category_results) / total
+            metrics['by_category'][category] = {
+                'total_samples': len(category_results),
+                'positive_classifications': sum(1 for code in ai_codes if code == "1"),
+                'average_confidence': sum(confidence_scores) / len(confidence_scores)
             }
-        
-        # Calculate overall metrics
-        all_human = [int(r.human_code) for r in results]
-        all_ai = [int(r.ai_code) for r in results]
-        total_agreements = sum(h == a for h, a in zip(all_human, all_ai))
-        
-        try:
-            overall_kappa = cohen_kappa_score(all_human, all_ai)
-        except ValueError:
-            overall_kappa = 0.0
-        
-        metrics["overall"].update({
-            "kappa_score": overall_kappa,
-            "agreement_rate": total_agreements / len(results) if results else 0.0,
-            "average_confidence": sum(r.confidence for r in results) / len(results) if results else 0.0
-        })
         
         return metrics
 
@@ -418,54 +374,48 @@ class ResponseValidator:
     def validate_response(self, response: str, logger: logging.Logger) -> ValidationResult:
         """Validate and interpret GPT response in JSON format"""
         try:
+            # Debug raw response
+            print(f"\n🔍 Raw GPT response:")
+            print(response)
+            
             # Parse JSON response
             response_data = json.loads(response)
+            print(f"\n📋 Parsed JSON data:")
+            print(response_data)
             
-            # Convert value from "Ja (1)" / "Nein (0)" to "1" / "0"
-            raw_value = response_data.get('value', '0')
-            value = "0"  # default
+            # Get value directly without conversion
+            value = str(response_data.get('value', ''))  # Just convert to string
             
-            if isinstance(raw_value, str):
-                if 'ja' in raw_value.lower() or '(1)' in raw_value:
-                    value = "1"
-                elif 'nein' in raw_value.lower() or '(0)' in raw_value:
-                    value = "0"
-            
-            # Debug output for value conversion
-            print(f"\n🔄 Value conversion:")
-            print(f"Raw value from GPT: {raw_value}")
-            print(f"Converted value: {value}")
+            # Debug output
+            print(f"\n🔄 Value from GPT: {value}")
             
             # Get confidence and reasoning
             confidence = float(response_data.get('confidence', 0.0))
             reasoning = str(response_data.get('reasoning', ''))
             
-            # Determine confidence level
-            if confidence < 0.33:
-                level = ConfidenceLevel.LOW
-            elif confidence < 0.67:
-                level = ConfidenceLevel.MEDIUM
-            else:
-                level = ConfidenceLevel.HIGH
-            
-            # Debug output
-            logger.debug(f"Parsed response: value={value}, confidence={confidence}")
-            
             return ValidationResult(
-                value=value,
+                value=value,  # Keep original value
                 confidence=confidence,
-                confidence_level=level,
+                confidence_level=self._get_confidence_level(confidence),
                 reasoning=reasoning
             )
             
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse JSON response: {str(e)}")
             return ValidationResult(
-                value="0",
+                value=response,  # Return raw response if JSON parsing fails
                 confidence=0.0,
                 confidence_level=ConfidenceLevel.LOW,
                 reasoning=f"Error parsing JSON response: {str(e)}"
             )
+
+    def _get_confidence_level(self, confidence: float) -> ConfidenceLevel:
+        """Helper to determine confidence level"""
+        if confidence < 0.33:
+            return ConfidenceLevel.LOW
+        elif confidence < 0.67:
+            return ConfidenceLevel.MEDIUM
+        return ConfidenceLevel.HIGH
 
 # GPT agent handles the AI interaction
 class GPTClassificationAgent:
@@ -583,82 +533,88 @@ class TrainingDataClassifier:
         self.classification_agent = GPTClassificationAgent()
         self.response_validator = ResponseValidator()
 
-    async def process_entry(self, entry: DataEntry, template: str, scheme: CodingScheme) -> List[ProcessingResult]:
-        """
-        Process a single training entry across all categories
+    # Keep the SELECTED_CATEGORIES
+    SELECTED_CATEGORIES = [
+        "Anzahl",
+        "Stattfinden der Veranstaltung",
+        "Dauer",
+        "Semester",
+        "Zielgruppe",
+        "Fachbereich",
+        "Kompetenzbereich des Zertifikats Hochschullehre"
+    ]
+
+    async def process_entries(self, entries: List[DataEntry], scheme: CodingScheme) -> None:
+        """Process all entries through the pipeline"""
+        print("\nStarting pipeline processing...")
         
-        Process:
-        1. For each category in scheme:
-           a. Generate category-specific prompt
-           b. Get GPT classification
-           c. Validate and interpret response
-           d. Store results
+        # Load template once
+        template = await self.resource_manager.load_template(self.config['paths']['prompt_template'])
         
-        Args:
-            entry: Training entry to classify
-            template: Base prompt template
-            scheme: Validated coding scheme
+        # Process each entry
+        for entry in entries:
+            results = await self.process_entry(entry, template, scheme)
             
-        Returns:
-            List of ProcessingResult, one per category
-        """
+            # Store results
+            for result in results:
+                await self.results_manager.store_result(
+                    entry=entry,
+                    category=result.category,
+                    value=result.value,
+                    confidence=result.confidence
+                )
+
+    async def process_entry(self, entry: DataEntry, template: str, scheme: CodingScheme) -> List[ProcessingResult]:
+        """Process a single entry for selected categories"""
         results = []
         
-        # Debug output
         print(f"\n📊 Processing Entry:")
         print(f"Title: {entry.title}")
-        print(f"Description: {entry.description[:100]}...")  # Show first 100 chars
+        print(f"Description: {entry.description[:100]}...")
         
-        # If in test mode, limit categories
-        categories = list(scheme.categories.keys())
-        if self.config.get('test_mode', {}).get('enabled', False):
-            max_cats = self.config['test_mode']['max_categories']
-            categories = categories[:max_cats]
-            print(f"\n🔬 Test Mode: Processing {max_cats} categories")
-        
-        for category_key in categories:
+        for category_key in self.SELECTED_CATEGORIES:
+            if category_key not in scheme.categories:
+                print(f"Warning: Category {category_key} not found in scheme")
+                continue
+            
             print(f"\n📋 Category: {category_key}")
             
-            # Generate prompt and get classification
-            prompt = await self.resource_manager.construct_prompt(
-                template, entry, scheme, category_key
-            )
-            gpt_input = GPTClassificationInput(
-                prompt=prompt,
-                model=self.config['gpt']['model'],
-                temperature=self.config['gpt']['temperature']
-            )
-            gpt_output = await self.classification_agent.process(gpt_input)
-            
-            # Validate response
-            validation_result = self.response_validator.validate_response(
-                gpt_output.response,
-                logger=self.logger
-            )
-            
-            # Log confidence level
-            self.logger.info(
-                f"Category {category_key} classified with {validation_result.confidence_level} "
-                f"confidence ({validation_result.confidence:.2f})"
-            )
-            
-            # Store result
-            print(f"\n Storing result:")
-            print(f"Category: {category_key}")
-            print(f"AI code: {validation_result.value}")
-            print(f"Human code: {entry.human_code}")
-            print(f"Confidence: {validation_result.confidence:.2f}")
-
-            results.append(ProcessingResult(
-                title=entry.title,
-                description=entry.description,
-                category=category_key,
-                human_code=entry.human_code,
-                ai_code=validation_result.value,
-                confidence=validation_result.confidence,
-                reasoning=validation_result.reasoning
-            ))
-        
+            try:
+                # Generate prompt
+                prompt = await self.resource_manager.construct_prompt(
+                    template, entry, scheme, category_key
+                )
+                
+                # Create GPT input
+                gpt_input = GPTClassificationInput(
+                    prompt=prompt,
+                    model=self.config['gpt']['model'],
+                    temperature=self.config['gpt']['temperature']
+                )
+                
+                # Get and validate classification
+                gpt_output = await self.classification_agent.process(gpt_input)
+                validation_result = self.response_validator.validate_response(
+                    gpt_output.response,
+                    logger=self.logger
+                )
+                
+                # Add to results
+                results.append(ProcessingResult(
+                    title=entry.title,
+                    description=entry.description,
+                    category=category_key,
+                    ai_code=validation_result.value,  # Use the value as-is
+                    confidence=validation_result.confidence,
+                    reasoning=validation_result.reasoning or ""
+                ))
+                
+                print(f"Result: {validation_result.value} (confidence: {validation_result.confidence:.2f})")
+                
+            except Exception as e:
+                print(f"Error processing category {category_key}: {str(e)}")
+                continue
+                
         return results
 
     async def run(self):
@@ -696,12 +652,8 @@ class TrainingDataClassifier:
             )
             self.logger.info(f"Results saved to: {output_path}")
             
-            # Calculate and display metrics
-            metrics = await self.results_manager.calculate_metrics(all_results)
-            print("\nEvaluation Metrics:")
-            print(f"Cohen's Kappa Score: {metrics['overall']['kappa_score']:.2f}")
-            print(f"Agreement Rate: {metrics['overall']['agreement_rate']:.2%}")
-            print(f"Total Samples: {metrics['overall']['total_samples']}")
+            # Skip metrics for now
+            # metrics = await self.results_manager.calculate_metrics(all_results)
             
             self.logger.info("Pipeline completed successfully")
             
