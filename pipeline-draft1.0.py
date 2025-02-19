@@ -37,13 +37,13 @@ load_dotenv()  # Add this at the top of the file
 # Configuration for file paths, logging, and GPT settings
 CONFIG = {
     'paths': {
-        'data_csv': "teacher_training_data.csv",        # Input training data
-        'human_codes': "human_codes.xlsx",              # Updated: now using Excel
-        'coding_scheme': "coding_scheme.yml",           # Category definitions
-        'prompt_template': "prompt.txt",                # Template for GPT prompts
-        'output_dir': "results",                        # Directory for results
-        'log_dir': "log",  # Added log directory config
-        'output_base': "results/ai_coded_results"       # Base name for output files
+        'data_csv': "training_data.xlsx",        # Changed from CSV to Excel
+        'human_codes': "human_codes.xlsx",              
+        'coding_scheme': "coding_scheme.yml",           
+        'prompt_template': "prompt.txt",                
+        'output_dir': "results",                        
+        'log_dir': "log",  
+        'output_base': "results/ai_coded_results"       
     },
     'logging': {
         'level': 'INFO',
@@ -148,7 +148,10 @@ class DataManager:
         try:
             # Determine file type from extension
             if path.endswith('.xlsx'):
-                return pd.read_excel(path)
+                df = pd.read_excel(path)
+                print(f"\nLoaded Excel file: {path}")
+                print(f"Columns found: {df.columns.tolist()}")
+                return df
             else:  # default to CSV
                 return pd.read_csv(path)
         except FileNotFoundError:
@@ -245,36 +248,34 @@ class ResourceManager:
             raise
 
 class ResultsManager:
-    """
-    Manages classification results and metrics
+    """Manages classification results and metrics"""
     
-    Responsibilities:
-    1. Save results to timestamped CSV files
-    2. Calculate agreement metrics:
-       - Overall metrics
-       - Per-category metrics
-       - Cohen's Kappa scores
-    """
-    @staticmethod
-    def get_timestamped_filename(base_name: str, extension: str) -> str:
-        """Generate filename with timestamp"""
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        return f"{base_name}_{timestamp}.{extension}"
-    
-    @staticmethod
-    async def save_results(results: List[ProcessingResult], output_base: str):
-        """Save results in both CSV and XLSX formats"""
+    def __init__(self):
+        self.results = []
+
+    def _transform_value(self, value: str) -> str:
+        """Transform values for output"""
+        # Convert German Ja/Nein to 1/0
+        value = str(value).strip().lower()
+        if value in ['ja', 'ja (1)', '(1)', '1']:
+            return "1"
+        elif value in ['nein', 'nein (0)', '(0)', '0']:
+            return "0"
+        # Return original value if no transformation needed
+        return value
+
+    async def save_results(self, results: List[ProcessingResult], output_base: str):
+        """Save results in Excel format"""
         # Group results by title
         entries = {}
         categories = set()
         
         for result in results:
             if result.title not in entries:
-                # Clean up description by removing extra newlines and whitespace
                 clean_description = ' '.join(
                     result.description
-                    .replace('\n', ' ')  # Replace newlines with spaces
-                    .split()  # Split on whitespace and rejoin to normalize spaces
+                    .replace('\n', ' ')
+                    .split()
                 )
                 entries[result.title] = {
                     'title': result.title,
@@ -282,56 +283,29 @@ class ResultsManager:
                 }
             # Store AI code, confidence, and reasoning for each category
             cat = result.category
-            entries[result.title][f'ai_{cat}'] = result.ai_code
+            entries[result.title][f'ai_{cat}'] = self._transform_value(result.ai_code)  # Now self is defined
             entries[result.title][f'confidence_{cat}'] = f"{result.confidence:.2f}"
-            entries[result.title][f'reasoning_{cat}'] = result.reasoning  # Add reasoning
+            entries[result.title][f'reasoning_{cat}'] = result.reasoning
             categories.add(cat)
         
         # Convert to DataFrame
         df = pd.DataFrame.from_dict(entries, orient='index')
         
-        # Organize columns in desired order
+        # Organize columns
         ai_cols = [f'ai_{cat}' for cat in sorted(categories)]
         confidence_cols = [f'confidence_{cat}' for cat in sorted(categories)]
-        reasoning_cols = [f'reasoning_{cat}' for cat in sorted(categories)]  # Add reasoning columns
+        reasoning_cols = [f'reasoning_{cat}' for cat in sorted(categories)]
         
-        # Update column order to include reasoning
         columns = ['title', 'description'] + ai_cols + confidence_cols + reasoning_cols
         df = df.reindex(columns=columns)
         
-        # Save to CSV
-        csv_path = ResultsManager.get_timestamped_filename(output_base, "csv")
-        df.to_csv(csv_path, index=False)
+        # Save with timestamp
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        excel_path = f"{output_base}_{timestamp}.xlsx"
+        df.to_excel(excel_path, index=False)
+        print(f"\nResults saved to Excel: {excel_path}")
         
-        # Save to Excel with formatting
-        xlsx_path = ResultsManager.get_timestamped_filename(output_base, "xlsx")
-        with pd.ExcelWriter(xlsx_path, engine='openpyxl') as writer:
-            df.to_excel(writer, sheet_name='Results', index=False)
-            
-            # Get workbook and worksheet
-            workbook = writer.book
-            worksheet = writer.sheets['Results']
-            
-            # Auto-adjust column widths
-            for column in worksheet.columns:
-                max_length = 0
-                column = [cell for cell in column]
-                for cell in column:
-                    try:
-                        if len(str(cell.value)) > max_length:
-                            max_length = len(str(cell.value))
-                    except:
-                        pass
-                adjusted_width = (max_length + 2)
-                worksheet.column_dimensions[column[0].column_letter].width = adjusted_width
-        
-        print(f"\nResults saved to:")
-        print(f"CSV: {csv_path}")
-        print(f"Excel: {xlsx_path}")
-        print("\nOutput format:")
-        print(df.head(2).to_string())
-        
-        return csv_path, xlsx_path
+        return excel_path
     
     @staticmethod
     async def calculate_metrics(results: List[ProcessingResult]) -> Dict:
@@ -535,13 +509,55 @@ class TrainingDataClassifier:
 
     # Keep the SELECTED_CATEGORIES
     SELECTED_CATEGORIES = [
-        "Anzahl",
-        "Stattfinden der Veranstaltung",
-        "Dauer",
-        "Semester",
-        "Zielgruppe",
+
+        ## Basic Categories
+        # "Kursname",
+        # "Anbieter",
+        # "Name der Hochschule",
+        # "Annehmerhochschulen des Hochschulanbieters",
+        # "Anzahl",
+        # "Dozent_in",
+        # "Veranstaltungsart",
+        # "Format der Veranstaltung Präsenz/Online",
+        # "Format der Veranstaltung synchron",
+        # "Stattfinden der Veranstaltung",
+        # "Termin der Veranstaltung",
+        # "Dauer",
+        # "Semester",
+        # "Zielgruppe",
         "Fachbereich",
-        "Kompetenzbereich des Zertifikats Hochschullehre"
+        # "Fachbereich offen",
+        # "Kompetenzbereich des Zertifikats Hochschullehre",
+        # "Pädagogisch-didaktisches Angebot allgemeiner oder fachbereichsspezifischer Art",
+        
+        ## Digital Competence Categories
+        # "Organisatorische Kommunikation",
+        # "Berufliche Zusammenarbeit",
+        # "Reflektierte Praxis",
+        # "Digitale fortlaufende berufliche Entwicklung",
+        # "Auswahl digitaler Ressourcen",
+        # "Erstellen und Anpassen digitaler Ressourcen",
+        # "Organisieren, Schützen und Teilen digitaler Ressourcen",
+        # "Lehren",
+        # "Lernbegleitung",
+        # "Kollaboratives Lernen",
+        # "Selbstgesteuertes Lernen",
+        # "Lernstand erheben",
+        # "Lern-Evidenzen analysieren",
+        # "Feedback und Planung",
+        # "Digitale Teilhabe",
+        # "Differenzierung und Individualisierung",
+        # "Aktive Einbindung von Lernenden",
+        "Förderung der Informations- und Medienkompetenz der Studierenden",
+        "Förderung der Digitalen Kommunikation und Zusammenarbeit der Studierenden",
+        # "Förderung der Erstellung digitaler Inhalte der Studierenden",
+        # "Förderung des verantwortungsvollen Umgang der Studierenden mit digitalen Medien",
+        # "Förderung der Studierenden zum Digitalen Problemlösen",
+        "Informations- und Medienkompetenz",
+        "Digitale Kommunikation und Zusammenarbeit",
+        # "Erstellung digitaler Inhalte",
+        # "Verantwortungsvoller Umgang mit digitalen Medien",
+        # "Digitales Problemlösen"
     ]
 
     async def process_entries(self, entries: List[DataEntry], scheme: CodingScheme) -> None:

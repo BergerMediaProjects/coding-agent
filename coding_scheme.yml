@@ -27,11 +27,11 @@ Name der Hochschule:
     \ Hochschule Amberg-Weiden\nHochschule Ansbach\nTechnische Hochschule Aschaffenburg\n\
     Hochschule Augsburg\nHochschule Coburg\nTechnische Hochschule Deggendorf (THD)\n\
     Hochschule Hof\nTechnische Hochschule Ingolstadt (THI)\nHochschule Kempten\nHochschule\
-    \ Landshut\nHochschule für angewandte Wissenschaften München\nHochschule Neu-Ulm\n\
-    Technische Hochschule Nürnberg Georg Simon Ohm \nName der Hochschule unklar (externer\
-    \ Anbieter)\nOstbayerische Technische Hochschule (OTH) Regensburg \nTechnische\
-    \ Hochschule Rosenheim\nHochschule Weihenstephan-Triesdorf\nHochschule Würzburg-Schweinfurt\n\
-    (ggf. Weitere)\n-99\""
+    \ Landshut\nHochschule für angewandte Wissenschaften München (HAW)\nHochschule\
+    \ Neu-Ulm\nTechnische Hochschule Nürnberg Georg Simon Ohm \nName der Hochschule\
+    \ unklar (externer Anbieter)\nOstbayerische Technische Hochschule (OTH) Regensburg\
+    \ \nTechnische Hochschule Rosenheim\nHochschule Weihenstephan-Triesdorf\nHochschule\
+    \ Würzburg-Schweinfurt\n(ggf. Weitere)\n-99\""
 Annehmerhochschulen des Hochschulanbieters:
   criteria: 'Weitere zusätzliche bayrische Hochschulen (siehe Liste 1.2.1.), die das
     Angebot des unter 1.2.1. genannten Hochschulanbieters nutzen können
@@ -122,7 +122,8 @@ Termin der Veranstaltung:
   criteria: ''
   examples:
   - '""'
-  values: '"Festgelegt (1); Auf Nachfrage/Anfrage (2); -99"'
+  values: '"Festgelegt (1); Auf Nachfrage/Anfrage (2); keine Information verfügbar
+    (-99)"'
 Dauer:
   criteria: 'Summe der Angebotsdauer
 
@@ -130,7 +131,7 @@ Dauer:
     Möglichst zwei Mal ausrechnen.'
   examples:
   - '""'
-  values: '"offen"'
+  values: '"(Angabe in Stunden); keine Information verfügbar (-99)"'
 Semester:
   criteria: 'Zeitraum SoSe21: 1.April.2021 bis einschließlich 30. September 2021
 
@@ -330,118 +331,289 @@ Digitale Medien werden als Lernziel angesprochen:
   values: '"Digitale Medien sind Lernziel (1);  Digitale Medien sind kein Lernziel
     (0)"'
 Organisatorische Kommunikation:
-  criteria: Nutzung digitaler Kommunikationsmittel innerhalb der Organisation wird
+  criteria: 'Nutzung digitaler Kommunikationsmittel innerhalb der Organisation wird
     im Segment angesprochen
+
+
+    Das bedeutet:
+
+    Nutzung von digitalen Medien zur Verbesserung der organisatorischen Kommunikation
+    mit Lernenden, Eltern und Dritten; Gemeinsame Entwicklung und Verbesserung organisatorischer
+    Kommunikationsstrategien'
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Berufliche Zusammenarbeit:
-  criteria: Digitale Zusammenarbeit zwischen Lehrkräften wird im Segment angesprochen
+  criteria: 'Digitale Zusammenarbeit zwischen Lehrkräften wird im Segment angesprochen
+
+
+    Das bedeutet:
+
+    Nutzung von digitalen Medien zur Zusammenarbeit mit anderen Lehrenden, zum Austausch
+    von Wissen und Erfahrungen und zur Erneuerung von gemeinsamen pädagogischen Praktiken'
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Reflektierte Praxis:
-  criteria: Methoden zur digitalen Selbstreflexion
+  criteria: 'Methoden zur digitalen Selbstreflexion
+
+
+    Das bedeutet:
+
+    Die eigene digitale pädagogische Praxis sowie die der Bildungsgemeinschaft individuell
+    und gemeinsam reflektieren, selbstkritisch beurteilen und aktiv entwickeln.'
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Digitale fortlaufende berufliche Entwicklung:
-  criteria: Förderung der digitalen Weiterbildung wird im Segment angesprochen
+  criteria: 'Förderung der digitalen Weiterbildung wird im Segment angesprochen
+
+
+    Das bedeutet:
+
+    Nutzung von digitalen Quellen und Ressourcen für die fortlaufende Weiterbildung'
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Auswahl digitaler Ressourcen:
-  criteria: Bewertung und Auswahl geeigneter digitaler Materialien wird im Segment
+  criteria: 'Bewertung und Auswahl geeigneter digitaler Materialien wird im Segment
     angesprochen
+
+
+    Das bedeutet:
+
+    Auswahl, Identifizierung und Auswertung digitaler Ressourcen für das Lehren und
+    Lernen; Berücksichtigung von konkretem Lernziel, Kontext, didaktischem Ansatz
+    und der Lerngruppe bei der Auswahl digitaler Ressourcen und der Planung ihrer
+    Nutzung'
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Erstellen und Anpassen digitaler Ressourcen:
-  criteria: Gestaltung und Anpassung digitaler Lernmaterialien wird im Segment angesprochen
+  criteria: 'Gestaltung und Anpassung digitaler Lernmaterialien wird im Segment angesprochen
+
+
+    Das bedeutet:
+
+
+    Modifizierung und Weiterentwicklung bestehender Ressourcen, sofern rechtlich möglich;
+    Erstellung oder Mitgestaltung von neuen digitalen Bildungsressourcen; Berücksichtigung
+    von konkretem Lernziel, Kontext, didaktischem Ansatz und der Lerngruppe beim Entwurf
+    digitaler Ressourcen und der Planung ihrer Nutzung'
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Organisieren, Schützen und Teilen digitaler Ressourcen:
-  criteria: Organisation und Weitergabe digitaler Lehrmaterialien wird im Segment
+  criteria: 'Organisation und Weitergabe digitaler Lehrmaterialien wird im Segment
     angesprochen
+
+
+    Das bedeutet:
+
+
+    Digitale Inhalte organisieren und Lernenden, Eltern und anderen Lehrenden zur
+    Verfügung stellen; Sensible digitale Inhalte effektiv schützen; Datenschutz- und
+    Urheberrechtsbestimmungen respektieren und korrekt anwenden; Die Verwendung und
+    Erstellung von offenen Lizenzen und offenen Bildungsressourcen einschließlich
+    ihrer angemessenen Zuordnung verstehen'
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Lehren:
-  criteria: Einsatz digitaler Werkzeuge im Unterricht wird im Segment angesprochen
+  criteria: "Einsatz digitaler Werkzeuge im Unterricht wird im Segment angesprochen\n\
+    \nDazu gehört: \n\nEinsatzplanung und - gestaltung von digitalen Geräten und Materialien\
+    \ im Unterricht zur Verbesserung der Effektivität von Lehrinterventionen; digitale\
+    \ Unterrichtsmethoden angemessen organisieren und gestalten; neue Formate und\
+    \ pädagogische Methoden für den Unterricht entwickeln und ausprobieren"
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Lernbegleitung:
-  criteria: Digitale Methoden zur Lernunterstützung werden im Segment angesprochen
+  criteria: "Digitale Methoden zur Lernunterstützung werden im Segment angesprochen\n\
+    \nDazu gehört: \n\nNutzung von digitalen Medien und Diensten zwecks Verbesserung\
+    \ der Interaktion mit den Lernenden auf individueller Ebene und als Gruppe innerhalb\
+    \ und außerhalb des Unterrichts; Nutzung von digitalen Medien, um rechtzeitig\
+    \ und gezielt Beratung und Unterstützung anbieten zu können; neue Formen und Formate\
+    \ der Hilfestellung und Anleitung entwickeln und experimentell einsetzen"
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Kollaboratives Lernen:
-  criteria: Förderung der digitalen Zusammenarbeit der Lernenden wird im Segment angesprochen
+  criteria: "Förderung der digitalen Zusammenarbeit der Lernenden wird im Segment\
+    \ angesprochen\n\nDazu gehört: \n\n\nNutzung von digitalen Medien zur Förderung\
+    \ und Verbesserung von gemeinsamen Lernstrategien; Lernende befähigen, digitale\
+    \ Medien in Gruppenund Teamarbeit zu nutzen, um Kommunikation innerhalb der Lerngruppe,\
+    \ Zusammenarbeit und gemeinsame Wissensgenerierung zu verbessern"
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Selbstgesteuertes Lernen:
-  criteria: Förderung autonomer Lernprozesse mit digitalen Medien wird im Segment
-    angesprochen
+  criteria: "Förderung autonomer Lernprozesse mit digitalen Medien wird im Segment\
+    \ angesprochen\n\nDazu gehört: \n\nNutzung von digitalen Medien zur Unterstützung\
+    \ von selbstgesteuerten Lernprozessen, d. h. den Lernenden sollte ermöglicht werden,\
+    \ ihr eigenes Lernen zu planen, zu überprüfen und zu reflektieren, Fortschritte\
+    \ zu dokumentieren, Ergebnisse zu kommunizieren und kreative Lösungen zu erarbeiten"
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Lernstand erheben:
-  criteria: Digitale Methoden zur Leistungsbewertung wird im Segment angesprochen
+  criteria: "Digitale Methoden zur Leistungsbewertung wird im Segment angesprochen\n\
+    \nDazu gehört: \n\nVerwendung von digitalen Medien zur Lernkontrolle und Leistungsbeurteilung;\
+    \ Verbesserung der Vielfalt und der Angemessenheit von Beurteilungsformaten und\
+    \ - ansätzen"
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Lern-Evidenzen analysieren:
-  criteria: Nutzung digitaler Daten zur Lernstandsanalyse wird im Segment angesprochen
+  criteria: "Nutzung digitaler Daten zur Lernstandsanalyse wird im Segment angesprochen\n\
+    \nDazu gehört: \n\nDigitale Informationen zu Lernerverhalten, Leistung und Fortschritt\
+    \ erheben, auswählen, kritisch analysieren und interpretieren, um Rückschlüsse\
+    \ für den Unterricht zu ziehen."
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Feedback und Planung:
-  criteria: Digitale Feedback-Mechanismen wird im Segment angesprochen
+  criteria: "Digitale Feedback-Mechanismen wird im Segment angesprochen\n\nDazu gehört:\
+    \ \n\nNutzung von digitalen Medien, um Lernenden gezielt und zeitnah Feedback\
+    \ zu geben; Anpassung von Unterrichtsstrategien und gezielte Unterstützung von\
+    \ Lernenden anhand verfügbarer digitaler Informationen; Lernenden und Eltern ermöglichen,\
+    \ digitale Informationen zu verstehen und sie für die Entscheidungsfindung zu\
+    \ nutzen."
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Digitale Teilhabe:
-  criteria: Förderung der digitalen Zugänglichkeit für alle wird im Segment angesprochen
+  criteria: "Förderung der digitalen Zugänglichkeit für alle wird im Segment angesprochen\n\
+    \nDazu gehört: \n\nGewährleisten, dass alle Lernenden, auch solche mit besonderen\
+    \ Bedürfnissen, Zugang zu den Lernressourcen und - aktivitäten haben; (Digitale)\
+    \ Erwartungen, Fähigkeiten, Vorkenntnisse und Missverständnisse der Lernenden\
+    \ berücksichtigen sowie kontextbezogene, physische oder kognitive Einschränkungen\
+    \ bei der Mediennutzung bedenken."
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Differenzierung und Individualisierung:
-  criteria: Anpassung digitaler Inhalte an individuelle Lernbedürfnisse wird im Segment
-    angesprochen
+  criteria: "Anpassung digitaler Inhalte an individuelle Lernbedürfnisse wird im Segment\
+    \ angesprochen\n\nDazu gehört: \n\nNutzung von digitalen Medien, um unterschiedlichen\
+    \ Lernbedürfnissen der Lernenden gerecht zu werden, indem ihnen ermöglicht wird,\
+    \ in den verschiedenen Niveaus und der Lerngeschwindigkeit fortzuschreiten, ihr\
+    \ individuelles Lernziel zu erreichen und individuelle Lernwege zu beschreiten."
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Aktive Einbindung von Lernenden:
-  criteria: Einsatz digitaler Methoden zur Lernmotivation wird im Segment angesprochen
+  criteria: "Einsatz digitaler Methoden zur Lernmotivation wird im Segment angesprochen\n\
+    \nDazu gehört: \n\nNutzung von digitalen Medien zur aktiven und kreativen Förderung\
+    \ des Engagements der Lernenden mit einem Thema; Einsatz von digitalen Medien\
+    \ im Rahmen pädagogischer Strategien zur Förderung übertragbarer Fähigkeiten,\
+    \ des tiefgründigen Denkens und kreativen Ausdrucks des Lernenden; Öffnung des\
+    \ Lernens zwecks Schaffung neuer, realer Lernkontexte, dank derer die Lernenden\
+    \ in praktische Aktivitäten, wissenschaftliche Untersuchungen oder komplexe Problemlösungen\
+    \ einbezogen werden, oder anderweitige Erhöhung der aktiven Auseinandersetzung\
+    \ der Lernenden mit komplexen Sachverhalten."
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
-Informations- und Medienkompetenz:
-  criteria: Schulung im kritischen Umgang mit digitalen Informationen wird im Segment
-    angesprochen
+Förderung der Informations- und Medienkompetenz der Studierenden:
+  criteria: "Schulung im kritischen Umgang mit digitalen Informationen der Studierenden\
+    \ wird im Segment angesprochen\n\nDazu gehört: \n\nEinsatz von Lernaktivitäten,\
+    \ Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, Informationsbedürfnisse\
+    \ zu artikulieren, Informationen und Ressourcen in digitalen Lernumgebungen zu\
+    \ finden, diese zu organisieren, zu verarbeiten, zu analysieren und zu interpretieren\
+    \ sowie die Glaubwürdigkeit und Zuverlässigkeit der Informationen und ihrer Quellen\
+    \ zu vergleichen und kritisch zu bewerten."
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
-Digitale Kommunikation und Zusammenarbeit:
-  criteria: Förderung digitaler Kommunikationsfähigkeiten wird im Segment angesprochen
+Förderung der Digitalen Kommunikation und Zusammenarbeit der Studierenden:
+  criteria: "Förderung digitaler Kommunikationsfähigkeiten der Studierenden wird im\
+    \ Segment angesprochen\n\nDazu gehört: \n\nEinsatz von Lernaktivitäten, Aufgaben\
+    \ und Prüfungen, in denen von den Lernenden erwartet wird, effektiv und verantwortungsbewusst\
+    \ digitale Medien für Kommunikation, Zusammenarbeit und Bürgerbeteiligung zu nutzen."
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
-Erstellung digitaler Inhalte:
-  criteria: Förderung kreativer digitaler Ausdrucksformen wird im Segment angesprochen
+Förderung der Erstellung digitaler Inhalte der Studierenden:
+  criteria: "Förderung kreativer digitaler Ausdrucksformen der Studierenden wird im\
+    \ Segment angesprochen\n\nDazu gehört: \n\nEinsatz von Lernaktivitäten, Aufgaben\
+    \ und Prüfungen, in denen von den Lernenden erwartet wird, sich mittels digitaler\
+    \ Medien auszudrücken und digitale Inhalte in verschiedenen Formaten zu bearbeiten\
+    \ und zu erstellen; Lernenden vermitteln, wie Urheberrecht und Lizenzen für digitale\
+    \ Inhalte gelten und wie man Quellen zitiert und Lizenzen angibt."
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
-Verantwortungsvoller Umgang mit digitalen Medien:
-  criteria: Sensibilisierung für Datenschutz und digitale Ethik wird im Segment angesprochen
+Förderung des verantwortungsvollen Umgang der Studierenden mit digitalen Medien:
+  criteria: "Sensibilisierung der Studierenden für Datenschutz und digitale Ethik\
+    \ wird im Segment angesprochen\n\nDazu gehört: \n\nMaßnahmen ergreifen, um das\
+    \ physische, psychische und soziale Wohlergehen der Lernenden bei der Nutzung\
+    \ von digitalen Medien zu gewährleisten; Lernenden eine sichere und verantwortungsvolle\
+    \ Nutzung von digitalen Medien zu ermöglichen und ihnen beibringen, Risiken zu\
+    \ bewältigen."
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
 Digitales Problemlösen:
-  criteria: Entwicklung digitaler Problemlösungsfähigkeiten wird im Segment angesprochen
+  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird
+    im Segment angesprochen
+
+
+    Dazu gehört:
+
+
+    Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden
+    erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches
+    Wissen kreativ auf neue Situationen zu übertragen.'
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Informations- und Medienkompetenz:
+  criteria: "Schulung der Dozierenden im kritischen Umgang mit digitalen Informationen\
+    \ wird im Segment angesprochen\n\nDazu gehört: \n\nEinsatz von Lernaktivitäten,\
+    \ Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, Informationsbedürfnisse\
+    \ zu artikulieren, Informationen und Ressourcen in digitalen Lernumgebungen zu\
+    \ finden, diese zu organisieren, zu verarbeiten, zu analysieren und zu interpretieren\
+    \ sowie die Glaubwürdigkeit und Zuverlässigkeit der Informationen und ihrer Quellen\
+    \ zu vergleichen und kritisch zu bewerten."
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Digitale Kommunikation und Zusammenarbeit:
+  criteria: "Förderung digitaler Kommunikationsfähigkeiten der Dozierenden wird im\
+    \ Segment angesprochen\n\nDazu gehört: \nEinsatz von Lernaktivitäten, Aufgaben\
+    \ und Prüfungen, in denen von den Lernenden erwartet wird, effektiv und verantwortungsbewusst\
+    \ digitale Medien für Kommunikation, Zusammenarbeit und Bürgerbeteiligung zu nutzen."
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Erstellung digitaler Inhalte:
+  criteria: 'Förderung kreativer digitaler Ausdrucksformen der Dozierenden wird im
+    Segment angesprochen
+
+
+    Dazu gehört:
+
+
+    Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden
+    erwartet wird, sich mittels digitaler Medien auszudrücken und digitale Inhalte
+    in verschiedenen Formaten zu bearbeiten und zu erstellen; Lernenden vermitteln,
+    wie Urheberrecht und Lizenzen für digitale Inhalte gelten und wie man Quellen
+    zitiert und Lizenzen angibt.'
+  examples:
+  - '""'
+  values: '"Ja (1), Nein (0)"'
+Verantwortungsvoller Umgang mit digitalen Medien:
+  criteria: 'Sensibilisierung der Dozierenden für Datenschutz und digitale Ethik wird
+    im Segment angesprochen
+
+
+    Dazu gehört:
+
+
+    Maßnahmen ergreifen, um das physische, psychische und soziale Wohlergehen der
+    Lernenden bei der Nutzung von digitalen Medien zu gewährleisten; Lernenden eine
+    sichere und verantwortungsvolle Nutzung von digitalen Medien zu ermöglichen und
+    ihnen beibringen, Risiken zu bewältigen.'
   examples:
   - '""'
   values: '"Ja (1), Nein (0)"'
@@ -523,9 +695,9 @@ _DERIVED_2.5 Lernerorientierung:
   examples:
   - '""'
   values: '"Ja (1)"'
-_DERIVED_2.6 Förderung der digitalen Kompetenz der Lernenden:
+_DERIVED_2.6 Förderung der digitalen Kompetenz der Studierenden:
   criteria: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen
-    des Bereichs   Förderung der digitalen Kompetenz der Lernenden angesprochen
+    des Bereichs   Förderung der digitalen Kompetenz der Studierenden angesprochen
   examples:
   - '""'
   values: '"Ja (1)"'
