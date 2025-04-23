@@ -23,6 +23,7 @@ Bitte gib deine Analyse im JSON-Format zurück:
     "value": gewählter_wert,
     "confidence": konfidenz_zwischen_0_und_1,
     "reasoning": "kurze Begründung mit Bezug auf Kriterium und Ankerbeispiele"
+    "citation": "Zitat aus der Beschreibung passend zur Begründung"
 }
 
 Richtlinien:

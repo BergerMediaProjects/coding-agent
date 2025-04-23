@@ -31,6 +31,8 @@ from enum import Enum
 from dotenv import load_dotenv
 import sys
 from collections import defaultdict
+from docx import Document
+import re
 
 load_dotenv()  # Add this at the top of the file
 
@@ -463,6 +465,258 @@ class GPTClassificationAgent:
             raise
 
 # ============================================================================
+# YAML Management Components
+# ============================================================================
+
+class YAMLManager:
+    """
+    Manages YAML operations for the coding scheme
+    
+    Responsibilities:
+    1. Generate YAML from DOCX
+    2. Fix YAML formatting
+    3. Validate YAML structure
+    """
+    
+    def __init__(self, config: Dict):
+        self.config = config
+        self.logger = logging.getLogger("yaml_manager")
+    
+    def parse_condition(self, values: str) -> dict:
+        """Parse condition from values string"""
+        if "wenn" not in values.lower():
+            return None
+            
+        condition = values.lower().split("wenn")[1].strip()
+        
+        if "min. eine der kategorien" in condition:
+            try:
+                range_part = condition.split("kategorien")[1].split("=")[0].strip()
+                start, end = range_part.split("-")
+                value = condition.split("=")[1].strip()
+                return {
+                    "type": "any_in_range",
+                    "range_start": start.strip(),
+                    "range_end": end.strip(),
+                    "value": value
+                }
+            except Exception as e:
+                self.logger.warning(f"Could not parse range condition: {condition}")
+                return None
+        elif "=" in condition:
+            ref_category, value = condition.split("=")
+            return {
+                "type": "equals",
+                "reference": ref_category.strip(),
+                "value": value.strip()
+            }
+        return None
+
+    def standardize_values(self, values: str) -> str:
+        """Standardize the values format"""
+        values = values.strip()
+        base_values = values.split("wenn")[0].strip() if "wenn" in values.lower() else values
+        
+        if "ja" in base_values.lower() and "nein" in base_values.lower():
+            return "Ja (1), Nein (0)"
+        elif "offen" in base_values.lower():
+            return "offen"
+        elif any(x in base_values for x in [";", ","]):
+            return base_values.replace("\n", " ").strip()
+        else:
+            return base_values
+
+    def simplify_category_name(self, name: str) -> str:
+        """Remove numbering pattern from category names"""
+        patterns = [
+            r'^\d+\.\d+\.?\d*\s*[a-z]?\s*',
+            r'^\.\d+\s*',
+            r'^\d+\s+'
+        ]
+        
+        result = name
+        for pattern in patterns:
+            result = re.sub(pattern, '', result)
+        
+        return result.strip()
+
+    def fix_criteria(self, criteria: str) -> str:
+        """Fix formatting of criteria text"""
+        criteria = re.sub(r'^Kriterium:\s*', '', criteria)
+        criteria = criteria.replace('"', "'").strip()
+        return criteria
+
+    def fix_examples(self, examples: list) -> list:
+        """Fix formatting of examples"""
+        fixed = []
+        for example in examples:
+            if isinstance(example, dict):
+                example = "; ".join(f"{k}: {v}" for k, v in example.items())
+            
+            example = re.sub(r'^[·•]\s*', '', str(example))
+            example = example.strip().replace('"', "'")
+            
+            if not (example.startswith('"') and example.endswith('"')):
+                example = f'"{example}"'
+            fixed.append(example)
+        return fixed
+
+    def fix_values(self, values: str) -> str:
+        """Fix formatting of values"""
+        if not values:
+            return '""'
+            
+        values = str(values).strip().strip('"\'')
+        
+        if not values.startswith('"'):
+            values = f'"{values}"'
+            
+        return values
+
+    async def generate_yaml_from_docx(self) -> bool:
+        """Generate YAML from DOCX file"""
+        try:
+            doc_folder = os.path.join(os.path.dirname(self.config['paths']['coding_scheme']), "DOC_coding_scheme")
+            input_file = os.path.join(doc_folder, "doc_cs.docx")
+            output_file = os.path.join(doc_folder, "coding_scheme_imported.yml")
+            
+            self.logger.info(f"Generating YAML from DOCX: {input_file}")
+            
+            # Load DOCX
+            doc = Document(input_file)
+            table = doc.tables[0]
+            codes = {}
+            
+            # Process table
+            for row in table.rows[1:]:
+                cells = row.cells
+                category = cells[0].text.strip()
+                values = cells[1].text.strip()
+                criteria = cells[2].text.strip()
+                examples = cells[3].text.strip()
+                
+                condition = self.parse_condition(values)
+                if condition:
+                    category = "_DERIVED_" + category
+                
+                codes[category] = {
+                    "criteria": criteria,
+                    "examples": examples.split('\n') if examples else [''],
+                    "values": self.standardize_values(values)
+                }
+                if condition:
+                    codes[category]["condition"] = condition
+            
+            # Save YAML
+            with open(output_file, "w", encoding="utf-8") as yaml_file:
+                yaml.dump(codes, yaml_file, allow_unicode=True, default_flow_style=False)
+            
+            self.logger.info(f"Generated YAML saved to: {output_file}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error generating YAML: {str(e)}")
+            return False
+
+    async def fix_yaml_format(self) -> bool:
+        """Fix YAML formatting"""
+        try:
+            doc_folder = os.path.join(os.path.dirname(self.config['paths']['coding_scheme']), "DOC_coding_scheme")
+            input_file = os.path.join(doc_folder, "coding_scheme_imported.yml")
+            output_file = self.config['paths']['coding_scheme']
+            
+            self.logger.info(f"Fixing YAML format: {input_file}")
+            
+            # Read original YAML
+            with open(input_file, 'r', encoding='utf-8') as file:
+                data = yaml.safe_load(file)
+            
+            # Fix format
+            fixed_data = {}
+            for key, value in data.items():
+                new_key = self.simplify_category_name(key)
+                fixed_content = {
+                    'criteria': self.fix_criteria(value['criteria']),
+                    'examples': self.fix_examples(value['examples']),
+                    'values': self.fix_values(value.get('values', ''))
+                }
+                fixed_data[new_key] = fixed_content
+            
+            # Save fixed YAML
+            with open(output_file, 'w', encoding='utf-8') as file:
+                yaml.dump(fixed_data, file, allow_unicode=True, sort_keys=False)
+            
+            self.logger.info(f"Fixed YAML saved to: {output_file}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error fixing YAML format: {str(e)}")
+            return False
+
+    async def validate_yaml(self) -> bool:
+        """Validate YAML structure"""
+        try:
+            self.logger.info(f"Validating YAML: {self.config['paths']['coding_scheme']}")
+            
+            with open(self.config['paths']['coding_scheme'], 'r', encoding='utf-8') as file:
+                data = yaml.safe_load(file)
+            
+            # Validate each category
+            for category_name, category_data in data.items():
+                if not isinstance(category_data, dict):
+                    self.logger.error(f"Invalid category structure: {category_name}")
+                    return False
+                
+                required_fields = ['criteria', 'examples', 'values']
+                for field in required_fields:
+                    if field not in category_data:
+                        self.logger.error(f"Missing field '{field}' in category: {category_name}")
+                        return False
+                
+                if not isinstance(category_data['examples'], list):
+                    self.logger.error(f"'examples' must be a list in category: {category_name}")
+                    return False
+            
+            self.logger.info("YAML validation successful")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error validating YAML: {str(e)}")
+            return False
+
+    async def update_coding_scheme(self) -> bool:
+        """
+        Update coding scheme by running the complete YAML pipeline:
+        1. Generate YAML from DOCX
+        2. Fix YAML format
+        3. Validate final YAML
+        """
+        try:
+            self.logger.info("Starting coding scheme update...")
+            
+            # Generate YAML from DOCX
+            if not await self.generate_yaml_from_docx():
+                self.logger.error("Failed to generate YAML from DOCX")
+                return False
+            
+            # Fix YAML format
+            if not await self.fix_yaml_format():
+                self.logger.error("Failed to fix YAML format")
+                return False
+            
+            # Validate final YAML
+            if not await self.validate_yaml():
+                self.logger.error("Failed to validate YAML")
+                return False
+            
+            self.logger.info("Coding scheme update completed successfully")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Error updating coding scheme: {str(e)}")
+            return False
+
+# ============================================================================
 # Classification Coordinator
 # ============================================================================
 
@@ -494,6 +748,7 @@ class TrainingDataClassifier:
     - GPTClassificationAgent: Handles AI interaction
     - ResponseValidator: Validates GPT responses
     - ResultsManager: Handles results and metrics
+    - YAMLManager: Manages YAML operations
     """
     
     def __init__(self, config: Dict):
@@ -506,6 +761,7 @@ class TrainingDataClassifier:
         self.results_manager = ResultsManager()
         self.classification_agent = GPTClassificationAgent()
         self.response_validator = ResponseValidator()
+        self.yaml_manager = YAMLManager(config)  # Add YAML manager
 
     # Keep the SELECTED_CATEGORIES
     SELECTED_CATEGORIES = [
@@ -525,7 +781,7 @@ class TrainingDataClassifier:
         # "Dauer",
         # "Semester",
         # "Zielgruppe",
-        "Fachbereich",
+        # "Fachbereich",
         # "Fachbereich offen",
         # "Kompetenzbereich des Zertifikats Hochschullehre",
         # "Pädagogisch-didaktisches Angebot allgemeiner oder fachbereichsspezifischer Art",
@@ -548,13 +804,13 @@ class TrainingDataClassifier:
         # "Digitale Teilhabe",
         # "Differenzierung und Individualisierung",
         # "Aktive Einbindung von Lernenden",
-        "Förderung der Informations- und Medienkompetenz der Studierenden",
-        "Förderung der Digitalen Kommunikation und Zusammenarbeit der Studierenden",
+        # "Förderung der Informations- und Medienkompetenz der Studierenden",
+        # "Förderung der Digitalen Kommunikation und Zusammenarbeit der Studierenden",
         # "Förderung der Erstellung digitaler Inhalte der Studierenden",
         # "Förderung des verantwortungsvollen Umgang der Studierenden mit digitalen Medien",
         # "Förderung der Studierenden zum Digitalen Problemlösen",
         "Informations- und Medienkompetenz",
-        "Digitale Kommunikation und Zusammenarbeit",
+        # "Digitale Kommunikation und Zusammenarbeit",
         # "Erstellung digitaler Inhalte",
         # "Verantwortungsvoller Umgang mit digitalen Medien",
         # "Digitales Problemlösen"
@@ -637,6 +893,13 @@ class TrainingDataClassifier:
         """Run the complete classification process"""
         self.logger.info("Starting classification")
         try:
+            # Update coding scheme if needed
+            if os.path.exists(os.path.join(os.path.dirname(self.config['paths']['coding_scheme']), "DOC_coding_scheme", "doc_cs.docx")):
+                self.logger.info("Found DOCX file, updating coding scheme...")
+                if not await self.yaml_manager.update_coding_scheme():
+                    self.logger.error("Failed to update coding scheme")
+                    return
+            
             # Load and validate resources
             dataset = await self.data_manager.load_data(self.config['paths']['data_csv'])
             if self.config['paths'].get('human_codes'):

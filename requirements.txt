@@ -4,4 +4,5 @@ pyyaml
 pydantic
 openpyxl
 python-dotenv
-python-docx 
+python-docx
+scikit-learn
