@@ -1,0 +1,427 @@
+coding_scheme:
+  version: '1.0'
+  categories:
+    Kursname:
+      display_name: Kursname
+      simplified_name: Kursname
+      criteria: Vorsätze wie „Neu:“, … sind nicht Teil des Titels und werden nicht übernommen.
+      examples: []
+      values: '"(kopiere hier den Titel des Kurses)"'
+    Anbieter:
+      display_name: Anbieter
+      simplified_name: Anbieter
+      criteria: '1: Hochschulen und einzelne Abteilungen von Hochschulen, die sich mit der Fortbildung von Lehrenden beschäftigen (z.B. ProfilLehre(Plus) Augsburg/LMU/…) 2: externe Einrichtungen, die sich mit der Fortbildung von Lehrenden beschäftigen und nicht mit einer konkreten Hochschule assoziiert sind (z.B. DIZ, BayLern, …)'
+      examples: []
+      values: '"Hochschule (1), externer Anbieter (2)"'
+    Name_der_Hochschule:
+      display_name: Name_der_Hochschule
+      simplified_name: Name_der_Hochschule
+      criteria: Hier geht es nur um die Hochschulen, die in unserer Stichprobe sind, das heißt es geht hier NICHT um den Anbieter (z.B. vhb). Die Namen immer voll ausschreiben, bzw. die Abkürzungen in () angeben. Hochschule für angewandte Wissenschaft mit HAW abkürzen.
+      examples: []
+      values: '"Universität Augsburg, Otto-Friedrich-Universität Bamberg, Universität Bayreuth, Friedrich-Alexander-Universität (FAU) Erlangen-Nürnberg, Ludwig-Maximilians-Universität (LMU) München, Technische Universität München (TUM), Universität Passau, Universität Regensburg, Julius-Maximilians-Universität Würzburg, Ostbayerische Technische Hochschule Amberg-Weiden, Hochschule Ansbach, Technische Hochschule Aschaffenburg, Hochschule Augsburg, Hochschule Coburg, Technische Hochschule Deggendorf (THD), Hochschule Hof, Technische Hochschule Ingolstadt (THI), Hochschule Kempten, Hochschule Landshut, Hochschule für angewandte Wissenschaften München (HAW), Hochschule Neu-Ulm, Technische Hochschule Nürnberg Georg Simon Ohm, Name der Hochschule unklar (externer Anbieter), Ostbayerische Technische Hochschule (OTH) Regensburg, Technische Hochschule Rosenheim, Hochschule Weihenstephan-Triesdorf, Hochschule Würzburg-Schweinfurt, (ggf. Weitere), -99"'
+    Annehmerhochschulen_des_Hochschulanbieters:
+      display_name: Annehmerhochschulen_des_Hochschulanbieters
+      simplified_name: Annehmerhochschulen_des_Hochschulanbieters
+      criteria: 'Weitere zusätzliche bayrische Hochschulen (siehe Liste 1.0.3), die das Angebot des unter 1.0.3 genannten Hochschulanbieters nutzen können Offen: konkret genannte weitere Hochschule(n) Mehrere Hochschulen: Nutzbarkeit gegeben für weitere Hochschulen, ohne dass diese einzeln namentlich genannt sind.'
+      examples:
+      - '"Mehrere Hochschulen = z.B. „gilt für bayerische Hochschulen“, „alle bayrischen Universitäten“, …"'
+      values: '"offen"'
+    Anzahl:
+      display_name: Anzahl
+      simplified_name: Anzahl
+      criteria: Meint hauptsächlich, wenn ein inhaltlich identisches Angebot an mehreren unterschiedlichen Terminen angeboten und aufgelistet wird (s. Frage 9 FAQ) Wichtig als Info festzuhalten (wenn mehrmals angeboten können den Kurs auch mehr Leute nutzen), für Auswertung aber nicht relevant. Meint keine Duplikate
+      examples:
+      - '"1,2,3,4,5,6"'
+      values: '"Anzahl der Termine, falls mehrere Angeboten werden (n)"'
+    Dozent_in:
+      display_name: Dozent_in
+      simplified_name: Dozent_in
+      criteria: ''''''
+      examples: []
+      values: '"(kopiere hier den Vor- und Nachnamen der Lehrperson), Information nicht verfügbar (-99)"'
+    Veranstaltungsart:
+      display_name: Veranstaltungsart
+      simplified_name: Veranstaltungsart
+      criteria: 'Seminar: Seminar, Kurs, Workshop, Vorlesung, Schulung, Fortbildung Coaching: Coaching, Beratung, Teaching Analysis Poll] Event: Event, Forum, Arbeitskreis(AK), Fachdidaktischer Arbeitskreis (FDAK), Lehrtreff, Tag der Lehre, Konferenz Weitere: keine der oben genannten -99: Information ist nicht aus dem Text erkennbar CAVE: Kontext mitberücksichtigen und sorgfältig am Fall prüfen, statt direkter Begriffszuordnung. Vorlesung kann z.B. sowohl Seminar als auch Event sein.'
+      examples:
+      - '"Bsp. für weitere (offen): „weitere Fortbildung“; „weitere Multiplikatorenprogramm“"'
+      values: '"Seminar (1), Event (2), Coaching (3), Weitere (4), Information nicht verfügbar (-99)"'
+    Format_der_Veranstaltung_Pr_senz_Online:
+      display_name: Format_der_Veranstaltung_Pr_senz_Online
+      simplified_name: Format_der_Veranstaltung_Pr_senz_Online
+      criteria: Präsenz, Online und Hybrid setzen eine explizite oder eine offensichtlich implizite Beschreibung voraus Angabe eines Raumes/Ortes als Indiz für Präsenz Hybrid umfasst Unterricht, der entweder online ODER persönlich stattfindet. Die Wahlmöglichkeiten müssen beide gleichzeitig in einer Sitzung stattfinden. Hybrid umfasst Unterricht, bei dem die Lernenden zwischen online und offline wählen können (z. B. Coaching-Sitzungen). Blended liegt vor, wenn die Lernenden den Unterricht sowohl online als auch persönlich absolvieren müssen. Dies kann in einer Sitzung oder in mehreren Sitzungen geschehen. Eine nach der anderen Wenn Selbstlernformat oder Selbstlernen erwähnt wird, wird es als „online“ und „asynchron“ gezählt. -99, wenn das Veranstaltungsformat nicht thematisiert ist
+      examples:
+      - '"Lehrvideos leicht gemacht, HAW München"'
+      - '"Hybrid Bsp: Ein Kurs, bei dem es nur eine Sitzung gibt und die Lernenden die Möglichkeit haben, am Online-Unterricht teilzunehmen oder das Seminar persönlich zu besuchen."'
+      - '"Blended Bsp.: In Woche 1 müssen die Lernenden persönlich am Unterricht teilnehmen, in Woche 2 müssen sie Gruppenarbeiten online durchführen und in Woche 3 präsentieren sie persönlich."'
+      values: '"Präsenz, Online, Hybrid, Blended, Präsenz oder Online, Information nicht verfügbar (-99)"'
+    Format_der_Veranstaltung_synchron:
+      display_name: Format_der_Veranstaltung_synchron
+      simplified_name: Format_der_Veranstaltung_synchron
+      criteria: Synchron, Asynchron und Kombination setzen eine explizite oder eine offensichtlich implizite Beschreibung voraus Wenn die Beschreibung enthält, dass der Kurs in Präsenz stattfindet, wird mit -99 kodiert.
+      examples:
+      - '"Zoom-Video-Konferenz(-Link) als Indiz für synchron, außer weitere asynchrone Elemente sind thematisiert"'
+      - '"Workshop „an einem Tag“ implizieren synchron (Bsp. Audio in der Hochschullehre, TUM)"'
+      values: '"Synchron, Asynchron, Kombination, Information nicht relevant (-99)"'
+    Stattfinden_der_Veranstaltung:
+      display_name: Stattfinden_der_Veranstaltung
+      simplified_name: Stattfinden_der_Veranstaltung
+      criteria: Nein = Angabe “Kurs wurde abgesagt” o.ä. Wenn nicht explizit mit dabei steht, dass die Veranstaltung abgesagt/verschoben/… wurde, nehmen wir „Ja (1)“ an.
+      examples: []
+      values: '"Ja (1), Nein (0)"'
+    Termin_der_Veranstaltung:
+      display_name: Termin_der_Veranstaltung
+      simplified_name: Termin_der_Veranstaltung
+      criteria: ''''''
+      examples: []
+      values: '"Festgelegt (1), Auf Nachfrage/Anfrage (2), keine Information verfügbar (-99)"'
+    Dauer:
+      display_name: Dauer
+      simplified_name: Dauer
+      criteria: Summe der Angebotsdauer Möglichst zwei Mal ausrechnen. Wenn die Anzahl der Sitzungen pro Woche nicht angegeben ist, gehen Sie davon aus, dass jede Sitzung einmal pro Woche stattfindet.
+      examples: []
+      values: '"(Angabe in Stunden), keine Information verfügbar (-99)"'
+    Semester:
+      display_name: Semester
+      simplified_name: Semester
+      criteria: 'Zeitraum SoSe25: 23.April.2025 bis einschließlich 25. Juli 2025 WiSe 24/25: 14.Oktober.2024 bis einschließlich 7.Februar 2025. Wenn wir einen Kurs finden, für den kein konkretes Datum angegeben wird, und auch kein expliziter Bezug aufs WiSe oder SoSe klar ist; Angebote, die nach Bedarf/Nachfrage stattfinden -> kodieren wir trotzdem, da wir eine „Momentaufnahme“ der Suche machen -> -99'
+      examples: []
+      values: '"SoSe25, WiSe24/25, -99"'
+    Zielgruppe:
+      display_name: Zielgruppe
+      simplified_name: Zielgruppe
+      criteria: Sollte eigentlich immer L beinhalten + ggf. eine der anderen Optionen nfrage hremde fallen alle ge (2) r kodieren und dann ggf. en er Stichprobe sind, das heißt es geht hier NICHT um den Anbieter Unter Lehrende fallen alle Zielgruppen, die klar Dozierende sind, bzw. bei denen wir nicht ausschließen können, dass sie keine Dozierenden sind. Sollte in vielen Fällen explizit dabeistehen vs. L kann aufgrund der Vorauswahl vorausgesetzt werden. Lehrende = Professor:in, Dozierende, Kopfstellenadministratoren; Multiplikator*innen für E-Learning der vhb-Trägerschulen Dekane (D) = für Leitendes Personal, die nicht in Lehrende enthalten sind
+      examples: []
+      values: '"Lehrende (L), Tutor:in (T), Mitarbeiter:in (M), Hiwi (S), Berater:in (B), Dekane (D)"'
+    Fachbereich:
+      display_name: Fachbereich
+      simplified_name: Fachbereich
+      criteria: ''''''
+      examples: []
+      values: '"Naturwissenschaften (1), Ingenieurwissenschaften (2), Rechtswissenschaften (3), Wirtschaftswissenschaften (4), Sozialwissenschaften (5), Geisteswissenschaften (6), Kulturwissenschaften (7), Sprachwissenschaften (8), Medizin (9), Allgemeine Didaktik (10), Nicht zuzuordnen/unklar: _____ (-99)"'
+    Fachbereich_offen:
+      display_name: Fachbereich_offen
+      simplified_name: Fachbereich_offen
+      criteria: ''''''
+      examples: []
+      values: '"Wenn bei 1.2.2 „Fachbereich“ -99
+
+
+
+
+        Offen: Name des Fachbereichs"'
+    Kompetenzbereich_des_Zertifikats_Hochschullehre:
+      display_name: Kompetenzbereich_des_Zertifikats_Hochschullehre
+      simplified_name: Kompetenzbereich_des_Zertifikats_Hochschullehre
+      criteria: 'explizit genannt/Bezug genommen z.T. wird allein über die Buchstaben (A-E) die Verbindung hergestellt: Lehrkategorie „ProfilLehre a“ (Bsp. Uni Augsburg) Buchstabennummerierung vor dem Titel des Angebots (Bsp. A19: Online-Lehre attraktiv gestalten)'
+      examples:
+      - '"Gemischtes Angebot (G) z.B., wenn bei einem Fortbildungsangebot Punkte für „Lehr- und Lernkonzepte (A)“ und „Prüfen (C)“ erwerben werden können, kodieren wir: „A; C; G“"'
+      values: '"Lehr- und Lernkonzepte (A), Präsentation und Kommunikation (B), Prüfen (C), Reflexion und Evaluation (D), Beraten und Begleiten (E), Bezug aufs Zertifikat allgemein (Z), Gemischtes Angebot (G), -99"'
+    P_dagogisch_didaktisches_Angebot_allgemeiner_oder_fachbereichsspezifischer_Art_Lehre:
+      display_name: P_dagogisch_didaktisches_Angebot_allgemeiner_oder_fachbereichsspezifischer_Art_Lehre
+      simplified_name: P_dagogisch_didaktisches_Angebot_allgemeiner_oder_fachbereichsspezifischer_Art_Lehre
+      criteria: Wir kodieren hier „1“, wenn ein Angebot explizit/implizit deklariert ist als pädagogisch-didaktisches Angebot allgemeiner oder fachbereichsspezifischer Art. Bestimmte Stichwörter können darauf hinweisen, wir machen es aber nicht nur konkret an bestimmten Stichpunkten fest, sondern erschließen uns den Bezug auf pädagogisch-didaktisch/Lehre anhand des Textes. Die meisten Angebote sollten so einen Bezug eigentlich haben.
+      examples:
+      - '"Stichwörter:"'
+      - '"„Lehre“, „Lehrmaterial“, „Studierende“, „Didaktik“, „Prüfungen“"'
+      - '"Auch kodieren wenn Zertifikatsbereich vorhanden ist"'
+      values: '"Ja (1), Nein (0)"'
+    Vorkenntnisse_f_r_Teilnahme_erforderlich:
+      display_name: Vorkenntnisse_f_r_Teilnahme_erforderlich
+      simplified_name: Vorkenntnisse_f_r_Teilnahme_erforderlich
+      criteria: 'Sollte vergleichbar/gleich bei Angeboten dabeistehen Meint Kompetenzen/Kenntnisse, welche die Teilnehmenden aufweisen sollten – nicht sachliche/infrastrukturelle Rahmenbedingungen Code 2 bei vertieften, guten … computerbezogenen Kenntnissen Bsp. für Code 1: grundlegende Moodlekenntnisse, allgemeine Computerkentnisse Code 0, wenn Vorkenntnisse/Voraussetzungen thematisiert wurden und keine genannt wurden oder abstrakte Dinge wie „Forschungsfreude“ genannt wurden. Code -99, wenn Vorkenntnisse/Voraussetzungen nirgends thematisiert wurden'
+      examples:
+      - '"„Grundlagenseminar“ synonym für „Vorkenntnisse nicht erforderlich“ Bsp. Uni Passau 2018"'
+      - '"Synonym für Vorkenntnisse:  „Voraussetzung“ (s. TUM 2018 „  Digitale Medien in der Lehre:Didaktische Konzepte,"'
+      - '"Formen, Praxisbeispiele“"'
+      values: '"Vorkenntnisse nicht erforderlich (0), Grundvorkenntnisse erforderlich (1), Vertiefte Vorkenntnisse erforderlich (2), -99"'
+    Stufen_des_Kompetenzbereichs:
+      display_name: Stufen_des_Kompetenzbereichs
+      simplified_name: Stufen_des_Kompetenzbereichs
+      criteria: Codes 0, 1 und 2 setzten eine explizite Bezeichnung, einen expliziten Bezug voraus Bsp. Grundlagenseminar ist nicht unbedingt gleichzusetzen mit Grundstufe im Sinne des Hochschulzertifikats -99
+      examples: []
+      values: '"Grundstufe (0), Aufbaustufe (1), Vertiefungsstufe (2), -99"'
+    Digitale_Medien_werden_angesprochen:
+      display_name: Digitale_Medien_werden_angesprochen
+      simplified_name: Digitale_Medien_werden_angesprochen
+      criteria: 'Digitale Medien werden im Segment angesprochen. Wir verstehen unter digitalen Medien: Synonyme wie „Digitales Medium“; konkrete Medien wie Smartphone, Tablet, Computer o.Ä.; digitale Programme wie PowerPoint; digitale didaktische Umsetzungen wie E-Learning (Materialien), Onlinekurse, Webinare, (digitale) Fernprüfungen, hybride Veranstaltungen, flipped classroom, vhb-Kurs. Wir fassen auch den Begriff „Medien“ als digitale Medien auf, wenn nicht explizit ein analoges Medium (z.B. Buch) genannt wird. Auch künstliche Intelligenz und Bestandteile der digitalen Infrastruktur zählen zu digitalen Medien.'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Nennung von digitalen Medien z.B. eher im Introteil einer Fortbildung"'
+      - '"„Ziele: Die Teilnehmenden planen barrierefreie Lehrveranstaltungen unter Berücksichtigung geeigneter Methoden und Medien“ (Uni Augsburg: A12 Behinderte und chronisch kranke Studierende in meiner Veranstaltung)"'
+      - '"Bsp. für den Code „0“:"'
+      - '"Die generelle Beschreibung: Auf der Grundlage von kurzen Input-Phasen überprüfen Sie, welche bewährten und innovativen Lehr-/Lernmethoden Ihre Lehre zusätzlich bereichern könnten (Uni Würzburg: Praxisworkshop – Hochschullehre)"'
+      values: '"Digitale Medien werden angesprochen (1), Digitale Medien werden nicht angesprochen (0)"'
+    Digitale_Medien_werden_als_Lernziel_angesprochen:
+      display_name: Digitale_Medien_werden_als_Lernziel_angesprochen
+      simplified_name: Digitale_Medien_werden_als_Lernziel_angesprochen
+      criteria: 1 setzt voraus, dass es im Angebot primär um digitale Medien als Hauptziel geht und/oder konkrete Medien (wie Moodle) im Hauptfokus sind – was mit einem Satz beschrieben ist („digital Lehren“ allein ist nicht ausreichend genug)
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Nennung von digitalen Medien oftmals als Lernziel im Bereich Kursziele o.ä. (im Gegensatz zur Nennung in Introteil)"'
+      - '"Die Teilnehmer sollen im Seminar Konzepte von Blended Learning kennenlernen und hinterfragen, wie diese sinnvoll für die eigene Lehre eingesetzt werden können. Für die Best Practice Beispiele wird das an der Ludwig-Maximilians-Universität eingesetzte LMS (Learning Management System) Moodle für Anschauungszwecke genutzt. Veranschaulicht wird das didaktische Grunddesign von Blended Learning Veranstaltungen und die damit verbundene spezifische Anforderungen an die Betreuung von Studierenden.(…) Lernziele: Kennenlernen von Best Practice Beispiele und verschiedenen Blended Learning Konzepten (LMU: Blended Learning in der Lehre)"'
+      - '"eigene medienunterstützte Lehrveranstaltung planen...; Einsatzmöglichkeiten mediengestützter Lehre kennen.. (FAU Erlangen-Nürnberg 001: E-learning in der Hochschullehre)"'
+      - '"Selbstlernphasen mit moodle-Tools didaktisch sinnvoll gestalten (Uni Regensburg 0007: Einstieg in Blended Learning (A4-1801))"'
+      - '"Sie selbst MiniWebinare zu Ihrem aktuellen Forschungsthema abhalten, zu überwinden (Uni Würzburg: Kann man mich hören)"'
+      - '"ein individuelles Lehrprojekt mit digitalen Ressourcen didaktisch sinnvoll konzipiert, durchgeführt und evaluiert (Uni Bayreuth 0024: Zertifikatsprogramm „Lehr-Lernprozesses fördern...“)"'
+      - '"Der Versuchsraum ist eine Sammlung von Lehrthemen, die in der berufsbegleitenden Lehre ausprobiert werden können. Dies kann Methoden der Unterrichtsgestaltung betreffen, wie z.B. problembasierter Unterricht oder forschendes Lernen. Aber auch Themen, die die Betreuung der Studierenden betreffen,wie die virtuelle Sprechstunde oder der Einsatz eines Wikis. Ebenso Maßnahmen zur Förderung zeit- und ortsunabhängigen Lernens wie Videoaufzeichnungen, E-Tutorials oder Vorlesungen über Adobe Connect (HS Ingolstadt: Versuchsraum)"'
+      values: '"Digitale Medien sind Lernziel (1), Digitale Medien sind kein Lernziel (0)"'
+    Vorkommen_Medienkompetenz_digitale_Bildung_als_Lernziel_bzw_Lerninhalt_explizit:
+      display_name: Vorkommen_Medienkompetenz_digitale_Bildung_als_Lernziel_bzw_Lerninhalt_explizit
+      simplified_name: Vorkommen_Medienkompetenz_digitale_Bildung_als_Lernziel_bzw_Lerninhalt_explizit
+      criteria: 'Die Äußerung/das Segment enthält explizit, dass es der Lerninhalt oder das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme der Lehrenden zu fördern Mögliche Synonyme: medienbezogene Kompetenz, digitale Kompetenz, mediale Bildung, Mediendidaktik, medienbezogene Kompetenz, mediendidaktische Kompetenz, medienerzieherische Kompetenz, Medienerziehung, Medien- und Informationsethik'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Die Bildschirmaufzeichnungssoftware Camtasia Studio anwenden können"'
+      - '"diskutieren den Einsatz von Clickersystemen."'
+      - '"Für die Dokumentation und Analyse in der Lehre eigene mobile Endgeräte schnell und einfach einsetzen"'
+      - '"Die didaktische und technische Umsetzung von Videoreflexion als Methode kennenlernen Video-Feedback in der Lehre als Lehrmethode umsetzen"'
+      values: '"Ja (1), Nein (0)"'
+    Vorkommen_Medienkompetenz_digitale_Bildung_als_Lernziel_bzw_Lerninhalt_implizit:
+      display_name: Vorkommen_Medienkompetenz_digitale_Bildung_als_Lernziel_bzw_Lerninhalt_implizit
+      simplified_name: Vorkommen_Medienkompetenz_digitale_Bildung_als_Lernziel_bzw_Lerninhalt_implizit
+      criteria: Die Äußerung/das Segment enthält explizit, dass es der Lerninhalt oder das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme der Lehrenden zu fördern Bei den Medienkompetenzen darauf achten, dass sie wirklich Lernziel sein müssen (z.B. nicht nur in Introteil genannt „Medienkompetenzen heutzutage sind wichtig“); steht wahrscheinlich oft unter konkreten Zielen der Fobi. Dieser Code hat 2018 eher dem entsprochen, was wir unter implizite Medienkompetenz verstehen.
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), nur, wenn auch 2.0.4 =1; Nein (0)"'
+    Thematisierung_von_K_nstlicher_Intelligenz:
+      display_name: Thematisierung_von_K_nstlicher_Intelligenz
+      simplified_name: Thematisierung_von_K_nstlicher_Intelligenz
+      criteria: Künstliche Intelligenz wird in irgendeiner Form im Titel oder Segment angesprochen
+      examples:
+      - '"“Lehrvideos und KI: Wie gestalte ich meine Lehre mit HAnS?”"'
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    KI_als_Lerngegenstand:
+      display_name: KI_als_Lerngegenstand
+      simplified_name: KI_als_Lerngegenstand
+      criteria: Vermittlung von theoretischen Grundlagen zu Künstlicher Intelligenz wird im Segment angesprochen
+      examples:
+      - '"Lehren und Lernen mit KI: ChatGPT in der Hochschullehre verantwortungsvoll einsetzen"'
+      - '"„Wir klären darin, warum aktuelle KI-Modelle nach statistischen Wahrscheinlichkeiten arbeiten, warum KI manchmal falsche Antworten gibt und wie man der KI Befehle geben kann“"'
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), nicht zutreffend (-99)"'
+    KI_als_Werkzeug:
+      display_name: KI_als_Werkzeug
+      simplified_name: KI_als_Werkzeug
+      criteria: Einsatz von KI-gestützten Anwendungen im Hochschul-Unterricht wird im Segment angesprochen
+      examples:
+      - '"Lehren und Lernen mit KI: ChatGPT in der Hochschullehre verantwortungsvoll einsetzen"'
+      - '"„Wir erarbeiten, wie man gute Befehle für Chatbots entwickelt (Prompt Engineering)“"'
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), nicht zutreffend (-99)"'
+    Organisatorische_Kommunikation:
+      display_name: Organisatorische_Kommunikation
+      simplified_name: Organisatorische_Kommunikation
+      criteria: 'Nutzung digitaler Kommunikationsmittel innerhalb der Organisation wird im Segment angesprochen Das bedeutet: Nutzung von digitalen Medien zur Verbesserung der organisatorischen Kommunikation mit Lernenden, Eltern und Dritten; Gemeinsame Entwicklung und Verbesserung organisatorischer Kommunikationsstrategien Das Kriterium muss explizit angesprochen werden.'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      - '"Die Fortbildung befasst sich mit der Nutzung von Moodle, einem digitalen Kommunikationsmittel, das innerhalb der Organisation (Hochschule) zur Verbesserung der Kommunikation mit Lernenden eingesetzt wird. Es wird jedoch nicht explizit auf die gemeinsame Entwicklung und Verbesserung organisatorischer Kommunikationsstrategien eingegangen."'
+      values: '"Ja (1), Nein (0)"'
+    Berufliche_Zusammenarbeit:
+      display_name: Berufliche_Zusammenarbeit
+      simplified_name: Berufliche_Zusammenarbeit
+      criteria: 'Digitale Zusammenarbeit zwischen Lehrkräften wird im Segment angesprochen Das bedeutet: Nutzung von digitalen Medien zur Zusammenarbeit mit anderen Lehrenden, zum Austausch von Wissen und Erfahrungen und zur Erneuerung von gemeinsamen pädagogischen Praktiken'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    Reflektierte_Praxis:
+      display_name: Reflektierte_Praxis
+      simplified_name: Reflektierte_Praxis
+      criteria: 'Methoden zur digitalen Selbstreflexion werden im Segment angesprochen Das bedeutet: Die eigene digitale pädagogische Praxis sowie die der Bildungsgemeinschaft individuell und gemeinsam reflektieren, selbstkritisch beurteilen und aktiv entwickeln.'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Die Umsetzung des Flipped Classrooms in der eigenen Lehre reflektieren"'
+      - '"In dieser Fortbildung lernen Sie die praktische Umsetzung didaktischer Einsatzszenarien mittels Lehrvideos rund um…Reflexion und Feedback in der Lehre kennen."'
+      values: '"Ja (1), Nein (0)"'
+    Digitale_fortlaufende_berufliche_Entwicklung:
+      display_name: Digitale_fortlaufende_berufliche_Entwicklung
+      simplified_name: Digitale_fortlaufende_berufliche_Entwicklung
+      criteria: 'Förderung der digitalen Weiterbildung wird im Segment angesprochen Das bedeutet: Nutzung von digitalen Quellen und Ressourcen für die fortlaufende Weiterbildung'
+      examples:
+      - '"TR01-TR07"'
+      - '"Bsp für den Code „1“:"'
+      - '"Die Umsetzung des Flipped Classrooms in der eigenen Lehre reflektieren"'
+      values: '"Ja (1), Nein (0)"'
+    Auswahl_digitaler_Ressourcen:
+      display_name: Auswahl_digitaler_Ressourcen
+      simplified_name: Auswahl_digitaler_Ressourcen
+      criteria: 'Bewertung und Auswahl geeigneter digitaler Materialien wird im Segment angesprochen Das bedeutet: Auswahl, Identifizierung und Auswertung digitaler Ressourcen für das Lehren und Lernen; Berücksichtigung von konkretem Lernziel, Kontext, didaktischem Ansatz und der Lerngruppe bei der Auswahl digitaler Ressourcen und der Planung ihrer Nutzung'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Die Umsetzung des Flipped Classrooms in der eigenen Lehre reflektieren"'
+      - '"Eine Auswahl an Aktivitäten (Aufgabe/Forum/Etherpad Lite) und ihre Einsatzmöglichkeiten für die Lehre kennenlernen"'
+      values: '"Ja (1), Nein (0)"'
+    Erstellen_und_Anpassen_digitaler_Ressourcen:
+      display_name: Erstellen_und_Anpassen_digitaler_Ressourcen
+      simplified_name: Erstellen_und_Anpassen_digitaler_Ressourcen
+      criteria: 'Gestaltung und Anpassung digitaler Lernmaterialien wird im Segment angesprochen Das bedeutet: Modifizierung und Weiterentwicklung bestehender Ressourcen, sofern rechtlich möglich; Erstellung oder Mitgestaltung von neuen digitalen Bildungsressourcen; Berücksichtigung von konkretem Lernziel, Kontext, didaktischem Ansatz und der Lerngruppe beim Entwurf digitaler Ressourcen und der Planung ihrer Nutzung'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Anschließend lernen Sie grundlegende Funktionen der Bildschirmaufzeichnungssoftware Camtasia Studio kennen und in den Übungsphasen setzen Sie das gelernte Wissen direkt um. So gelangen Sie Schritt für Schritt zum eigenen Lehrvideo."'
+      - '"TR01-TR07"'
+      values: '"Ja (1), Nein (0)"'
+    Organisieren_Sch_tzen_und_Teilen_digitaler_Ressourcen:
+      display_name: Organisieren_Sch_tzen_und_Teilen_digitaler_Ressourcen
+      simplified_name: Organisieren_Sch_tzen_und_Teilen_digitaler_Ressourcen
+      criteria: 'Organisation und Weitergabe digitaler Lehrmaterialien wird im Segment angesprochen Das bedeutet: Digitale Inhalte organisieren und Lernenden, Eltern und anderen Lehrenden zur Verfügung stellen; Sensible digitale Inhalte effektiv schützen; Datenschutz- und Urheberrechtsbestimmungen respektieren und korrekt anwenden; Die Verwendung und Erstellung von offenen Lizenzen und offenen Bildungsressourcen einschließlich ihrer angemessenen Zuordnung verstehen'
+      examples:
+      - '"TR01-TR06"'
+      - '"Bsp für den Code „1“:"'
+      - '"Anschließend lernen Sie grundlegende Funktionen der Bildschirmaufzeichnungssoftware Camtasia Studio kennen und in den Übungsphasen setzen Sie das gelernte Wissen direkt um. So gelangen Sie Schritt für Schritt zum eigenen Lehrvideo."'
+      values: '"Ja (1), Nein (0)"'
+    Lehren:
+      display_name: Lehren
+      simplified_name: Lehren
+      criteria: 'Einsatz digitaler Werkzeuge im Unterricht wird im Segment angesprochen Dazu gehört: Einsatzplanung und - gestaltung von digitalen Geräten und Materialien im Unterricht zur Verbesserung der Effektivität von Lehrinterventionen; digitale Unterrichtsmethoden angemessen organisieren und gestalten; neue Formate und pädagogische Methoden für den Unterricht entwickeln und ausprobieren'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"In dieser Online-Fortbildung lernen Sie das didaktische Konzept des Flipped Classrooms und die Anwendung der Bildschirmaufzeichnungssoftware Camtasia Studio kennen."'
+      values: '"Ja (1), Nein (0)"'
+    Lernbegleitung:
+      display_name: Lernbegleitung
+      simplified_name: Lernbegleitung
+      criteria: 'Digitale Methoden zur Lernunterstützung werden im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien und Diensten zwecks Verbesserung der Interaktion mit den Lernenden auf individueller Ebene und als Gruppe innerhalb und außerhalb des Unterrichts; Nutzung von digitalen Medien, um rechtzeitig und gezielt Beratung und Unterstützung anbieten zu können; neue Formen und Formate der Hilfestellung und Anleitung entwickeln und experimentell einsetzen'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Die technische und didaktische Implementierung von Gamification mittels adaptiven Lernpfaden im eigenen Moodlekurs umsetzen"'
+      - '"Mittels Gamification, d.h. Implementierung von Spielelementen in Moodle kann man Studierende kognitiv, sozial und emotional einbinden und so die Lernerfahrung emotionaler und motivierender gestalten."'
+      values: '"Ja (1), Nein (0)"'
+    Kollaboratives_Lernen:
+      display_name: Kollaboratives_Lernen
+      simplified_name: Kollaboratives_Lernen
+      criteria: 'Förderung der digitalen Zusammenarbeit der Lernenden wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien zur Förderung und Verbesserung von gemeinsamen Lernstrategien; Lernende befähigen, digitale Medien in Gruppenund Teamarbeit zu nutzen, um Kommunikation innerhalb der Lerngruppe, Zusammenarbeit und gemeinsame Wissensgenerierung zu verbessern'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Neben der Funktion einer persönlichen digitalen Sammelmappe, können mit Mahara auch verschiedene kollaborative Elemente (z.B. Peer-Feedback, Gruppen) zum Einsatz kommen."'
+      values: '"Ja (1), Nein (0)"'
+    Selbstgesteuertes_Lernen:
+      display_name: Selbstgesteuertes_Lernen
+      simplified_name: Selbstgesteuertes_Lernen
+      criteria: 'Förderung autonomer Lernprozesse mit digitalen Medien wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien zur Unterstützung von selbstgesteuerten Lernprozessen, d. h. den Lernenden sollte ermöglicht werden, ihr eigenes Lernen zu planen, zu überprüfen und zu reflektieren, Fortschritte zu dokumentieren, Ergebnisse zu kommunizieren und kreative Lösungen zu erarbeiten'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Sie erlernen den Umgang mit der Software Mahara und erstellen selbstständig Ihr erstes eigenes E-Portfolio."'
+      - '"Den Einsatz von Gamification in der eigenen Lehre reflektieren"'
+      values: '"Ja (1), Nein (0)"'
+    Lernstand_erheben:
+      display_name: Lernstand_erheben
+      simplified_name: Lernstand_erheben
+      criteria: 'Digitale Methoden zur Leistungsbewertung wird im Segment angesprochen Dazu gehört: Verwendung von digitalen Medien zur Lernkontrolle und Leistungsbeurteilung; Verbesserung der Vielfalt und der Angemessenheit von Beurteilungsformaten und - ansätzen'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Die Aktivität ''Test'' der Lernplattform Moodle bietet Ihnen eine gute Möglichkeit, Lernprozesse der Studierenden aktiv zu unterstützen. Die Studierenden können mit Tests ihr Vorwissen aktivieren und Gelerntes überprüfen, indem sie Feedback erhalten."'
+      values: '"Ja (1), Nein (0)"'
+    Lern_Evidenzen_analysieren:
+      display_name: Lern_Evidenzen_analysieren
+      simplified_name: Lern_Evidenzen_analysieren
+      criteria: 'Nutzung digitaler Daten zur Lernstandsanalyse wird im Segment angesprochen Dazu gehört: Digitale Informationen zu Lernerverhalten, Leistung und Fortschritt erheben, auswählen, kritisch analysieren und interpretieren, um Rückschlüsse für den Unterricht zu ziehen.'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Die Aktivität ''Test'' der Lernplattform Moodle bietet Ihnen eine gute Möglichkeit, Lernprozesse der Studierenden aktiv zu unterstützen. Die Studierenden können mit Tests ihr Vorwissen aktivieren und Gelerntes überprüfen, indem sie Feedback erhalten."'
+      values: '"Ja (1), Nein (0)"'
+    Feedback_und_Planung:
+      display_name: Feedback_und_Planung
+      simplified_name: Feedback_und_Planung
+      criteria: 'Digitale Feedback-Mechanismen wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien, um Lernenden gezielt und zeitnah Feedback zu geben; Anpassung von Unterrichtsstrategien und gezielte Unterstützung von Lernenden anhand verfügbarer digitaler Informationen; Lernenden und Eltern ermöglichen, digitale Informationen zu verstehen und sie für die Entscheidungsfindung zu nutzen.'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Anschließend erhalten Sie einen Überblick, wie Sie eine individuelle oder allgemeine Rückmeldung in der Lehre mittels Video-Feedback geben können. Zudem lernen Sie mit der Bildschirmaufzeichnungssoftware Snagit ein geeignetes Werkzeug zur Erstellung von Video-Feedback kennen und probieren diese aus."'
+      values: '"Ja (1), Nein (0)"'
+    Digitale_Teilhabe:
+      display_name: Digitale_Teilhabe
+      simplified_name: Digitale_Teilhabe
+      criteria: 'Förderung der digitalen Zugänglichkeit für alle wird im Segment angesprochen Dazu gehört: Gewährleisten, dass alle Lernenden, auch solche mit besonderen Bedürfnissen, Zugang zu den Lernressourcen und - aktivitäten haben; (Digitale) Erwartungen, Fähigkeiten, Vorkenntnisse und Missverständnisse der Lernenden berücksichtigen sowie kontextbezogene, physische oder kognitive Einschränkungen bei der Mediennutzung bedenken.'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    Differenzierung_und_Individualisierung:
+      display_name: Differenzierung_und_Individualisierung
+      simplified_name: Differenzierung_und_Individualisierung
+      criteria: 'Anpassung digitaler Inhalte an individuelle Lernbedürfnisse wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien, um unterschiedlichen Lernbedürfnissen der Lernenden gerecht zu werden, indem ihnen ermöglicht wird, in den verschiedenen Niveaus und der Lerngeschwindigkeit fortzuschreiten, ihr individuelles Lernziel zu erreichen und individuelle Lernwege zu beschreiten.'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Die technische und didaktische Implementierung von Gamification mittels adaptiven Mittels Gamification, d.h. Implementierung von Spielelementen in Moodle kann man Studierende kognitiv, sozial und emotional einbinden und so die Lernerfahrung emotionaler und motivierender gestalten."'
+      values: '"Ja (1), Nein (0)"'
+    Aktive_Einbindung_von_Lernenden:
+      display_name: Aktive_Einbindung_von_Lernenden
+      simplified_name: Aktive_Einbindung_von_Lernenden
+      criteria: 'Einsatz digitaler Methoden zur Lernmotivation wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien zur aktiven und kreativen Förderung des Engagements der Lernenden mit einem Thema; Einsatz von digitalen Medien im Rahmen pädagogischer Strategien zur Förderung übertragbarer Fähigkeiten, des tiefgründigen Denkens und kreativen Ausdrucks des Lernenden; Öffnung des Lernens zwecks Schaffung neuer, realer Lernkontexte, dank derer die Lernenden in praktische Aktivitäten, wissenschaftliche Untersuchungen oder komplexe Problemlösungen einbezogen werden, oder anderweitige Erhöhung der aktiven Auseinandersetzung der Lernenden mit komplexen Sachverhalten.'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Die technische und didaktische Implementierung von Gamification mittels adaptiven Mittels Gamification, d.h. Implementierung von Spielelementen in Moodle kann man Studierende kognitiv, sozial und emotional einbinden und so die Lernerfahrung emotionaler und motivierender gestalten."'
+      values: '"Ja (1), Nein (0)"'
+    F_rderung_der_Informations_und_Medienkompetenz_der_Studierenden:
+      display_name: F_rderung_der_Informations_und_Medienkompetenz_der_Studierenden
+      simplified_name: F_rderung_der_Informations_und_Medienkompetenz_der_Studierenden
+      criteria: 'Schulung im kritischen Umgang mit digitalen Informationen der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, Informationsbedürfnisse zu artikulieren, Informationen und Ressourcen in digitalen Lernumgebungen zu finden, diese zu organisieren, zu verarbeiten, zu analysieren und zu interpretieren sowie die Glaubwürdigkeit und Zuverlässigkeit der Informationen und ihrer Quellen zu vergleichen und kritisch zu bewerten.'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    F_rderung_der_Digitalen_Kommunikation_und_Zusammenarbeit_der_Studierenden:
+      display_name: F_rderung_der_Digitalen_Kommunikation_und_Zusammenarbeit_der_Studierenden
+      simplified_name: F_rderung_der_Digitalen_Kommunikation_und_Zusammenarbeit_der_Studierenden
+      criteria: 'Förderung digitaler Kommunikationsfähigkeiten der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, effektiv und verantwortungsbewusst digitale Medien für Kommunikation, Zusammenarbeit und Bürgerbeteiligung zu nutzen.'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    F_rderung_der_Erstellung_digitaler_Inhalte_der_Studierenden:
+      display_name: F_rderung_der_Erstellung_digitaler_Inhalte_der_Studierenden
+      simplified_name: F_rderung_der_Erstellung_digitaler_Inhalte_der_Studierenden
+      criteria: 'Förderung kreativer digitaler Ausdrucksformen der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, sich mittels digitaler Medien auszudrücken und digitale Inhalte in verschiedenen Formaten zu bearbeiten und zu erstellen; Lernenden vermitteln, wie Urheberrecht und Lizenzen für digitale Inhalte gelten und wie man Quellen zitiert und Lizenzen angibt.'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    F_rderung_des_verantwortungsvollen_Umgang_der_Studierenden_mit_digitalen_Medien:
+      display_name: F_rderung_des_verantwortungsvollen_Umgang_der_Studierenden_mit_digitalen_Medien
+      simplified_name: F_rderung_des_verantwortungsvollen_Umgang_der_Studierenden_mit_digitalen_Medien
+      criteria: 'Sensibilisierung der Studierenden für Datenschutz und digitale Ethik wird im Segment angesprochen Dazu gehört: Maßnahmen ergreifen, um das physische, psychische und soziale Wohlergehen der Lernenden bei der Nutzung von digitalen Medien zu gewährleisten; Lernenden eine sichere und verantwortungsvolle Nutzung von digitalen Medien zu ermöglichen und ihnen beibringen, Risiken zu bewältigen.'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    Digitales_Probleml_sen:
+      display_name: Digitales_Probleml_sen
+      simplified_name: Digitales_Probleml_sen
+      criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    Informations_und_Medienkompetenz:
+      display_name: Informations_und_Medienkompetenz
+      simplified_name: Informations_und_Medienkompetenz
+      criteria: 'Schulung der Dozierenden im kritischen Umgang mit digitalen Informationen wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, Informationsbedürfnisse zu artikulieren, Informationen und Ressourcen in digitalen Lernumgebungen zu finden, diese zu organisieren, zu verarbeiten, zu analysieren und zu interpretieren sowie die Glaubwürdigkeit und Zuverlässigkeit der Informationen und ihrer Quellen zu vergleichen und kritisch zu bewerten.'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    Digitale_Kommunikation_und_Zusammenarbeit:
+      display_name: Digitale_Kommunikation_und_Zusammenarbeit
+      simplified_name: Digitale_Kommunikation_und_Zusammenarbeit
+      criteria: 'Förderung digitaler Kommunikationsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, effektiv und verantwortungsbewusst digitale Medien für Kommunikation, Zusammenarbeit und Bürgerbeteiligung zu nutzen.'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"…können mit Mahara auch verschiedene kollaborative Elemente (z.B. Peer-Feedback, Gruppen) zum Einsatz kommen. In dieser Fortbildung erhalten Sie einen Überblick über die didaktischen Einsatzmöglichkeiten von E-Portfolios und über die Grundfunktionen von Mahara."'
+      values: '"Ja (1), Nein (0)"'
+    Erstellung_digitaler_Inhalte:
+      display_name: Erstellung_digitaler_Inhalte
+      simplified_name: Erstellung_digitaler_Inhalte
+      criteria: 'Förderung kreativer digitaler Ausdrucksformen der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, sich mittels digitaler Medien auszudrücken und digitale Inhalte in verschiedenen Formaten zu bearbeiten und zu erstellen; Lernenden vermitteln, wie Urheberrecht und Lizenzen für digitale Inhalte gelten und wie man Quellen zitiert und Lizenzen angibt.'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"Anschließend lernen Sie grundlegende Funktionen der Bildschirmaufzeichnungssoftware Camtasia Studio kennen und in den Übungsphasen setzen Sie das gelernte Wissen direkt um. So gelangen Sie Schritt für Schritt zum eigenen Lehrvideo."'
+      - '"… der Veranstaltung legen Sie konkret Spielelemente in Form von adaptiven Lernpfaden im eigenen Moodlekurs an…"'
+      values: '"Ja (1), Nein (0)"'
+    Verantwortungsvoller_Umgang_mit_digitalen_Medien:
+      display_name: Verantwortungsvoller_Umgang_mit_digitalen_Medien
+      simplified_name: Verantwortungsvoller_Umgang_mit_digitalen_Medien
+      criteria: 'Sensibilisierung der Dozierenden für Datenschutz und digitale Ethik wird im Segment angesprochen Dazu gehört: Maßnahmen ergreifen, um das physische, psychische und soziale Wohlergehen der Lernenden bei der Nutzung von digitalen Medien zu gewährleisten; Lernenden eine sichere und verantwortungsvolle Nutzung von digitalen Medien zu ermöglichen und ihnen beibringen, Risiken zu bewältigen.'
+      examples:
+      - '"Bsp für den Code „0“:"'
+      values: '"Ja (1), Nein (0)"'
+    Digitales_Probleml_sen_1:
+      display_name: Digitales_Probleml_sen_1
+      simplified_name: Digitales_Probleml_sen_1
+      criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
+      examples:
+      - '"Bsp für den Code „1“:"'
+      - '"…der Veranstaltung legen Sie konkret Spielelemente in Form von adaptiven Lernpfaden im eigenen Moodlekurs an…"'
+      values: '"Ja (1), Nein (0)"'

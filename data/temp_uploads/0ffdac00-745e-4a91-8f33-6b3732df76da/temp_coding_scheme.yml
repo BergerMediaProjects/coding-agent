@@ -1,0 +1,8 @@
+coding_scheme:
+  version: '1.0'
+  categories:
+    coding_scheme:
+      display_name: coding_scheme
+      criteria: ''
+      examples: []
+      values: '""'

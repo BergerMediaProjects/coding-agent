@@ -287,10 +287,11 @@ Förderung des verantwortungsvollen Umgang der Studierenden mit digitalen Medien
   examples:
   - '"Bsp für den Code „0“:"'
   values: '"Ja (1), Nein (0)"'
-Förderung der Kompetenz “Digitales Problemlösen” der Studierenden:
-  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
+Digitales Problemlösen:
+  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
   examples:
-  - '"Bsp für den Code „0“:"'
+  - '"Bsp für den Code „1“:"'
+  - '"…der Veranstaltung legen Sie konkret Spielelemente in Form von adaptiven Lernpfaden im eigenen Moodlekurs an…"'
   values: '"Ja (1), Nein (0)"'
 Informations- und Medienkompetenz:
   criteria: 'Schulung der Dozierenden im kritischen Umgang mit digitalen Informationen wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, Informationsbedürfnisse zu artikulieren, Informationen und Ressourcen in digitalen Lernumgebungen zu finden, diese zu organisieren, zu verarbeiten, zu analysieren und zu interpretieren sowie die Glaubwürdigkeit und Zuverlässigkeit der Informationen und ihrer Quellen zu vergleichen und kritisch zu bewerten.'
@@ -314,10 +315,4 @@ Verantwortungsvoller Umgang mit digitalen Medien:
   criteria: 'Sensibilisierung der Dozierenden für Datenschutz und digitale Ethik wird im Segment angesprochen Dazu gehört: Maßnahmen ergreifen, um das physische, psychische und soziale Wohlergehen der Lernenden bei der Nutzung von digitalen Medien zu gewährleisten; Lernenden eine sichere und verantwortungsvolle Nutzung von digitalen Medien zu ermöglichen und ihnen beibringen, Risiken zu bewältigen.'
   examples:
   - '"Bsp für den Code „0“:"'
-  values: '"Ja (1), Nein (0)"'
-Digitales Problemlösen:
-  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
-  examples:
-  - '"Bsp für den Code „1“:"'
-  - '"…der Veranstaltung legen Sie konkret Spielelemente in Form von adaptiven Lernpfaden im eigenen Moodlekurs an…"'
   values: '"Ja (1), Nein (0)"'

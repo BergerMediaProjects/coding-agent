@@ -62,12 +62,12 @@ Dauer:
   - '""'
   values: '"(Angabe in Stunden), keine Information verfügbar (-99)"'
 Semester:
-  criteria: 'Zeitraum SoSe25: 23.April 2025 bis einschließlich 25. Juli 2025 WiSe 24/25: 14.Oktober 2024 bis einschließlich 7. Februar 2025. Wenn wir einen Kurs finden, für den kein konkretes Datum angegeben wird, und auch kein expliziter Bezug aufs WiSe oder SoSe klar ist; Angebote, die nach Bedarf/Nachfrage stattfinden -> kodieren wir trotzdem, da wir eine „Momentaufnahme“ der Suche machen -> -99'
+  criteria: 'Zeitraum SoSe25: 23.April.2025 bis einschließlich 25. Juli 2025 WiSe 24/25: 14.Oktober.2024 bis einschließlich 7.Februar 2025. Wenn wir einen Kurs finden, für den kein konkretes Datum angegeben wird, und auch kein expliziter Bezug aufs WiSe oder SoSe klar ist; Angebote, die nach Bedarf/Nachfrage stattfinden -> kodieren wir trotzdem, da wir eine „Momentaufnahme“ der Suche machen -> -99'
   examples:
   - '""'
   values: '"SoSe25, WiSe24/25, -99"'
 Zielgruppe:
-  criteria: Sollte eigentlich immer L beinhalten + ggf. eine der anderen Optionen nfrage hremde fallen alle ge (2) r kodieren und dann ggf. en er Stichprobe sind, das heißt es geht hier NICHT um den Anbieter Unter Lehrende fallen alle Zielgruppen, die klar Dozierende sind, bzw. bei denen wir nicht ausschließen können, dass sie keine Dozierenden sind. Sollte in vielen Fällen explizit dabeistehen vs. L kann aufgrund der Vorauswahl vorausgesetzt werden. Lehrende = Professor:in, Dozierende, Kopfstellenadministratoren, Multiplikator*innen für E-Learning der vhb-Trägerschulen Dekane (D) = für Leitendes Personal, die nicht in Lehrende enthalten sind
+  criteria: Sollte eigentlich immer L beinhalten + ggf. eine der anderen Optionen nfrage hremde fallen alle ge (2) r kodieren und dann ggf. en er Stichprobe sind, das heißt es geht hier NICHT um den Anbieter Unter Lehrende fallen alle Zielgruppen, die klar Dozierende sind, bzw. bei denen wir nicht ausschließen können, dass sie keine Dozierenden sind. Sollte in vielen Fällen explizit dabeistehen vs. L kann aufgrund der Vorauswahl vorausgesetzt werden. Lehrende = Professor:in, Dozierende, Kopfstellenadministratoren; Multiplikator*innen für E-Learning der vhb-Trägerschulen Dekane (D) = für Leitendes Personal, die nicht in Lehrende enthalten sind
   examples:
   - '""'
   values: '"Lehrende (L), Tutor:in (T), Mitarbeiter:in (M), Hiwi (S), Berater:in (B), Dekane (D)"'
@@ -287,10 +287,11 @@ Förderung des verantwortungsvollen Umgang der Studierenden mit digitalen Medien
   examples:
   - '"Bsp für den Code „0“:"'
   values: '"Ja (1), Nein (0)"'
-Förderung der Kompetenz “Digitales Problemlösen” der Studierenden:
-  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
+Digitales Problemlösen:
+  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
   examples:
-  - '"Bsp für den Code „0“:"'
+  - '"Bsp für den Code „1“:"'
+  - '"…der Veranstaltung legen Sie konkret Spielelemente in Form von adaptiven Lernpfaden im eigenen Moodlekurs an…"'
   values: '"Ja (1), Nein (0)"'
 Informations- und Medienkompetenz:
   criteria: 'Schulung der Dozierenden im kritischen Umgang mit digitalen Informationen wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, Informationsbedürfnisse zu artikulieren, Informationen und Ressourcen in digitalen Lernumgebungen zu finden, diese zu organisieren, zu verarbeiten, zu analysieren und zu interpretieren sowie die Glaubwürdigkeit und Zuverlässigkeit der Informationen und ihrer Quellen zu vergleichen und kritisch zu bewerten.'
@@ -314,10 +315,4 @@ Verantwortungsvoller Umgang mit digitalen Medien:
   criteria: 'Sensibilisierung der Dozierenden für Datenschutz und digitale Ethik wird im Segment angesprochen Dazu gehört: Maßnahmen ergreifen, um das physische, psychische und soziale Wohlergehen der Lernenden bei der Nutzung von digitalen Medien zu gewährleisten; Lernenden eine sichere und verantwortungsvolle Nutzung von digitalen Medien zu ermöglichen und ihnen beibringen, Risiken zu bewältigen.'
   examples:
   - '"Bsp für den Code „0“:"'
-  values: '"Ja (1), Nein (0)"'
-Digitales Problemlösen:
-  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
-  examples:
-  - '"Bsp für den Code „1“:"'
-  - '"…der Veranstaltung legen Sie konkret Spielelemente in Form von adaptiven Lernpfaden im eigenen Moodlekurs an…"'
   values: '"Ja (1), Nein (0)"'

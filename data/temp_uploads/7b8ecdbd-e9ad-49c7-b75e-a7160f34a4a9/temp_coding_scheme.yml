@@ -12,7 +12,7 @@ Name der Hochschule:
   criteria: Hier geht es nur um die Hochschulen, die in unserer Stichprobe sind, das heißt es geht hier NICHT um den Anbieter (z.B. vhb). Die Namen immer voll ausschreiben, bzw. die Abkürzungen in () angeben. Hochschule für angewandte Wissenschaft mit HAW abkürzen.
   examples:
   - '""'
-  values: '"Universität Augsburg, Otto-Friedrich-Universität Bamberg, Universität Bayreuth, Friedrich-Alexander-Universität (FAU) Erlangen-Nürnberg, Ludwig-Maximilians-Universität (LMU) München, Technische Universität München (TUM), Universität Passau, Universität Regensburg, Julius-Maximilians-Universität Würzburg, Ostbayerische Technische Hochschule Amberg-Weiden, Hochschule Ansbach, Technische Hochschule Aschaffenburg, Hochschule Augsburg, Hochschule Coburg, Technische Hochschule Deggendorf (THD), Hochschule Hof, Technische Hochschule Ingolstadt (THI), Hochschule Kempten, Hochschule Landshut, Hochschule für angewandte Wissenschaften München (HAW), Hochschule Neu-Ulm, Technische Hochschule Nürnberg Georg Simon Ohm, Name der Hochschule unklar (externer Anbieter), Ostbayerische Technische Hochschule (OTH) Regensburg, Technische Hochschule Rosenheim, Hochschule Weihenstephan-Triesdorf, Hochschule Würzburg-Schweinfurt, (ggf. Weitere), -99"'
+  values: '"Universität Augsburg; Otto-Friedrich-Universität Bamberg; Universität Bayreuth; Friedrich-Alexander-Universität (FAU) Erlangen-Nürnberg; Ludwig-Maximilians-Universität (LMU) München; Technische Universität München (TUM); Universität Passau; Universität Regensburg; Julius-Maximilians-Universität Würzburg; Ostbayerische Technische Hochschule Amberg-Weiden; Hochschule Ansbach; Technische Hochschule Aschaffenburg; Hochschule Augsburg; Hochschule Coburg; Technische Hochschule Deggendorf (THD); Hochschule Hof; Technische Hochschule Ingolstadt (THI); Hochschule Kempten; Hochschule Landshut; Hochschule für angewandte Wissenschaften München (HAW); Hochschule Neu-Ulm; Technische Hochschule Nürnberg Georg Simon Ohm; Name der Hochschule unklar (externer Anbieter); Ostbayerische Technische Hochschule (OTH) Regensburg; Technische Hochschule Rosenheim; Hochschule Weihenstephan-Triesdorf; Hochschule Würzburg-Schweinfurt; (ggf. Weitere); -99"'
 Annehmerhochschulen des Hochschulanbieters:
   criteria: 'Weitere zusätzliche bayrische Hochschulen (siehe Liste 1.0.3), die das Angebot des unter 1.0.3 genannten Hochschulanbieters nutzen können Offen: konkret genannte weitere Hochschule(n) Mehrere Hochschulen: Nutzbarkeit gegeben für weitere Hochschulen, ohne dass diese einzeln namentlich genannt sind.'
   examples:
@@ -27,25 +27,25 @@ Dozent_in:
   criteria: ''''''
   examples:
   - '""'
-  values: '"(kopiere hier den Vor- und Nachnamen der Lehrperson), Information nicht verfügbar (-99)"'
+  values: '"(kopiere hier den Vor- und Nachnamen der Lehrperson); Information nicht verfügbar (-99)"'
 Veranstaltungsart:
   criteria: 'Seminar: Seminar, Kurs, Workshop, Vorlesung, Schulung, Fortbildung Coaching: Coaching, Beratung, Teaching Analysis Poll] Event: Event, Forum, Arbeitskreis(AK), Fachdidaktischer Arbeitskreis (FDAK), Lehrtreff, Tag der Lehre, Konferenz Weitere: keine der oben genannten -99: Information ist nicht aus dem Text erkennbar CAVE: Kontext mitberücksichtigen und sorgfältig am Fall prüfen, statt direkter Begriffszuordnung. Vorlesung kann z.B. sowohl Seminar als auch Event sein.'
   examples:
   - '"Bsp. für weitere (offen): „weitere Fortbildung“; „weitere Multiplikatorenprogramm“"'
-  values: '"Seminar (1), Event (2), Coaching (3), Weitere (4), Information nicht verfügbar (-99)"'
+  values: '"Seminar (1);; Event (2);; Coaching (3);; Weitere (4);; Information nicht verfügbar (-99)"'
 Format der Veranstaltung Präsenz/Online:
   criteria: Präsenz, Online und Hybrid setzen eine explizite oder eine offensichtlich implizite Beschreibung voraus Angabe eines Raumes/Ortes als Indiz für Präsenz Hybrid umfasst Unterricht, der entweder online ODER persönlich stattfindet. Die Wahlmöglichkeiten müssen beide gleichzeitig in einer Sitzung stattfinden. Hybrid umfasst Unterricht, bei dem die Lernenden zwischen online und offline wählen können (z. B. Coaching-Sitzungen). Blended liegt vor, wenn die Lernenden den Unterricht sowohl online als auch persönlich absolvieren müssen. Dies kann in einer Sitzung oder in mehreren Sitzungen geschehen. Eine nach der anderen Wenn Selbstlernformat oder Selbstlernen erwähnt wird, wird es als „online“ und „asynchron“ gezählt. -99, wenn das Veranstaltungsformat nicht thematisiert ist
   examples:
   - '"Lehrvideos leicht gemacht, HAW München"'
   - '"Hybrid Bsp: Ein Kurs, bei dem es nur eine Sitzung gibt und die Lernenden die Möglichkeit haben, am Online-Unterricht teilzunehmen oder das Seminar persönlich zu besuchen."'
   - '"Blended Bsp.: In Woche 1 müssen die Lernenden persönlich am Unterricht teilnehmen, in Woche 2 müssen sie Gruppenarbeiten online durchführen und in Woche 3 präsentieren sie persönlich."'
-  values: '"Präsenz, Online, Hybrid, Blended, Präsenz oder Online, Information nicht verfügbar (-99)"'
+  values: '"Präsenz; Online; Hybrid; Blended; Präsenz oder Online; Information nicht verfügbar (-99)"'
 Format der Veranstaltung synchron:
   criteria: Synchron, Asynchron und Kombination setzen eine explizite oder eine offensichtlich implizite Beschreibung voraus Wenn die Beschreibung enthält, dass der Kurs in Präsenz stattfindet, wird mit -99 kodiert.
   examples:
   - '"Zoom-Video-Konferenz(-Link) als Indiz für synchron, außer weitere asynchrone Elemente sind thematisiert"'
   - '"Workshop „an einem Tag“ implizieren synchron (Bsp. Audio in der Hochschullehre, TUM)"'
-  values: '"Synchron, Asynchron, Kombination, Information nicht relevant (-99)"'
+  values: '"Synchron;; Asynchron;; Kombination;; Information nicht relevant (-99)"'
 Stattfinden der Veranstaltung:
   criteria: Nein = Angabe “Kurs wurde abgesagt” o.ä. Wenn nicht explizit mit dabei steht, dass die Veranstaltung abgesagt/verschoben/… wurde, nehmen wir „Ja (1)“ an.
   examples:
@@ -55,27 +55,27 @@ Termin der Veranstaltung:
   criteria: ''''''
   examples:
   - '""'
-  values: '"Festgelegt (1), Auf Nachfrage/Anfrage (2), keine Information verfügbar (-99)"'
+  values: '"Festgelegt (1); Auf Nachfrage/Anfrage (2); keine Information verfügbar (-99)"'
 Dauer:
   criteria: Summe der Angebotsdauer Möglichst zwei Mal ausrechnen. Wenn die Anzahl der Sitzungen pro Woche nicht angegeben ist, gehen Sie davon aus, dass jede Sitzung einmal pro Woche stattfindet.
   examples:
   - '""'
-  values: '"(Angabe in Stunden), keine Information verfügbar (-99)"'
+  values: '"(Angabe in Stunden); keine Information verfügbar (-99)"'
 Semester:
-  criteria: 'Zeitraum SoSe25: 23.April 2025 bis einschließlich 25. Juli 2025 WiSe 24/25: 14.Oktober 2024 bis einschließlich 7. Februar 2025. Wenn wir einen Kurs finden, für den kein konkretes Datum angegeben wird, und auch kein expliziter Bezug aufs WiSe oder SoSe klar ist; Angebote, die nach Bedarf/Nachfrage stattfinden -> kodieren wir trotzdem, da wir eine „Momentaufnahme“ der Suche machen -> -99'
+  criteria: 'Zeitraum SoSe25: 23.April.2025 bis einschließlich 25. Juli 2025 WiSe 24/25: 14.Oktober.2024 bis einschließlich 7.Februar 2025. Wenn wir einen Kurs finden, für den kein konkretes Datum angegeben wird, und auch kein expliziter Bezug aufs WiSe oder SoSe klar ist; Angebote, die nach Bedarf/Nachfrage stattfinden -> kodieren wir trotzdem, da wir eine „Momentaufnahme“ der Suche machen -> -99'
   examples:
   - '""'
-  values: '"SoSe25, WiSe24/25, -99"'
+  values: '"SoSe25; WiSe24/25;; -99"'
 Zielgruppe:
-  criteria: Sollte eigentlich immer L beinhalten + ggf. eine der anderen Optionen nfrage hremde fallen alle ge (2) r kodieren und dann ggf. en er Stichprobe sind, das heißt es geht hier NICHT um den Anbieter Unter Lehrende fallen alle Zielgruppen, die klar Dozierende sind, bzw. bei denen wir nicht ausschließen können, dass sie keine Dozierenden sind. Sollte in vielen Fällen explizit dabeistehen vs. L kann aufgrund der Vorauswahl vorausgesetzt werden. Lehrende = Professor:in, Dozierende, Kopfstellenadministratoren, Multiplikator*innen für E-Learning der vhb-Trägerschulen Dekane (D) = für Leitendes Personal, die nicht in Lehrende enthalten sind
+  criteria: Sollte eigentlich immer L beinhalten + ggf. eine der anderen Optionen nfrage hremde fallen alle ge (2) r kodieren und dann ggf. en er Stichprobe sind, das heißt es geht hier NICHT um den Anbieter Unter Lehrende fallen alle Zielgruppen, die klar Dozierende sind, bzw. bei denen wir nicht ausschließen können, dass sie keine Dozierenden sind. Sollte in vielen Fällen explizit dabeistehen vs. L kann aufgrund der Vorauswahl vorausgesetzt werden. Lehrende = Professor:in, Dozierende, Kopfstellenadministratoren; Multiplikator*innen für E-Learning der vhb-Trägerschulen Dekane (D) = für Leitendes Personal, die nicht in Lehrende enthalten sind
   examples:
   - '""'
-  values: '"Lehrende (L), Tutor:in (T), Mitarbeiter:in (M), Hiwi (S), Berater:in (B), Dekane (D)"'
+  values: '"Lehrende (L); Tutor:in (T); Mitarbeiter:in (M); Hiwi (S); Berater:in (B); Dekane (D)"'
 Fachbereich:
   criteria: ''''''
   examples:
   - '""'
-  values: '"Naturwissenschaften (1), Ingenieurwissenschaften (2), Rechtswissenschaften (3), Wirtschaftswissenschaften (4), Sozialwissenschaften (5), Geisteswissenschaften (6), Kulturwissenschaften (7), Sprachwissenschaften (8), Medizin (9), Allgemeine Didaktik (10), Nicht zuzuordnen/unklar: _____ (-99)"'
+  values: '"Naturwissenschaften (1); Ingenieurwissenschaften (2); Rechtswissenschaften (3); Wirtschaftswissenschaften (4); Sozialwissenschaften (5); Geisteswissenschaften (6); Kulturwissenschaften (7); Sprachwissenschaften (8); Medizin (9); Allgemeine Didaktik (10); Nicht zuzuordnen/unklar: _____ (-99)"'
 Fachbereich offen:
   criteria: ''''''
   examples:
@@ -90,7 +90,7 @@ Kompetenzbereich des Zertifikats Hochschullehre:
   criteria: 'explizit genannt/Bezug genommen z.T. wird allein über die Buchstaben (A-E) die Verbindung hergestellt: Lehrkategorie „ProfilLehre a“ (Bsp. Uni Augsburg) Buchstabennummerierung vor dem Titel des Angebots (Bsp. A19: Online-Lehre attraktiv gestalten)'
   examples:
   - '"Gemischtes Angebot (G) z.B., wenn bei einem Fortbildungsangebot Punkte für „Lehr- und Lernkonzepte (A)“ und „Prüfen (C)“ erwerben werden können, kodieren wir: „A; C; G“"'
-  values: '"Lehr- und Lernkonzepte (A), Präsentation und Kommunikation (B), Prüfen (C), Reflexion und Evaluation (D), Beraten und Begleiten (E), Bezug aufs Zertifikat allgemein (Z), Gemischtes Angebot (G), -99"'
+  values: '"Lehr- und Lernkonzepte (A); Präsentation und Kommunikation (B); Prüfen (C); Reflexion und Evaluation (D); Beraten und Begleiten (E); Bezug aufs Zertifikat allgemein (Z); Gemischtes Angebot (G); -99"'
 Pädagogisch-didaktisches Angebot allgemeiner oder fachbereichsspezifischer Art/ Lehre:
   criteria: Wir kodieren hier „1“, wenn ein Angebot explizit/implizit deklariert ist als pädagogisch-didaktisches Angebot allgemeiner oder fachbereichsspezifischer Art. Bestimmte Stichwörter können darauf hinweisen, wir machen es aber nicht nur konkret an bestimmten Stichpunkten fest, sondern erschließen uns den Bezug auf pädagogisch-didaktisch/Lehre anhand des Textes. Die meisten Angebote sollten so einen Bezug eigentlich haben.
   examples:
@@ -104,12 +104,12 @@ Vorkenntnisse für Teilnahme erforderlich:
   - '"„Grundlagenseminar“ synonym für „Vorkenntnisse nicht erforderlich“ Bsp. Uni Passau 2018"'
   - '"Synonym für Vorkenntnisse:  „Voraussetzung“ (s. TUM 2018 „  Digitale Medien in der Lehre:Didaktische Konzepte,"'
   - '"Formen, Praxisbeispiele“"'
-  values: '"Vorkenntnisse nicht erforderlich (0), Grundvorkenntnisse erforderlich (1), Vertiefte Vorkenntnisse erforderlich (2), -99"'
+  values: '"Vorkenntnisse nicht erforderlich (0);; Grundvorkenntnisse erforderlich (1);; Vertiefte Vorkenntnisse erforderlich (2); -99"'
 Stufen des Kompetenzbereichs:
   criteria: Codes 0, 1 und 2 setzten eine explizite Bezeichnung, einen expliziten Bezug voraus Bsp. Grundlagenseminar ist nicht unbedingt gleichzusetzen mit Grundstufe im Sinne des Hochschulzertifikats -99
   examples:
   - '""'
-  values: '"Grundstufe (0), Aufbaustufe (1), Vertiefungsstufe (2), -99"'
+  values: '"Grundstufe (0);; Aufbaustufe (1);; Vertiefungsstufe (2); -99"'
 Digitale Medien werden angesprochen:
   criteria: 'Digitale Medien werden im Segment angesprochen. Wir verstehen unter digitalen Medien: Synonyme wie „Digitales Medium“; konkrete Medien wie Smartphone, Tablet, Computer o.Ä.; digitale Programme wie PowerPoint; digitale didaktische Umsetzungen wie E-Learning (Materialien), Onlinekurse, Webinare, (digitale) Fernprüfungen, hybride Veranstaltungen, flipped classroom, vhb-Kurs. Wir fassen auch den Begriff „Medien“ als digitale Medien auf, wenn nicht explizit ein analoges Medium (z.B. Buch) genannt wird. Auch künstliche Intelligenz und Bestandteile der digitalen Infrastruktur zählen zu digitalen Medien.'
   examples:
@@ -118,7 +118,7 @@ Digitale Medien werden angesprochen:
   - '"„Ziele: Die Teilnehmenden planen barrierefreie Lehrveranstaltungen unter Berücksichtigung geeigneter Methoden und Medien“ (Uni Augsburg: A12 Behinderte und chronisch kranke Studierende in meiner Veranstaltung)"'
   - '"Bsp. für den Code „0“:"'
   - '"Die generelle Beschreibung: Auf der Grundlage von kurzen Input-Phasen überprüfen Sie, welche bewährten und innovativen Lehr-/Lernmethoden Ihre Lehre zusätzlich bereichern könnten (Uni Würzburg: Praxisworkshop – Hochschullehre)"'
-  values: '"Digitale Medien werden angesprochen (1), Digitale Medien werden nicht angesprochen (0)"'
+  values: '"Digitale Medien werden angesprochen (1); Digitale Medien werden nicht angesprochen (0)"'
 Digitale Medien werden als Lernziel angesprochen:
   criteria: 1 setzt voraus, dass es im Angebot primär um digitale Medien als Hauptziel geht und/oder konkrete Medien (wie Moodle) im Hauptfokus sind – was mit einem Satz beschrieben ist („digital Lehren“ allein ist nicht ausreichend genug)
   examples:
@@ -130,7 +130,7 @@ Digitale Medien werden als Lernziel angesprochen:
   - '"Sie selbst MiniWebinare zu Ihrem aktuellen Forschungsthema abhalten, zu überwinden (Uni Würzburg: Kann man mich hören)"'
   - '"ein individuelles Lehrprojekt mit digitalen Ressourcen didaktisch sinnvoll konzipiert, durchgeführt und evaluiert (Uni Bayreuth 0024: Zertifikatsprogramm „Lehr-Lernprozesses fördern...“)"'
   - '"Der Versuchsraum ist eine Sammlung von Lehrthemen, die in der berufsbegleitenden Lehre ausprobiert werden können. Dies kann Methoden der Unterrichtsgestaltung betreffen, wie z.B. problembasierter Unterricht oder forschendes Lernen. Aber auch Themen, die die Betreuung der Studierenden betreffen,wie die virtuelle Sprechstunde oder der Einsatz eines Wikis. Ebenso Maßnahmen zur Förderung zeit- und ortsunabhängigen Lernens wie Videoaufzeichnungen, E-Tutorials oder Vorlesungen über Adobe Connect (HS Ingolstadt: Versuchsraum)"'
-  values: '"Digitale Medien sind Lernziel (1), Digitale Medien sind kein Lernziel (0)"'
+  values: '"Digitale Medien sind Lernziel (1); Digitale Medien sind kein Lernziel (0)"'
 Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt explizit:
   criteria: 'Die Äußerung/das Segment enthält explizit, dass es der Lerninhalt oder das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme der Lehrenden zu fördern Mögliche Synonyme: medienbezogene Kompetenz, digitale Kompetenz, mediale Bildung, Mediendidaktik, medienbezogene Kompetenz, mediendidaktische Kompetenz, medienerzieherische Kompetenz, Medienerziehung, Medien- und Informationsethik'
   examples:
@@ -152,7 +152,7 @@ KI als Lerngegenstand:
   - '"Lehren und Lernen mit KI: ChatGPT in der Hochschullehre verantwortungsvoll einsetzen"'
   - '"„Wir klären darin, warum aktuelle KI-Modelle nach statistischen Wahrscheinlichkeiten arbeiten, warum KI manchmal falsche Antworten gibt und wie man der KI Befehle geben kann“"'
   - '"Bsp für den Code „0“:"'
-  values: '"Ja (1), nicht zutreffend (-99)"'
+  values: '"Ja (1); nicht zutreffend (-99)"'
 KI als Werkzeug:
   criteria: Einsatz von KI-gestützten Anwendungen im Hochschul-Unterricht wird im Segment angesprochen
   examples:
@@ -287,10 +287,11 @@ Förderung des verantwortungsvollen Umgang der Studierenden mit digitalen Medien
   examples:
   - '"Bsp für den Code „0“:"'
   values: '"Ja (1), Nein (0)"'
-Förderung der Kompetenz “Digitales Problemlösen” der Studierenden:
-  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
+Digitales Problemlösen:
+  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
   examples:
-  - '"Bsp für den Code „0“:"'
+  - '"Bsp für den Code „1“:"'
+  - '"…der Veranstaltung legen Sie konkret Spielelemente in Form von adaptiven Lernpfaden im eigenen Moodlekurs an…"'
   values: '"Ja (1), Nein (0)"'
 Informations- und Medienkompetenz:
   criteria: 'Schulung der Dozierenden im kritischen Umgang mit digitalen Informationen wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, Informationsbedürfnisse zu artikulieren, Informationen und Ressourcen in digitalen Lernumgebungen zu finden, diese zu organisieren, zu verarbeiten, zu analysieren und zu interpretieren sowie die Glaubwürdigkeit und Zuverlässigkeit der Informationen und ihrer Quellen zu vergleichen und kritisch zu bewerten.'
@@ -314,10 +315,4 @@ Verantwortungsvoller Umgang mit digitalen Medien:
   criteria: 'Sensibilisierung der Dozierenden für Datenschutz und digitale Ethik wird im Segment angesprochen Dazu gehört: Maßnahmen ergreifen, um das physische, psychische und soziale Wohlergehen der Lernenden bei der Nutzung von digitalen Medien zu gewährleisten; Lernenden eine sichere und verantwortungsvolle Nutzung von digitalen Medien zu ermöglichen und ihnen beibringen, Risiken zu bewältigen.'
   examples:
   - '"Bsp für den Code „0“:"'
-  values: '"Ja (1), Nein (0)"'
-Digitales Problemlösen:
-  criteria: 'Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen.'
-  examples:
-  - '"Bsp für den Code „1“:"'
-  - '"…der Veranstaltung legen Sie konkret Spielelemente in Form von adaptiven Lernpfaden im eigenen Moodlekurs an…"'
   values: '"Ja (1), Nein (0)"'

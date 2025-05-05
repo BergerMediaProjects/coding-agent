@@ -1,0 +1,332 @@
+coding_scheme:
+  version: "1.0"
+  categories:
+    Kursname:
+      display_name: "1.0.1 Kursname"
+      criteria: "Vorsätze wie \"Neu:\" sind nicht Teil des Titels und werden nicht übernommen."
+      examples: []
+      values: "(kopiere hier den Titel des Kurses)"
+
+    Anbieter:
+      display_name: "1.0.2 Anbieter"
+      criteria: "1: Hochschulen und einzelne Abteilungen von Hochschulen, die sich mit der Fortbildung von Lehrenden beschäftigen (z.B. ProfilLehre(Plus) Augsburg/LMU/...) 2: externe Einrichtungen, die sich mit der Fortbildung von Lehrenden beschäftigen und nicht mit einer konkreten Hochschule assoziiert sind (z.B. DIZ, BayLern, ...)"
+      examples: []
+      values: "Hochschule (1), externer Anbieter (2)"
+
+    Name_der_Hochschule:
+      display_name: "1.0.3 Name der Hochschule"
+      criteria: "Hier geht es nur um die Hochschulen, die in unserer Stichprobe sind, das heißt es geht hier NICHT um den Anbieter (z.B. vhb). Die Namen immer voll ausschreiben, bzw. die Abkürzungen in () angeben. Hochschule für angewandte Wissenschaft mit HAW abkürzen."
+      examples: []
+      values: |
+        Universität Augsburg;
+        Otto-Friedrich-Universität Bamberg;
+        Universität Bayreuth;
+        Friedrich-Alexander-Universität (FAU) Erlangen-Nürnberg;
+        Ludwig-Maximilians-Universität (LMU) München;
+        Technische Universität München (TUM);
+        Universität Passau;
+        Universität Regensburg;
+        Julius-Maximilians-Universität Würzburg;
+        Ostbayerische Technische Hochschule Amberg-Weiden;
+        Hochschule Ansbach;
+        Technische Hochschule Aschaffenburg;
+        Hochschule Augsburg;
+        Hochschule Coburg;
+        Technische Hochschule Deggendorf (THD);
+        Hochschule Hof;
+        Technische Hochschule Ingolstadt (THI);
+        Hochschule Kempten;
+        Hochschule Landshut;
+        Hochschule für angewandte Wissenschaften München (HAW);
+        Hochschule Neu-Ulm;
+        Technische Hochschule Nürnberg Georg Simon Ohm;
+        Name der Hochschule unklar (externer Anbieter);
+        Ostbayerische Technische Hochschule (OTH) Regensburg;
+        Technische Hochschule Rosenheim;
+        Hochschule Weihenstephan-Triesdorf;
+        Hochschule Würzburg-Schweinfurt;
+        (ggf. Weitere);
+        -99
+
+    Format_der_Veranstaltung:
+      display_name: "1.1.2 Format der Veranstaltung Präsenz/Online"
+      criteria: "Präsenz, Online und Hybrid setzen eine explizite oder eine offensichtlich implizite Beschreibung voraus. Angabe eines Raumes/Ortes als Indiz für Präsenz. -99, wenn das Veranstaltungsformat nicht thematisiert ist."
+      examples:
+  - "Lehrvideos leicht gemacht, HAW München"
+      values: "Präsenz; Online; Hybrid; Blended; Information nicht verfügbar (-99)"
+
+    Digitale_Medien:
+      display_name: "2.0a Digitale Medien werden angesprochen"
+      criteria: |
+        Digitale Medien werden im Segment angesprochen. Wir verstehen unter digitalen Medien:
+        - Synonyme wie "Digitales Medium"
+        - Konkrete Medien wie Smartphone, Tablet, Computer o.Ä.
+        - Digitale Programme wie PowerPoint
+        - Digitale didaktische Umsetzungen wie E-Learning (Materialien), Onlinekurse, Webinare, (digitale) Fernprüfungen, hybride Veranstaltungen, flipped classroom, vhb-Kurs
+        - Wir fassen auch den Begriff "Medien" als digitale Medien auf, wenn nicht explizit ein analoges Medium (z.B. Buch) genannt wird
+        - Auch künstliche Intelligenz und Bestandteile der digitalen Infrastruktur zählen zu digitalen Medien
+      examples:
+        - "Bsp für den Code \"1\": Nennung von digitalen Medien z.B. eher im Introteil einer Fortbildung"
+        - "\"Ziele: Die Teilnehmenden planen barrierefreie Lehrveranstaltungen unter Berücksichtigung geeigneter Methoden und Medien\" (Uni Augsburg: A12 Behinderte und chronisch kranke Studierende in meiner Veranstaltung)"
+      values: "Digitale Medien werden angesprochen (1); Digitale Medien werden nicht angesprochen (0)"
+
+    Digitale_Medien_als_Lernziel:
+      display_name: "2.0b Digitale Medien werden als Lernziel angesprochen"
+      criteria: "1 setzt voraus, dass es im Angebot primär um digitale Medien als Hauptziel geht und/oder konkrete Medien (wie Moodle) im Hauptfokus sind – was mit einem Satz beschrieben ist (\"digital Lehren\" allein ist nicht ausreichend genug)"
+      examples:
+  - "Nennung von digitalen Medien oftmals als Lernziel im Bereich Kursziele o.ä. (im Gegensatz zur Nennung in Introteil)"
+        - "Die Teilnehmer sollen im Seminar Konzepte von Blended Learning kennenlernen und hinterfragen, wie diese sinnvoll für die eigene Lehre eingesetzt werden können."
+        - "eigene medienunterstützte Lehrveranstaltung planen...; Einsatzmöglichkeiten mediengestützter Lehre kennen.."
+        - "Selbstlernphasen mit moodle-Tools didaktisch sinnvoll gestalten"
+      values: "Digitale Medien sind Lernziel (1); Digitale Medien sind kein Lernziel (0)"
+
+    _DERIVED_2.0.4:
+      display_name: "_DERIVED_2.0.4 DigCompEdu Kompetenzen, die in der VA angesprochen werden"
+      criteria: "Kriterium: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen angesprochen"
+      examples:
+  - "ANKERBEISPIELE folgen in der ersten Kodier-Testrunde"
+      values: "Ja (1) wenn min. eine der Kategorien 2.1-2.6 = 1\noder Nein (0)"
+      condition:
+        type: "any_in_range"
+        range_start: "2.1"
+        range_end: "2.6"
+        value: "1"
+
+    _DERIVED_2.1:
+      display_name: "_DERIVED_2.1 Berufliches Engagement"
+      criteria: "Kriterium: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen des Bereichs Berufliches Engagement angesprochen"
+      examples: []
+      values: "Ja (1) wenn min. eine der Kategorien 2.1.1-2.1.4 = 1\noder Nein (0)"
+      condition:
+        type: "any_in_range"
+        range_start: "2.1.1"
+        range_end: "2.1.4"
+        value: "1"
+
+    Organisatorische_Kommunikation:
+      display_name: "2.1.1 Organisatorische Kommunikation"
+      criteria: "Kriterium: Nutzung digitaler Kommunikationsmittel innerhalb der Organisation wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Berufliche_Zusammenarbeit:
+      display_name: "2.1.2 Berufliche Zusammenarbeit"
+      criteria: "Kriterium: Digitale Zusammenarbeit zwischen Lehrkräften wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Reflektierte_Praxis:
+      display_name: "2.1.3 Reflektierte Praxis"
+      criteria: "Kriterium: Methoden zur digitalen Selbstreflexion werden im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Digitale_Fortbildung:
+      display_name: "2.1.4 Digitale fortlaufende berufliche Entwicklung"
+      criteria: "Kriterium: Förderung der digitalen Weiterbildung wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    _DERIVED_2.2:
+      display_name: "_DERIVED_2.2 Digitale Ressourcen"
+      criteria: "Kriterium: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen des Bereichs Digitale Ressourcen angesprochen"
+      examples: []
+      values: "Ja (1) wenn min. eine der Kategorien 2.2.1-2.2.3 = 1\noder Nein (0)"
+      condition:
+        type: "any_in_range"
+        range_start: "2.2.1"
+        range_end: "2.2.3"
+        value: "1"
+
+    Auswahl_digitaler_Ressourcen:
+      display_name: "2.2.1 Auswahl digitaler Ressourcen"
+      criteria: "Kriterium: Bewertung und Auswahl geeigneter digitaler Materialien wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Erstellen_und_Anpassen:
+      display_name: "2.2.2 Erstellen und Anpassen digitaler Ressourcen"
+      criteria: "Kriterium: Gestaltung und Anpassung digitaler Lernmaterialien wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Organisieren_und_Teilen:
+      display_name: "2.2.3 Organisieren, Schützen und Teilen digitaler Ressourcen"
+      criteria: "Kriterium: Organisation und Weitergabe digitaler Lehrmaterialien wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    _DERIVED_2.3:
+      display_name: "_DERIVED_2.3 Lehren und Lernen"
+      criteria: "Kriterium: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen des Bereichs Lehren und Lernen angesprochen"
+      examples: []
+      values: "Ja (1) wenn min. eine der Kategorien 2.3.1-2.3.4 = 1\noder Nein (0)"
+      condition:
+        type: "any_in_range"
+        range_start: "2.3.1"
+        range_end: "2.3.4"
+        value: "1"
+
+    Lehren:
+      display_name: "2.3.1 Lehren"
+      criteria: "Kriterium: Einsatz digitaler Werkzeuge im Unterricht wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Lernbegleitung:
+      display_name: "2.3.2 Lernbegleitung"
+      criteria: "Kriterium: Digitale Methoden zur Lernunterstützung werden im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Kollaboratives_Lernen:
+      display_name: "2.3.3 Kollaboratives Lernen"
+      criteria: "Kriterium: Förderung der digitalen Zusammenarbeit der Lernenden wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Selbstgesteuertes_Lernen:
+      display_name: "2.3.4 Selbstgesteuertes Lernen"
+      criteria: "Kriterium: Förderung autonomer Lernprozesse mit digitalen Medien wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    _DERIVED_2.4:
+      display_name: "_DERIVED_2.4 Evaluation"
+      criteria: "Kriterium: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen des Bereichs Evaluation angesprochen"
+      examples: []
+      values: "Ja (1) wenn min. eine der Kategorien 2.4.1-2.4.3 = 1\noder Nein (0)"
+      condition:
+        type: "any_in_range"
+        range_start: "2.4.1"
+        range_end: "2.4.3"
+        value: "1"
+
+    Lernstand_erheben:
+      display_name: "2.4.1 Lernstand erheben"
+      criteria: "Kriterium: Digitale Methoden zur Leistungsbewertung wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Lern_Evidenzen:
+      display_name: "2.4.2 Lern-Evidenzen analysieren"
+      criteria: "Kriterium: Nutzung digitaler Daten zur Lernstandsanalyse wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Feedback_und_Planung:
+      display_name: "2.4.3 Feedback und Planung"
+      criteria: "Kriterium: Digitale Feedback-Mechanismen wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    _DERIVED_2.5:
+      display_name: "_DERIVED_2.5 Lernerorientierung"
+      criteria: "Kriterium: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen des Bereichs Lernerorientierung angesprochen"
+      examples: []
+      values: "Ja (1) wenn min. eine der Kategorien 2.5.1-2.5.3 = 1\noder Nein (0)"
+      condition:
+        type: "any_in_range"
+        range_start: "2.5.1"
+        range_end: "2.5.3"
+        value: "1"
+
+    Digitale_Teilhabe:
+      display_name: "2.5.1 Digitale Teilhabe"
+      criteria: "Kriterium: Förderung der digitalen Zugänglichkeit für alle wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Differenzierung:
+      display_name: "2.5.2 Differenzierung und Individualisierung"
+      criteria: "Kriterium: Anpassung digitaler Inhalte an individuelle Lernbedürfnisse wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Aktive_Einbindung:
+      display_name: "2.5.3 Aktive Einbindung von Lernenden"
+      criteria: "Kriterium: Einsatz digitaler Methoden zur Lernmotivation wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    _DERIVED_2.6:
+      display_name: "_DERIVED_2.6 Förderung der digitalen Kompetenz der Studierenden"
+      criteria: "Kriterium: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen des Bereichs Förderung der digitalen Kompetenz der Studierenden angesprochen"
+      examples: []
+      values: "Ja (1) wenn min. eine der Kategorien 2.6.1-2.6.5 = 1\noder Nein (0)"
+      condition:
+        type: "any_in_range"
+        range_start: "2.6.1"
+        range_end: "2.6.5"
+        value: "1"
+
+    Informations_Medienkompetenz:
+      display_name: "2.6.1 Förderung der Informations- und Medienkompetenz der Studierenden"
+      criteria: "Kriterium: Schulung im kritischen Umgang mit digitalen Informationen der Studierenden wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Digitale_Kommunikation:
+      display_name: "2.6.2 Förderung der Digitalen Kommunikation und Zusammenarbeit der Studierenden"
+      criteria: "Kriterium: Förderung digitaler Kommunikationsfähigkeiten der Studierenden wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Erstellung_digitaler_Inhalte:
+      display_name: "2.6.3 Förderung der Erstellung digitaler Inhalte der Studierenden"
+      criteria: "Kriterium: Förderung kreativer digitaler Ausdrucksformen der Studierenden wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Verantwortungsvoller_Umgang:
+      display_name: "2.6.4 Förderung des verantwortungsvollen Umgang der Studierenden mit digitalen Medien"
+      criteria: "Kriterium: Sensibilisierung der Studierenden für Datenschutz und digitale Ethik wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Digitales_Problemloesen:
+      display_name: "2.6.5 Förderung der Kompetenz Digitales Problemlösen der Studierenden"
+      criteria: "Kriterium: Entwicklung digitaler Problemlösungsfähigkeiten der Studierenden wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    _DERIVED_3:
+      display_name: "_DERIVED_3 DigComp Kompetenzen, die in der VA angesprochen werden"
+      criteria: "Kriterium: Im Segment wird mindestens eine der (eigenen) digitalen Kompetenzen nach DigComp der Dozierenden angesprochen"
+      examples: []
+      values: "Ja (1) wenn min. eine der Kategorien 3.1-3.5 = 1\noder Nein (0)"
+      condition:
+        type: "any_in_range"
+        range_start: "3.1"
+        range_end: "3.5"
+        value: "1"
+
+    Informations_Medienkompetenz_Dozenten:
+      display_name: "3.1 Informations- und Medienkompetenz"
+      criteria: "Kriterium: Schulung der Dozierenden im kritischen Umgang mit digitalen Informationen wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Digitale_Kommunikation_Dozenten:
+      display_name: "3.2 Digitale Kommunikation und Zusammenarbeit"
+      criteria: "Kriterium: Förderung digitaler Kommunikationsfähigkeiten der Dozierenden wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Erstellung_digitaler_Inhalte_Dozenten:
+      display_name: "3.3 Erstellung digitaler Inhalte"
+      criteria: "Kriterium: Förderung kreativer digitaler Ausdrucksformen der Dozierenden wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Verantwortungsvoller_Umgang_Dozenten:
+      display_name: "3.4 Verantwortungsvoller Umgang mit digitalen Medien"
+      criteria: "Kriterium: Sensibilisierung der Dozierenden für Datenschutz und digitale Ethik wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
+
+    Digitales_Problemloesen_Dozenten:
+      display_name: "3.5 Digitales Problemlösen"
+      criteria: "Kriterium: Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen"
+      examples: []
+      values: "Ja (1), Nein (0)"
