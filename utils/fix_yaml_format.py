@@ -123,11 +123,7 @@ def fix_yaml_format(input_file: str, output_file: str) -> bool:
         # Create new dict with simplified keys and fixed content
         fixed_data = {}
         for key, value in input_categories.items():
-            # Skip _DERIVED_ categories
-            if key.startswith('_DERIVED_'):
-                print(f"Skipping derived category: {key}")
-                continue
-                
+            # Include all categories, including derived ones
             if not isinstance(value, dict):
                 print(f"Error: Category {key} value is not a dictionary")
                 return False
@@ -145,6 +141,11 @@ def fix_yaml_format(input_file: str, output_file: str) -> bool:
                     'examples': fix_examples(value.get('examples', [])),
                     'values': fix_values(value.get('values', ''))
                 }
+                
+                # Add condition if it exists (for derived categories)
+                if 'condition' in value:
+                    fixed_content['condition'] = value['condition']
+                
                 # Use the original key to maintain numbering in the output
                 fixed_data[original_key] = fixed_content
                 print(f"Converted category:\n  From: {original_key}\n  To:   {simplified_key}")

@@ -60,16 +60,6 @@
             background-color: #dc3545;
             border-color: #dc3545;
         }
-        .btn-warning {
-            color: #212529;
-            background-color: #ffc107;
-            border-color: #ffc107;
-        }
-        .btn-success {
-            color: #fff;
-            background-color: #198754;
-            border-color: #198754;
-        }
         .alert {
             padding: 1rem;
             margin-bottom: 1rem;
@@ -141,21 +131,6 @@
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold text-center mb-8">AI Pipeline Interface</h1>
         
-        <!-- Admin Controls -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5>Admin Controls</h5>
-            </div>
-            <div class="card-body">
-                <button type="button" id="restartButton" class="btn btn-warning">
-                    <span id="restartButtonText">Restart Service</span>
-                </button>
-                <small class="form-text text-muted d-block mt-2">
-                    Use this button to restart the web service if you experience issues with category display or other functionality.
-                </small>
-            </div>
-        </div>
-        
         <div class="card mb-4">
             <div class="card-header">
                 <h5>Upload Files</h5>
@@ -197,7 +172,7 @@
                     </div>
                     
                     <div class="button-group">
-                    <button type="submit" class="btn btn-primary">Run Pipeline</button>
+                        <button type="submit" class="btn btn-primary">Run Pipeline</button>
                         <button type="button" id="cancelButton" class="btn btn-danger" style="display: none;">Cancel</button>
                     </div>
                 </form>
@@ -241,61 +216,6 @@
     <script>
         let statusPollingInterval = null;
         let isCancelled = false;
-
-        // Add restart button handler
-        document.getElementById('restartButton').addEventListener('click', async () => {
-            const button = document.getElementById('restartButton');
-            const buttonText = document.getElementById('restartButtonText');
-            
-            // Confirm restart
-            if (!confirm('Are you sure you want to restart the service? This will temporarily disconnect all users.')) {
-                return;
-            }
-            
-            // Disable button and show loading state
-            button.disabled = true;
-            buttonText.textContent = 'Restarting...';
-            
-            try {
-                const response = await fetch('/restart_service', { method: 'POST' });
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    // Show success message
-                    const statusDiv = document.getElementById('status');
-                    statusDiv.style.display = 'block';
-                    statusDiv.className = 'alert alert-success';
-                    statusDiv.textContent = data.message + ' The page will automatically refresh in 5 seconds...';
-                    
-                    // Refresh page after 5 seconds
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 5000);
-                } else {
-                    // Show error message
-                    const statusDiv = document.getElementById('status');
-                    statusDiv.style.display = 'block';
-                    statusDiv.className = 'alert alert-danger';
-                    statusDiv.textContent = data.message;
-                    
-                    // Re-enable button
-                    button.disabled = false;
-                    buttonText.textContent = 'Restart Service';
-                }
-            } catch (error) {
-                console.error('Error restarting service:', error);
-                
-                // Show error message
-                const statusDiv = document.getElementById('status');
-                statusDiv.style.display = 'block';
-                statusDiv.className = 'alert alert-danger';
-                statusDiv.textContent = 'Error restarting service: ' + error.message;
-                
-                // Re-enable button
-                button.disabled = false;
-                buttonText.textContent = 'Restart Service';
-            }
-        });
 
         // Add cancel button handler
         document.getElementById('cancelButton').addEventListener('click', async () => {

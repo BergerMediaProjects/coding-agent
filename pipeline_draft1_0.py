@@ -493,124 +493,120 @@ class ResponseValidator:
 class GPTClassificationAgent:
     """GPT agent for classifying training data entries"""
     def __init__(self):
-        self.api_key = os.getenv("OPENAI_API_KEY")
-        if not self.api_key:
-            raise ValueError("OPENAI_API_KEY not found in environment variables. Please check your .env file.")
-        
-        # Validate API key format
-        if not self.api_key.startswith(('sk-', 'sk-proj-')):
-            raise ValueError("Invalid API key format. Please check your .env file.")
-        
-        # Configure OpenAI client with optimized settings
         self.client = OpenAI(
-            api_key=self.api_key,
-            timeout=120.0,  # Increase timeout to 120 seconds
-            max_retries=5  # Increase retries
+            api_key=os.getenv("OPENAI_API_KEY"),
+            timeout=120.0  # Increase timeout to 120 seconds
         )
-        self.logger = logging.getLogger('gpt_agent')
+        self.logger = logging.getLogger('gpt_agent')  # Get a logger for GPT agent
 
     async def process(self, input_data: GPTClassificationInput) -> GPTClassificationOutput:
-        try:
-            # Debug output - safer parsing
-            self.logger.info("\n🔍 Sending to GPT:")
-            self.logger.info("=" * 50)
+        max_retries = 3
+        retry_delay = 2  # seconds
+        
+        for attempt in range(max_retries):
             try:
-                # Extract title from prompt
-                prompt_lines = input_data.prompt.split('\n')
-                title = next((line.split('Titel: ')[1] for line in prompt_lines 
-                            if 'Titel: ' in line), 'No title found')
-                
-                # Extract category from JSON template
-                category = next((line.split('category": "')[1].split('"')[0] 
-                               for line in prompt_lines if '"category": "' in line), 
-                              'No category found')
-                
-                self.logger.info(f"Title: {title}")
-                self.logger.info(f"Category: {category}")
-            except Exception as e:
-                self.logger.error(f"Error parsing prompt for debug output: {str(e)}")
-                self.logger.info("Raw prompt:")
-                self.logger.info(input_data.prompt)
-            
-            self.logger.info("-" * 50)
-            self.logger.info("Full Prompt:")
-            self.logger.info(input_data.prompt)
-            self.logger.info("=" * 50)
-
-            try:
-                # Add response format specification to ensure JSON output
-                response = self.client.chat.completions.create(
-                    model=input_data.model,
-                    temperature=input_data.temperature,
-                    messages=[
-                        {
-                            "role": "system", 
-                            "content": "Du bist ein wissenschaftlicher Coder, spezialisiert auf strukturierte Daten. Bitte antworte immer im JSON-Format mit den Feldern 'value', 'confidence' und 'reasoning'."
-                        },
-                        {
-                            "role": "user",
-                            "content": input_data.prompt + "\n\nBitte antworte im folgenden JSON-Format:\n{\n  \"value\": \"0\" oder \"1\",\n  \"confidence\": Zahl zwischen 0 und 1,\n  \"reasoning\": \"Deine Begründung\"\n}"
-                        }
-                    ],
-                    max_tokens=500  # Limit response length
-                )
-
-                # Check if we got a valid response
-                if not response.choices:
-                    raise Exception("No response received from GPT")
-                
-                response_content = response.choices[0].message.content
-                if not response_content:
-                    raise Exception("Empty response from GPT")
-
-                # Check for HTML in response
-                if response_content.strip().startswith('<'):
-                    raise Exception("Received HTML response instead of JSON. This might indicate a server error or timeout.")
-
-                # Debug raw response
-                self.logger.info("\n📝 Raw GPT Response:")
+                # Debug output - safer parsing
+                self.logger.info("\n🔍 Sending to GPT:")
                 self.logger.info("=" * 50)
-                self.logger.info(response_content)
-                self.logger.info("=" * 50)
-
-                # Clean the response if it contains markdown code blocks
-                if '```json' in response_content:
-                    response_content = response_content.split('```json')[1].split('```')[0].strip()
-                elif '```' in response_content:
-                    response_content = response_content.split('```')[1].split('```')[0].strip()
-
-                # Validate that the response is JSON
                 try:
-                    json.loads(response_content)
-                except json.JSONDecodeError as e:
-                    self.logger.error(f"Failed to parse JSON response: {str(e)}")
-                    self.logger.error(f"Response content: {response_content[:500]}...")
-                    raise Exception(f"GPT response is not valid JSON. Response content: {response_content[:200]}...")
-
-                return GPTClassificationOutput(response=response_content)
-
+                    # Extract title from prompt
+                    prompt_lines = input_data.prompt.split('\n')
+                    title = next((line.split('Titel: ')[1] for line in prompt_lines 
+                                if 'Titel: ' in line), 'No title found')
+                    # Extract category from JSON template
+                    category = next((line.split('category": "')[1].split('"')[0] 
+                                   for line in prompt_lines if '"category": "' in line), 
+                                  'No category found')
+                    self.logger.info(f"Title: {title}")
+                    self.logger.info(f"Category: {category}")
+                except Exception as e:
+                    self.logger.error(f"Error parsing prompt for debug output: {str(e)}")
+                    self.logger.info("Raw prompt:")
+                    self.logger.info(input_data.prompt)
+                self.logger.info("-" * 50)
+                self.logger.info("Full Prompt:")
+                self.logger.info(input_data.prompt)
+                self.logger.info("=" * 50)
+                try:
+                    # Add response format specification to ensure JSON output
+                    response = self.client.chat.completions.create(
+                        model=input_data.model,
+                        temperature=input_data.temperature,
+                        messages=[
+                            {
+                                "role": "system", 
+                                "content": "Du bist ein wissenschaftlicher Coder, spezialisiert auf strukturierte Daten. Bitte antworte immer im JSON-Format mit den Feldern 'value', 'confidence' und 'reasoning'."
+                            },
+                            {
+                                "role": "user",
+                                "content": input_data.prompt + "\n\nBitte antworte im folgenden JSON-Format:\n{\n  \"value\": \"0\" oder \"1\",\n  \"confidence\": Zahl zwischen 0 und 1,\n  \"reasoning\": \"Deine Begründung\"\n}"
+                            }
+                        ],
+                        max_tokens=500,  # Limit response length
+                        timeout=120.0  # Timeout in seconds
+                    )
+                    # Check if we got a valid response
+                    if not response.choices:
+                        raise Exception("No response received from GPT")
+                    response_content = response.choices[0].message.content
+                    if not response_content:
+                        raise Exception("Empty response from GPT")
+                    # Check for HTML in response
+                    if response_content.strip().startswith('<'):
+                        raise Exception("Received HTML response instead of JSON. This might indicate a server error or timeout.")
+                    # Debug raw response
+                    self.logger.info("\n📝 Raw GPT Response:")
+                    self.logger.info("=" * 50)
+                    self.logger.info(response_content)
+                    self.logger.info("=" * 50)
+                    # Clean the response if it contains markdown code blocks
+                    if '```json' in response_content:
+                        response_content = response_content.split('```json')[1].split('```')[0].strip()
+                    elif '```' in response_content:
+                        response_content = response_content.split('```')[1].split('```')[0].strip()
+                    # Validate that the response is JSON
+                    try:
+                        json.loads(response_content)
+                    except json.JSONDecodeError as e:
+                        self.logger.error(f"Failed to parse JSON response: {str(e)}")
+                        self.logger.error(f"Response content: {response_content[:500]}...")
+                        raise Exception(f"GPT response is not valid JSON. Response content: {response_content[:200]}...")
+                    return GPTClassificationOutput(response=response_content)
+                except Exception as e:
+                    if attempt < max_retries - 1:
+                        self.logger.warning(f"Attempt {attempt + 1} failed: {str(e)}")
+                        self.logger.info(f"Retrying in {retry_delay} seconds...")
+                        await asyncio.sleep(retry_delay)
+                        retry_delay *= 2  # Exponential backoff
+                        continue
+                    else:
+                        self.logger.error(f"\n❌ Error in GPT request after {max_retries} attempts: {str(e)}")
+                        self.logger.error("Request details:")
+                        self.logger.error(f"Model: {input_data.model}")
+                        self.logger.error(f"Temperature: {input_data.temperature}")
+                        self.logger.error(f"API Key (first 8 chars): {api_key[:8]}...")
+                        # Add more detailed error information
+                        if hasattr(e, 'response'):
+                            self.logger.error(f"Response status: {e.response.status_code}")
+                            self.logger.error(f"Response body: {e.response.text}")
+                        raise
             except Exception as e:
-                self.logger.error(f"\n❌ Error in GPT request: {str(e)}")
-                self.logger.error("Request details:")
-                self.logger.error(f"Model: {input_data.model}")
-                self.logger.error(f"Temperature: {input_data.temperature}")
-                self.logger.error(f"API Key (first 8 chars): {self.api_key[:8]}...")
-                # Add more detailed error information
-                if hasattr(e, 'response'):
-                    self.logger.error(f"Response status: {e.response.status_code}")
-                    self.logger.error(f"Response body: {e.response.text}")
-                raise
-
-        except Exception as e:
-            self.logger.error(f"Error in GPT processing: {str(e)}")
-            # Add more context to the error
-            if "SSL" in str(e):
-                self.logger.error("SSL connection error detected. This might be due to:")
-                self.logger.error("1. Network connectivity issues")
-                self.logger.error("2. SSL certificate verification problems")
-                self.logger.error("3. Proxy or firewall settings")
-                self.logger.error("4. API key authentication issues")
-            raise
+                if attempt < max_retries - 1:
+                    self.logger.warning(f"Attempt {attempt + 1} failed: {str(e)}")
+                    self.logger.info(f"Retrying in {retry_delay} seconds...")
+                    await asyncio.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                    continue
+                else:
+                    self.logger.error(f"Error in GPT processing after {max_retries} attempts: {str(e)}")
+                    # Add more context to the error
+                    if "SSL" in str(e):
+                        self.logger.error("SSL connection error detected. This might be due to:")
+                        self.logger.error("1. Network connectivity issues")
+                        self.logger.error("2. SSL certificate verification problems")
+                        self.logger.error("3. Proxy or firewall settings")
+                        self.logger.error("4. API key authentication issues")
+                    raise
 
 # ============================================================================
 # YAML Management Components
@@ -993,8 +989,29 @@ class TrainingDataClassifier:
         # Load template once
         template = await self.resource_manager.load_template(self.config['paths']['prompt_template'])
         
+        # Get total number of entries and categories
+        total_entries = len(entries)
+        total_categories = len(self.config.get('selected_categories', []))
+        total_tasks = total_entries * total_categories
+        completed_tasks = 0
+        
         # Process each entry
-        for entry in entries:
+        for entry_idx, entry in enumerate(entries, 1):
+            # Check for cancellation
+            if 'status_callback' in self.config:
+                try:
+                    self.config['status_callback'](
+                        entry_num=entry_idx,
+                        total_entries=total_entries,
+                        category='',
+                        progress=int((completed_tasks / total_tasks) * 100)
+                    )
+                except Exception as e:
+                    if "Pipeline cancelled" in str(e):
+                        print("\nPipeline cancelled by user")
+                        return
+                    raise
+            
             results = await self.process_entry(entry, template, scheme)
             
             # Store results
@@ -1004,6 +1021,17 @@ class TrainingDataClassifier:
                     category=result.category,
                     value=result.value,
                     confidence=result.confidence
+                )
+            
+            # Update progress
+            completed_tasks += total_categories
+            if 'status_callback' in self.config:
+                progress = int((completed_tasks / total_tasks) * 100)
+                self.config['status_callback'](
+                    entry_num=entry_idx,
+                    total_entries=total_entries,
+                    category=result.category if results else '',
+                    progress=progress
                 )
 
     async def process_entry(self, entry: DataEntry, template: str, scheme: CodingScheme) -> List[ProcessingResult]:

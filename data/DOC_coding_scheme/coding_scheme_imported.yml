@@ -187,39 +187,38 @@
       - "Für die Dokumentation und Analyse in der Lehre eigene mobile Endgeräte schnell und einfach einsetzen"
       - "Die didaktische und technische Umsetzung von Videoreflexion als Methode kennenlernen Video-Feedback in der Lehre als Lehrmethode umsetzen"
       "values": "Ja (1), Nein (0)"
-    "_DERIVED_Vorkommen_Medienkompetenz_digitale_Bildung_als_Lernziel_bzw_Lerninhalt_implizit":
+    "Vorkommen_Medienkompetenz_digitale_Bildung_als_Lernziel_bzw_Lerninhalt_implizit":
       "display_name": "2.0.2 Vorkommen Medienkompetenz/digitale Bildung als Lernziel bzw. Lerninhalt implizit"
       "criteria": "Die Äußerung/das Segment enthält explizit, dass es der Lerninhalt oder das Lernziel ist, Medienkompetenz/digitale Bildung/weitere Synonyme der Lehrenden zu fördern Bei den Medienkompetenzen darauf achten, dass sie wirklich Lernziel sein müssen (z.B. nicht nur in Introteil genannt „Medienkompetenzen heutzutage sind wichtig“); steht wahrscheinlich oft unter konkreten Zielen der Fobi. Dieser Code hat 2018 eher dem entsprochen, was wir unter implizite Medienkompetenz verstehen."
       "examples":
-      - "Bsp für den Code „0“:"
+      - "Bsp für den Code „1“:"
+      - "Practise key presentation phrases by means of developing and delivering a presentation,make use of academic vocabulary in the presentation,integrate didactic principles in your presentation that guide and activate your audience (aim- and phase-orientation, motivational design, didactic reducation), and practise giving and receiving feedback."
       "values": "Ja (1), nur, wenn auch 2.0.4 =1; Nein (0)"
-      "condition":
-        "type": "equals"
-        "reference": "auch 2.0.4"
-        "value": "1; nein (0)"
     "Thematisierung_von_K_nstlicher_Intelligenz":
       "display_name": "2.0.3 Thematisierung von Künstlicher Intelligenz"
       "criteria": "Kriterium: Künstliche Intelligenz wird in irgendeiner Form im Titel oder Segment angesprochen"
       "examples":
       - "“Lehrvideos und KI: Wie gestalte ich meine Lehre mit HAnS?”"
       - "Bsp für den Code „0“:"
-      "values": "Ja (1), Nein (0)"
+      "values": "Ja (1) wenn min. eine der Kategorien 2.0.3.1 & 2.0.3.2 = 1\noder Nein (0)"
     "KI_als_Lerngegenstand":
       "display_name": "2.0.3.1 KI als Lerngegenstand"
       "criteria": "Kriterium: Vermittlung von theoretischen Grundlagen zu Künstlicher Intelligenz wird im Segment angesprochen"
       "examples":
+      - "Bsp für den Code „1“:"
       - "Lehren und Lernen mit KI: ChatGPT in der Hochschullehre verantwortungsvoll einsetzen"
       - "„Wir klären darin, warum aktuelle KI-Modelle nach statistischen Wahrscheinlichkeiten arbeiten, warum KI manchmal falsche Antworten gibt und wie man der KI Befehle geben kann“"
       - "Bsp für den Code „0“:"
-      "values": "Ja (1); nicht zutreffend (-99)"
+      "values": "Ja (1); nicht zutreffend (0)"
     "KI_als_Werkzeug":
       "display_name": "2.0.3.2 KI als Werkzeug"
       "criteria": "Kriterium: Einsatz von KI-gestützten Anwendungen im Hochschul-Unterricht wird im Segment angesprochen"
       "examples":
+      - "Bsp für den Code „1“:"
       - "Lehren und Lernen mit KI: ChatGPT in der Hochschullehre verantwortungsvoll einsetzen"
       - "„Wir erarbeiten, wie man gute Befehle für Chatbots entwickelt (Prompt Engineering)“"
       - "Bsp für den Code „0“:"
-      "values": "Ja (1), nicht zutreffend (-99)"
+      "values": "Ja (1), nicht zutreffend (0)"
     "_DERIVED_DigCompEdu_Kompetenzen_die_in_der_VA_angesprochen_werden":
       "display_name": "2.0.4 DigCompEdu Kompetenzen, die in der VA angesprochen werden"
       "criteria": "Kriterium: Im Segment wird mindestens eine der offiziellen DigCompEdu Kompetenzen angesprochen"
@@ -250,25 +249,25 @@
       "values": "Ja (1), Nein (0)"
     "Berufliche_Zusammenarbeit":
       "display_name": "2.1.2 Berufliche Zusammenarbeit"
-      "criteria": "Kriterium: Digitale Zusammenarbeit zwischen Lehrkräften wird im Segment angesprochen Das bedeutet: Nutzung von digitalen Medien zur Zusammenarbeit mit anderen Lehrenden, zum Austausch von Wissen und Erfahrungen und zur Erneuerung von gemeinsamen pädagogischen Praktiken"
+      "criteria": "Kriterium: Digitale Zusammenarbeit zwischen Lehrkräften wird im Segment angesprochen Das bedeutet: Digitale Medien werden nicht nur genutzt, sondern es wird im Segment deutlich beschrieben, dass diese zur Zusammenarbeit mit anderen Lehrenden eingesetzt werden – z. B. für den gezielten Austausch von Wissen und Erfahrungen oder zur gemeinsamen Weiterentwicklung pädagogischer Praktiken. Eine implizite Andeutung reicht nicht aus; die Nutzung zur Kooperation muss ohne interpretative Annahmen nachvollziehbar sein."
       "examples":
-      - "Bsp für den Code „0“:"
+      - "Bsp für den Code „1“:"
+      - "...ein Forum für NLP-Lehrende, in dem wir uns über unsere Lehrpläne und Lernziele in unseren NLP-Veranstaltungen austauschen. Idealerweise generieren wir hierdurch austauschbare \"best practice\"-Materialien, die gleichzeitig die Lehre vereinfachen und verbessern."
       "values": "Ja (1), Nein (0)"
     "Reflektierte_Praxis":
       "display_name": "2.1.3 Reflektierte Praxis"
-      "criteria": "Kriterium: Methoden zur digitalen Selbstreflexion werden im Segment angesprochen Das bedeutet: Die eigene digitale pädagogische Praxis sowie die der Bildungsgemeinschaft individuell und gemeinsam reflektieren, selbstkritisch beurteilen und aktiv entwickeln."
+      "criteria": "Kriterium: Methoden zur digitalen Selbstreflexion werden im Segment angesprochen Das bedeutet: Sie umfasst das Erkennen von Kompetenzlücken, das Einholen von Unterstützung und gezielter Weiterbildung, die Zusammenarbeit mit Kolleg*innen sowie die Mitgestaltung digitaler Lehrpraktiken und Strategien auf individueller und institutioneller Ebene."
       "examples":
       - "Bsp für den Code „1“:"
-      - "Die Umsetzung des Flipped Classrooms in der eigenen Lehre reflektieren"
-      - "In dieser Fortbildung lernen Sie die praktische Umsetzung didaktischer Einsatzszenarien mittels Lehrvideos rund um…Reflexion und Feedback in der Lehre kennen."
+      - "Eigene Erfahrungen mit dem Flipped Classroom reflektieren und gezielt Weiterentwicklungsbedarfe in der digitalen Lehre identifizieren."
+      - "In der Fortbildung didaktische Einsatzszenarien mit Lehrvideos zur Förderung von Reflexion und Feedback kennenlernen und deren Anwendung im eigenen Lehrkontext kritisch prüfen."
       "values": "Ja (1), Nein (0)"
     "Digitale_fortlaufende_berufliche_Entwicklung":
       "display_name": "2.1.4 Digitale fortlaufende berufliche Entwicklung"
-      "criteria": "Kriterium: Förderung der digitalen Weiterbildung wird im Segment angesprochen Das bedeutet: Nutzung von digitalen Quellen und Ressourcen für die fortlaufende Weiterbildung"
+      "criteria": "Kriterium: Explizit Förderung der digitalen Weiterbildung wird im Segment angesprochen Das bedeutet: Nutzung von digitalen Quellen und Ressourcen für die fortlaufende Weiterbildung."
       "examples":
-      - "TR01-TR07"
       - "Bsp für den Code „1“:"
-      - "Die Umsetzung des Flipped Classrooms in der eigenen Lehre reflektieren"
+      - "Der Einsatz digitaler Technologien (einschließlich des Internets) zur beruflichen Weiterentwicklung durch die Teilnahme an Kursen, die Suche nach Fortbildungsmöglichkeiten."
       "values": "Ja (1), Nein (0)"
     "_DERIVED_Digitale_Ressourcen":
       "display_name": "2.2 Digitale Ressourcen"
@@ -290,17 +289,15 @@
       "values": "Ja (1), Nein (0)"
     "Erstellen_und_Anpassen_digitaler_Ressourcen":
       "display_name": "2.2.2 Erstellen und Anpassen digitaler Ressourcen"
-      "criteria": "Kriterium: Gestaltung und Anpassung digitaler Lernmaterialien wird im Segment angesprochen Das bedeutet: Modifizierung und Weiterentwicklung bestehender Ressourcen, sofern rechtlich möglich; Erstellung oder Mitgestaltung von neuen digitalen Bildungsressourcen; Berücksichtigung von konkretem Lernziel, Kontext, didaktischem Ansatz und der Lerngruppe beim Entwurf digitaler Ressourcen und der Planung ihrer Nutzung"
+      "criteria": "Kriterium: Gestaltung und Anpassung digitaler Lernmaterialien wird im Segment angesprochen Dazu gehören (aber nicht nur) die Erstellung von Tutorials, Multiple-Choice-Fragen und Quizze. Das bedeutet: Modifizierung und Weiterentwicklung bestehender Ressourcen, sofern rechtlich möglich; Erstellung oder Mitgestaltung von neuen digitalen Bildungsressourcen; Berücksichtigung von konkretem Lernziel, Kontext, didaktischem Ansatz und der Lerngruppe beim Entwurf digitaler Ressourcen und der Planung ihrer Nutzung"
       "examples":
       - "Bsp für den Code „1“:"
       - "Anschließend lernen Sie grundlegende Funktionen der Bildschirmaufzeichnungssoftware Camtasia Studio kennen und in den Übungsphasen setzen Sie das gelernte Wissen direkt um. So gelangen Sie Schritt für Schritt zum eigenen Lehrvideo."
-      - "TR01-TR07"
-      "values": "Ja (1), Nein (0)"
+      "values": "Ja (1) oder Nein (0)\n\nWenn 2.2.2. Ja (1) ist, ist 3.3. ebenfalls Ja (1)"
     "Organisieren_Sch_tzen_und_Teilen_digitaler_Ressourcen":
       "display_name": "2.2.3  Organisieren, Schützen und Teilen digitaler Ressourcen"
       "criteria": "Kriterium: Organisation und Weitergabe digitaler Lehrmaterialien wird im Segment angesprochen Das bedeutet: Digitale Inhalte organisieren und Lernenden, Eltern und anderen Lehrenden zur Verfügung stellen; Sensible digitale Inhalte effektiv schützen; Datenschutz- und Urheberrechtsbestimmungen respektieren und korrekt anwenden; Die Verwendung und Erstellung von offenen Lizenzen und offenen Bildungsressourcen einschließlich ihrer angemessenen Zuordnung verstehen"
       "examples":
-      - "TR01-TR06"
       - "Bsp für den Code „1“:"
       - "Anschließend lernen Sie grundlegende Funktionen der Bildschirmaufzeichnungssoftware Camtasia Studio kennen und in den Übungsphasen setzen Sie das gelernte Wissen direkt um. So gelangen Sie Schritt für Schritt zum eigenen Lehrvideo."
       "values": "Ja (1), Nein (0)"
@@ -316,33 +313,34 @@
         "value": "1\n oder nein (0)"
     "Lehren":
       "display_name": "2.3.1 Lehren"
-      "criteria": "Kriterium: Einsatz digitaler Werkzeuge im Unterricht wird im Segment angesprochen Dazu gehört: Einsatzplanung und - gestaltung von digitalen Geräten und Materialien im Unterricht zur Verbesserung der Effektivität von Lehrinterventionen; digitale Unterrichtsmethoden angemessen organisieren und gestalten; neue Formate und pädagogische Methoden für den Unterricht entwickeln und ausprobieren"
+      "criteria": "Kriterium: Einsatz digitaler Werkzeuge im Unterricht wird im Segment angesprochen Dazu gehört: Einsatzplanung und - gestaltung von digitalen Geräten und Materialien im Unterricht zur Verbesserung der Effektivität von Lehrinterventionen; digitale Unterrichtsmethoden angemessen organisieren und gestalten; neue Formate und pädagogische Methoden für den Unterricht entwickeln und ausprobieren Dies gilt nicht für den Einsatz von Technologie innerhalb des Kurses (z. B. Zoom), um den Kursteilnehmern das Lernen zu erleichtern. Dies umfasst keine Aktivitäten wie Beurteilungen, Bewertungen oder Beratungen."
       "examples":
       - "Bsp für den Code „1“:"
       - "In dieser Online-Fortbildung lernen Sie das didaktische Konzept des Flipped Classrooms und die Anwendung der Bildschirmaufzeichnungssoftware Camtasia Studio kennen."
       "values": "Ja (1), Nein (0)"
     "Lernbegleitung":
       "display_name": "2.3.2 Lernbegleitung"
-      "criteria": "Kriterium: Digitale Methoden zur Lernunterstützung werden im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien und Diensten zwecks Verbesserung der Interaktion mit den Lernenden auf individueller Ebene und als Gruppe innerhalb und außerhalb des Unterrichts; Nutzung von digitalen Medien, um rechtzeitig und gezielt Beratung und Unterstützung anbieten zu können; neue Formen und Formate der Hilfestellung und Anleitung entwickeln und experimentell einsetzen"
+      "criteria": "Kriterium: Digitale Methoden zur Lernunterstützung werden im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien und Diensten zwecks Verbesserung der Interaktion mit den Lernenden auf individueller Ebene und als Gruppe innerhalb und außerhalb des Unterrichts; Nutzung von digitalen Medien, um rechtzeitig und gezielt Beratung und Unterstützung anbieten zu können; neue Formen und Formate der Hilfestellung und Anleitung entwickeln und experimentell einsetzen Die Begleitung sollte darauf abzielen, die Interaktion mit den Lernenden individuell und kollektiv zu verbessern. Die Lernbegleitung sollte außerhalb des aktuellen Kurses stattfinden."
       "examples":
       - "Bsp für den Code „1“:"
-      - "Die technische und didaktische Implementierung von Gamification mittels adaptiven Lernpfaden im eigenen Moodlekurs umsetzen"
-      - "Mittels Gamification, d.h. Implementierung von Spielelementen in Moodle kann man Studierende kognitiv, sozial und emotional einbinden und so die Lernerfahrung emotionaler und motivierender gestalten."
+      - "Bei der Einrichtung von Lernaktivitäten in digitalen Umgebungen werden Video-Tutorials und ein FAQ-Bereich eingerichtet, um das Lernen zu unterstützen."
+      - "Während der digitalen Lernaktivitäten wird das Verhalten der SchülerInnen von den Lehrkräften genau beobachtet, sodass Unterstützung und Anleitung rechtzeitig angeboten werden können."
       "values": "Ja (1), Nein (0)"
     "Kollaboratives_Lernen":
       "display_name": "2.3.3 Kollaboratives Lernen"
-      "criteria": "Kriterium: Förderung der digitalen Zusammenarbeit der Lernenden wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien zur Förderung und Verbesserung von gemeinsamen Lernstrategien; Lernende befähigen, digitale Medien in Gruppenund Teamarbeit zu nutzen, um Kommunikation innerhalb der Lerngruppe, Zusammenarbeit und gemeinsame Wissensgenerierung zu verbessern"
+      "criteria": "Kriterium: Explizit Förderung der digitalen Zusammenarbeit der Lernenden wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien zur Förderung und Verbesserung von gemeinsamen Lernstrategien; Lernende befähigen, digitale Medien in Gruppenund Teamarbeit zu nutzen, um Kommunikation innerhalb der Lerngruppe, Zusammenarbeit und gemeinsame Wissensgenerierung zu verbessern Dies umfasst nicht die Förderung des kollaborativen Lernens mithilfe digitaler Technologien, um den Kursteilnehmern die Unterstützung zu erleichtern."
       "examples":
       - "Bsp für den Code „1“:"
       - "Neben der Funktion einer persönlichen digitalen Sammelmappe, können mit Mahara auch verschiedene kollaborative Elemente (z.B. Peer-Feedback, Gruppen) zum Einsatz kommen."
+      - "Entwurf und Verwaltung vielfältiger kollaborativer Lernaktivitäten für Studierende mit digitalen Technologien, die für folgende Zwecke eingesetzt werden: gegenseitige Bewertung und Lernen, kollaborative Selbstregulierung sowie als Medium zum Austausch von Erkenntnissen und zum Erhalt von Feedback von Gleichaltrigen."
       "values": "Ja (1), Nein (0)"
     "Selbstgesteuertes_Lernen":
       "display_name": "2.3.4 Selbstgesteuertes Lernen"
-      "criteria": "Kriterium: Förderung autonomer Lernprozesse mit digitalen Medien wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien zur Unterstützung von selbstgesteuerten Lernprozessen, d. h. den Lernenden sollte ermöglicht werden, ihr eigenes Lernen zu planen, zu überprüfen und zu reflektieren, Fortschritte zu dokumentieren, Ergebnisse zu kommunizieren und kreative Lösungen zu erarbeiten"
+      "criteria": "Kriterium: Explizit Förderung autonomer Lernprozesse mit digitalen Medien wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien zur Unterstützung von selbstgesteuerten Lernprozessen, d. h. den Lernenden sollte ermöglicht werden, ihr eigenes Lernen zu planen, zu überprüfen und zu reflektieren, Fortschritte zu dokumentieren, Ergebnisse zu kommunizieren und kreative Lösungen zu erarbeiten Geben Sie keine selbstständigen Lernaktivitäten an, die im Rahmen des Kurses für die Kursteilnehmer stattfinden."
       "examples":
       - "Bsp für den Code „1“:"
-      - "Sie erlernen den Umgang mit der Software Mahara und erstellen selbstständig Ihr erstes eigenes E-Portfolio."
-      - "Den Einsatz von Gamification in der eigenen Lehre reflektieren"
+      - "Reflektieren Sie über den Einsatz von Gamification-Strategien zur Förderung des selbstregulierten Lernens im Unterricht."
+      - "Sie werden den Einsatz der Mahara-Software fördern, damit die Lernenden ihr eigenes Lernen planen können."
       "values": "Ja (1), Nein (0)"
     "_DERIVED_Evaluation":
       "display_name": "2.4 Evaluation"
@@ -389,7 +387,8 @@
       "display_name": "2.5.1 Digitale Teilhabe"
       "criteria": "Kriterium: Förderung der digitalen Zugänglichkeit für alle wird im Segment angesprochen Dazu gehört: Gewährleisten, dass alle Lernenden, auch solche mit besonderen Bedürfnissen, Zugang zu den Lernressourcen und - aktivitäten haben; (Digitale) Erwartungen, Fähigkeiten, Vorkenntnisse und Missverständnisse der Lernenden berücksichtigen sowie kontextbezogene, physische oder kognitive Einschränkungen bei der Mediennutzung bedenken."
       "examples":
-      - "Bsp für den Code „0“:"
+      - "Bsp für den Code „1“:"
+      - "Tauchen Sie ein in theoretische Grundlagen und entdecken Sie mit uns Barrierefreiheit, Immersion und die Zukunft des Lernens bei XR-Szenarien."
       "values": "Ja (1), Nein (0)"
     "Differenzierung_und_Individualisierung":
       "display_name": "2.5.2 Differenzierung und Individualisierung"
@@ -400,7 +399,7 @@
       "values": "Ja (1), Nein (0)"
     "Aktive_Einbindung_von_Lernenden":
       "display_name": "2.5.3 Aktive Einbindung von Lernenden"
-      "criteria": "Kriterium: Einsatz digitaler Methoden zur Lernmotivation wird im Segment angesprochen Dazu gehört: Nutzung von digitalen Medien zur aktiven und kreativen Förderung des Engagements der Lernenden mit einem Thema; Einsatz von digitalen Medien im Rahmen pädagogischer Strategien zur Förderung übertragbarer Fähigkeiten, des tiefgründigen Denkens und kreativen Ausdrucks des Lernenden; Öffnung des Lernens zwecks Schaffung neuer, realer Lernkontexte, dank derer die Lernenden in praktische Aktivitäten, wissenschaftliche Untersuchungen oder komplexe Problemlösungen einbezogen werden, oder anderweitige Erhöhung der aktiven Auseinandersetzung der Lernenden mit komplexen Sachverhalten."
+      "criteria": "Kriterium: Einsatz digitaler Methoden zur Lernmotivation wird im Segment angesprochen Dazu gehört: Der Einsatz digitaler Medien wird explizit zur aktiven und kreativen Förderung des Engagements der Lernenden mit einem bestimmten Thema genutzt. Digitale Medien werden im Rahmen klar erkennbarer pädagogischer Strategien eingesetzt, um übertragbare Fähigkeiten, tiefgründiges Denken sowie den kreativen Ausdruck der Lernenden gezielt zu fördern. Darüber hinaus wird das Lernen explizit geöffnet, indem neue und reale Lernkontexte geschaffen werden, in denen die Lernenden aktiv in praktische Tätigkeiten, wissenschaftliche Untersuchungen oder komplexe Problemlösungen eingebunden sind. Es ist deutlich erkennbar, dass die aktive Auseinandersetzung der Lernenden mit komplexen Sachverhalten gezielt angeregt und unterstützt wird."
       "examples":
       - "Bsp für den Code „1“:"
       - "Die technische und didaktische Implementierung von Gamification mittels adaptiven Mittels Gamification, d.h. Implementierung von Spielelementen in Moodle kann man Studierende kognitiv, sozial und emotional einbinden und so die Lernerfahrung emotionaler und motivierender gestalten."
@@ -419,25 +418,28 @@
       "display_name": "2.6.1 Förderung der Informations- und Medienkompetenz der Studierenden"
       "criteria": "Kriterium: Schulung im kritischen Umgang mit digitalen Informationen der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, Informationsbedürfnisse zu artikulieren, Informationen und Ressourcen in digitalen Lernumgebungen zu finden, diese zu organisieren, zu verarbeiten, zu analysieren und zu interpretieren sowie die Glaubwürdigkeit und Zuverlässigkeit der Informationen und ihrer Quellen zu vergleichen und kritisch zu bewerten."
       "examples":
-      - "Bsp für den Code „0“:"
+      - "Bsp für den Code „1“:"
+      - "Auch im späteren Berufsleben werden sie in der digitalen Welt zu Hause sein, weshalb ein kompetenter Umgang mit digitalen Werkzeugen von essenzieller Bedeutung ist."
       "values": "Ja (1), Nein (0)"
     "F_rderung_der_Digitalen_Kommunikation_und_Zusammenarbeit_der_Studierenden":
       "display_name": "2.6.2  Förderung der Digitalen Kommunikation und Zusammenarbeit der Studierenden"
-      "criteria": "Kriterium: Förderung digitaler Kommunikationsfähigkeiten der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, effektiv und verantwortungsbewusst digitale Medien für Kommunikation, Zusammenarbeit und Bürgerbeteiligung zu nutzen."
+      "criteria": "Kriterium: Förderung digitaler Kommunikationsfähigkeiten der Lernenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, effektiv und verantwortungsbewusst digitale Medien für Kommunikation, Zusammenarbeit und Bürgerbeteiligung zu nutzen. Dabei wird explizit deutlich, dass die Förderung der digitalen Kommunikationsfähigkeiten bei den Lernenden – nicht bei den Lehrenden – im Mittelpunkt steht. Die entsprechenden Maßnahmen sind klar als pädagogisches Ziel erkennbar und werden nicht lediglich implizit vorausgesetzt."
       "examples":
-      - "Bsp für den Code „0“:"
+      - "Bsp für den Code „1“:"
+      - "Welche Methoden und digitalen Werkzeuge fördern die Kommunikation, Zusammenarbeit und aktive Beteiligung der Studierenden?"
       "values": "Ja (1), Nein (0)"
     "F_rderung_der_Erstellung_digitaler_Inhalte_der_Studierenden":
       "display_name": "2.6.3  Förderung der Erstellung digitaler Inhalte der Studierenden"
       "criteria": "Kriterium: Förderung kreativer digitaler Ausdrucksformen der Studierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, sich mittels digitaler Medien auszudrücken und digitale Inhalte in verschiedenen Formaten zu bearbeiten und zu erstellen; Lernenden vermitteln, wie Urheberrecht und Lizenzen für digitale Inhalte gelten und wie man Quellen zitiert und Lizenzen angibt."
       "examples":
-      - "Bsp für den Code „0“:"
+      - "Bsp für den Code „1“:"
       "values": "Ja (1), Nein (0)"
     "F_rderung_des_verantwortungsvollen_Umgang_der_Studierenden_mit_digitalen_Medien":
       "display_name": "2.6.4 Förderung des verantwortungsvollen Umgang der Studierenden mit digitalen Medien"
       "criteria": "Kriterium: Sensibilisierung der Studierenden für Datenschutz und digitale Ethik wird im Segment angesprochen Dazu gehört: Maßnahmen ergreifen, um das physische, psychische und soziale Wohlergehen der Lernenden bei der Nutzung von digitalen Medien zu gewährleisten; Lernenden eine sichere und verantwortungsvolle Nutzung von digitalen Medien zu ermöglichen und ihnen beibringen, Risiken zu bewältigen."
       "examples":
-      - "Bsp für den Code „0“:"
+      - "Bsp für den Code „1“:"
+      - "entwickeln Strategien, um die Studierenden anzuleiten, Chatbots verantwortungsvoll zu nutzen."
       "values": "Ja (1), Nein (0)"
     "F_rderung_der_Kompetenz_Digitales_Probleml_sen_der_Studierenden":
       "display_name": "2.6.5 Förderung der Kompetenz “Digitales Problemlösen” der Studierenden"
@@ -459,18 +461,19 @@
       "display_name": "3.1 Informations- und Medienkompetenz"
       "criteria": "Kriterium: Schulung der Dozierenden im kritischen Umgang mit digitalen Informationen wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, Informationsbedürfnisse zu artikulieren, Informationen und Ressourcen in digitalen Lernumgebungen zu finden, diese zu organisieren, zu verarbeiten, zu analysieren und zu interpretieren sowie die Glaubwürdigkeit und Zuverlässigkeit der Informationen und ihrer Quellen zu vergleichen und kritisch zu bewerten."
       "examples":
-      - "Bsp für den Code „0“:"
+      - "Bsp für den Code „1“:"
+      - "Welche Tools und Medien stehen mir zur Verfügung und was ist wann sinnvoll?"
       "values": "Ja (1), Nein (0)"
     "Digitale_Kommunikation_und_Zusammenarbeit":
       "display_name": "3.2 Digitale Kommunikation und Zusammenarbeit"
-      "criteria": "Kriterium: Förderung digitaler Kommunikationsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, effektiv und verantwortungsbewusst digitale Medien für Kommunikation, Zusammenarbeit und Bürgerbeteiligung zu nutzen."
+      "criteria": "Kriterium: Förderung digitaler Kommunikationsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Der Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, effektiv und verantwortungsbewusst digitale Medien für Kommunikation, Zusammenarbeit und Bürgerbeteiligung zu nutzen, wird nur dann berücksichtigt, wenn er explizit – und nicht lediglich implizit – im Segment thematisiert wird."
       "examples":
       - "Bsp für den Code „1“:"
       - "…können mit Mahara auch verschiedene kollaborative Elemente (z.B. Peer-Feedback, Gruppen) zum Einsatz kommen. In dieser Fortbildung erhalten Sie einen Überblick über die didaktischen Einsatzmöglichkeiten von E-Portfolios und über die Grundfunktionen von Mahara."
       "values": "Ja (1), Nein (0)"
     "Erstellung_digitaler_Inhalte":
       "display_name": "3.3 Erstellung digitaler Inhalte"
-      "criteria": "Kriterium: Förderung kreativer digitaler Ausdrucksformen der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, sich mittels digitaler Medien auszudrücken und digitale Inhalte in verschiedenen Formaten zu bearbeiten und zu erstellen; Lernenden vermitteln, wie Urheberrecht und Lizenzen für digitale Inhalte gelten und wie man Quellen zitiert und Lizenzen angibt."
+      "criteria": "Kriterium: Förderung kreativer digitaler Ausdrucksformen der Dozierenden wird im Segment angesprochen Dabei muss es sich nicht unbedingt um Lernmaterialien handeln – entscheidend ist, dass die Dozierenden befähigt werden, eigene digitale Inhalte kreativ zu gestalten und zu erstellen. Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, sich mittels digitaler Medien auszudrücken und digitale Inhalte in verschiedenen Formaten zu bearbeiten und zu erstellen; Lernenden vermitteln, wie Urheberrecht und Lizenzen für digitale Inhalte gelten und wie man Quellen zitiert und Lizenzen angibt."
       "examples":
       - "Bsp für den Code „1“:"
       - "Anschließend lernen Sie grundlegende Funktionen der Bildschirmaufzeichnungssoftware Camtasia Studio kennen und in den Übungsphasen setzen Sie das gelernte Wissen direkt um. So gelangen Sie Schritt für Schritt zum eigenen Lehrvideo."
@@ -480,11 +483,12 @@
       "display_name": "3.4 Verantwortungsvoller Umgang mit digitalen Medien"
       "criteria": "Kriterium: Sensibilisierung der Dozierenden für Datenschutz und digitale Ethik wird im Segment angesprochen Dazu gehört: Maßnahmen ergreifen, um das physische, psychische und soziale Wohlergehen der Lernenden bei der Nutzung von digitalen Medien zu gewährleisten; Lernenden eine sichere und verantwortungsvolle Nutzung von digitalen Medien zu ermöglichen und ihnen beibringen, Risiken zu bewältigen."
       "examples":
-      - "Bsp für den Code „0“:"
+      - "Bsp für den Code „1“:"
+      - "Wir diskutieren, wie die neuen Möglichkeiten verantwortungsvoll in die Lehre integriert werden können."
       "values": "Ja (1), Nein (0)"
     "Digitales_Probleml_sen":
       "display_name": "3.5 Digitales Problemlösen"
-      "criteria": "Kriterium: Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen."
+      "criteria": "Kriterium: Entwicklung digitaler Problemlösungsfähigkeiten der Dozierenden wird im Segment angesprochen Dazu gehört: Expliziter Einsatz von Lernaktivitäten, Aufgaben und Prüfungen, in denen von den Lernenden erwartet wird, technische Probleme zu identifizieren und zu lösen oder technisches Wissen kreativ auf neue Situationen zu übertragen."
       "examples":
       - "Bsp für den Code „1“:"
       - "…der Veranstaltung legen Sie konkret Spielelemente in Form von adaptiven Lernpfaden im eigenen Moodlekurs an…"

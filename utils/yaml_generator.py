@@ -27,8 +27,12 @@ class YAMLGenerator:
 
     def parse_condition(self, values: str) -> dict:
         """Parse condition from values string"""
-        # Don't treat 2.0.2 as a derived category
+        # Don't treat 2.0.2 as a derived category - check for the specific pattern
         if "nur, wenn auch 2.0.4 =1" in values.lower():
+            return None
+        
+        # Additional check for the specific 2.0.2 pattern
+        if "nur, wenn auch" in values.lower() and "2.0.4" in values.lower():
             return None
         
         if "wenn" not in values.lower():

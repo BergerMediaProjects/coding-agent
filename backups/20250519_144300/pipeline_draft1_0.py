@@ -26,30 +26,57 @@ from typing import Dict, List, AsyncGenerator, Optional, Any
 from pydantic import BaseModel, Field
 import asyncio
 import logging
+from logging.handlers import RotatingFileHandler
 from datetime import datetime
 from enum import Enum
-from dotenv import load_dotenv
 import sys
 from collections import defaultdict
 from docx import Document
 import re
 
-load_dotenv()  # Add this at the top of the file
+# Get the root directory path
+root_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Verify API key is loaded
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("OPENAI_API_KEY not found in environment variables. Please check your .env file.")
+
+# Debug: Print environment variables
+print("\n=== Environment Variables ===")
+print(f"Current directory: {os.getcwd()}")
+print(f"Root directory: {root_dir}")
+print(f"OPENAI_API_KEY exists: {'OPENAI_API_KEY' in os.environ}")
+if 'OPENAI_API_KEY' in os.environ:
+    print(f"OPENAI_API_KEY length: {len(api_key)}")
+    print(f"OPENAI_API_KEY first 8 chars: {api_key[:8]}...")
+print("==========================\n")
 
 # Configuration for file paths, logging, and GPT settings
 CONFIG = {
     'paths': {
-        'data_csv': "training_data.xlsx",        # Changed from CSV to Excel
-        'human_codes': "human_codes.xlsx",              
-        'coding_scheme': "coding_scheme.yml",           
-        'prompt_template': "prompt.txt",                
-        'output_dir': "results",                        
-        'log_dir': "log",  
-        'output_base': "results/ai_coded_results"       
+        'data_csv': "data/training_data.xlsx",        # Changed from CSV to Excel
+        'human_codes': "data/human_codes.xlsx",              
+        'coding_scheme': "data/coding_scheme.yml",           
+        'prompt_template': "data/prompt.txt",                
+        'output_dir': "data/results",                        
+        'log_dir': "data/log",  
+        'output_base': "data/results/results",  # Changed to match the expected filename pattern
+        'docx_file': "data/DOC_coding_scheme/doc_cs.docx"    # Added path to DOCX file
     },
     'logging': {
         'level': 'INFO',
-        'file': os.path.join('logs', 'atomic_agents.log')
+        'max_bytes': 10 * 1024 * 1024,  # 10MB
+        'backup_count': 5,
+        'format': {
+            'timestamp': '%(asctime)s',
+            'level': '%(levelname)s',
+            'logger': '%(name)s',
+            'message': '%(message)s',
+            'module': '%(module)s',
+            'function': '%(funcName)s',
+            'line': '%(lineno)d'
+        }
     },
     'gpt': {
         'model': 'gpt-4',                              # GPT model to use
@@ -114,22 +141,43 @@ class ValidationResult(BaseModel):
 
 class CodingSchemeCategory(BaseModel):
     """Structure for a single category in the coding scheme"""
+    display_name: str
+    simplified_name: str
     criteria: str
     examples: List[str]
     values: str
 
 class CodingScheme(BaseModel):
     """Structure for coding scheme"""
+    version: str
     categories: Dict[str, CodingSchemeCategory]
-
+    
     @classmethod
     def from_yaml(cls, data: Dict) -> 'CodingScheme':
         """Create CodingScheme from YAML data"""
-        categories = {
-            key: CodingSchemeCategory(**value) 
-            for key, value in data.items()
-        }
-        return cls(categories=categories)
+        if not isinstance(data, dict):
+            raise ValueError("YAML data must be a dictionary")
+            
+        if 'coding_scheme' not in data:
+            raise ValueError("Missing 'coding_scheme' root object")
+            
+        scheme_data = data['coding_scheme']
+        if not isinstance(scheme_data, dict):
+            raise ValueError("coding_scheme must be a dictionary")
+            
+        if 'version' not in scheme_data:
+            raise ValueError("coding_scheme must have 'version' field")
+            
+        if 'categories' not in scheme_data:
+            raise ValueError("coding_scheme must have 'categories' field")
+            
+        if not isinstance(scheme_data['categories'], dict):
+            raise ValueError("categories must be a dictionary")
+            
+        return cls(
+            version=scheme_data['version'],
+            categories=scheme_data['categories']
+        )
 
 # ============================================================================
 # Management Components
@@ -192,59 +240,66 @@ class DataManager:
             )
 
 class ResourceManager:
-    """
-    Manages loading and preparation of classification resources
+    """Manages loading and access to resources like coding scheme and prompts"""
     
-    Responsibilities:
-    1. Load and validate coding scheme from YAML
-    2. Load prompt template
-    3. Construct category-specific prompts
-    """
     @staticmethod
     async def load_scheme(path: str) -> CodingScheme:
-        """
-        Load and validate coding scheme from YAML
-        
-        Args:
-            path: Path to coding scheme YAML file
-            
-        Returns:
-            Validated CodingScheme
-            
-        Raises:
-            FileNotFoundError: If scheme file doesn't exist
-            ValueError: If scheme structure is invalid
-        """
+        """Load and validate coding scheme"""
         try:
-            with open(path, "r", encoding="utf-8") as file:
-                raw_scheme = yaml.safe_load(file)
-                return CodingScheme.from_yaml(raw_scheme)
-        except FileNotFoundError:
-            raise FileNotFoundError(f"Coding scheme file not found: {path}")
-        except yaml.YAMLError as e:
-            raise ValueError(f"Invalid YAML in coding scheme: {str(e)}")
-    
+            with open(path, 'r', encoding='utf-8') as file:
+                data = yaml.safe_load(file)
+            
+            # Create a mapping of simplified names to original names
+            if 'coding_scheme' in data and 'categories' in data['coding_scheme']:
+                categories = data['coding_scheme']['categories']
+                simplified_map = {}
+                for key, value in categories.items():
+                    if 'simplified_name' in value:
+                        simplified_map[value['simplified_name']] = key
+                    
+                # Create new categories dict with both original and simplified keys
+                new_categories = {}
+                for key, value in categories.items():
+                    new_categories[key] = value  # Keep original key
+                    if 'simplified_name' in value:
+                        new_categories[value['simplified_name']] = value  # Add simplified key
+                
+                data['coding_scheme']['categories'] = new_categories
+            
+            return CodingScheme.from_yaml(data)
+            
+        except Exception as e:
+            print(f"Error loading coding scheme: {str(e)}")
+            raise
+
     @staticmethod
     async def load_template(path: str) -> str:
-        with open(path, "r", encoding="utf-8") as file:
-            return file.read()
-    
+        """Load prompt template"""
+        with open(path, 'r', encoding='utf-8') as file:
+            return file.read().strip()
+
     @staticmethod
     async def construct_prompt(template: str, entry: DataEntry, scheme: CodingScheme, category_key: str) -> str:
-        """Construct category-specific prompt"""
+        """Construct prompt for classification"""
         try:
-            print(f"\nConstructing prompt for YAML category: {category_key}")
-            if not category_key in scheme.categories:
-                raise ValueError(f"Category {category_key} not found in coding scheme")
+            category = scheme.categories.get(category_key)
+            if not category:
+                raise ValueError(f"Category {category_key} not found in scheme")
             
-            category = scheme.categories[category_key]
-            prompt = template.replace('[title]', entry.title)
+            # Use display_name if available, otherwise use the key
+            display_name = category.display_name if hasattr(category, 'display_name') else category_key
+            
+            # Replace placeholders in template
+            prompt = template
+            prompt = prompt.replace('[title]', entry.title)
             prompt = prompt.replace('[description]', entry.description)
-            prompt = prompt.replace('[category_name]', category_key)  # Use exact YAML key
+            prompt = prompt.replace('[category_name]', display_name)
             prompt = prompt.replace('[criteria]', category.criteria)
             prompt = prompt.replace('[examples]', '\n'.join(f'- {ex}' for ex in category.examples))
             prompt = prompt.replace('[values]', category.values)
+            
             return prompt
+            
         except Exception as e:
             print(f"Error constructing prompt: {str(e)}")
             raise
@@ -301,9 +356,13 @@ class ResultsManager:
         columns = ['title', 'description'] + ai_cols + confidence_cols + reasoning_cols
         df = df.reindex(columns=columns)
         
+        # Ensure results directory exists
+        results_dir = os.path.join(root_dir, 'data', 'results')  # Use root_dir to get absolute path
+        os.makedirs(results_dir, exist_ok=True)
+        
         # Save with timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        excel_path = f"{output_base}_{timestamp}.xlsx"
+        excel_path = os.path.join(results_dir, f"results_{timestamp}.xlsx")
         df.to_excel(excel_path, index=False)
         print(f"\nResults saved to Excel: {excel_path}")
         
@@ -351,22 +410,59 @@ class ResponseValidator:
         """Validate and interpret GPT response in JSON format"""
         try:
             # Debug raw response
-            print(f"\n🔍 Raw GPT response:")
-            print(response)
+            logger.info(f"\n🔍 Raw GPT response:")
+            logger.info(response)
+            
+            # Clean the response if it contains markdown code blocks
+            if '```json' in response:
+                response = response.split('```json')[1].split('```')[0].strip()
+            elif '```' in response:
+                response = response.split('```')[1].split('```')[0].strip()
             
             # Parse JSON response
-            response_data = json.loads(response)
-            print(f"\n📋 Parsed JSON data:")
-            print(response_data)
+            try:
+                response_data = json.loads(response)
+            except json.JSONDecodeError as e:
+                logger.error(f"Failed to parse JSON response: {str(e)}")
+                logger.error(f"Response content: {response[:200]}...")
+                return ValidationResult(
+                    value="0",  # Default to 0 on error
+                    confidence=0.0,
+                    confidence_level=ConfidenceLevel.LOW,
+                    reasoning=f"Error parsing JSON response: {str(e)}"
+                )
+            
+            logger.info(f"\n📋 Parsed JSON data:")
+            logger.info(response_data)
+            
+            # Validate required fields
+            required_fields = ['value', 'confidence', 'reasoning']
+            missing_fields = [field for field in required_fields if field not in response_data]
+            if missing_fields:
+                logger.error(f"Missing required fields in response: {missing_fields}")
+                return ValidationResult(
+                    value="0",  # Default to 0 on error
+                    confidence=0.0,
+                    confidence_level=ConfidenceLevel.LOW,
+                    reasoning=f"Missing required fields in response: {missing_fields}"
+                )
             
             # Get value directly without conversion
             value = str(response_data.get('value', ''))  # Just convert to string
             
             # Debug output
-            print(f"\n🔄 Value from GPT: {value}")
+            logger.info(f"\n🔄 Value from GPT: {value}")
             
             # Get confidence and reasoning
-            confidence = float(response_data.get('confidence', 0.0))
+            try:
+                confidence = float(response_data.get('confidence', 0.0))
+                if confidence < 0.0 or confidence > 1.0:
+                    logger.warning(f"Confidence value {confidence} out of range [0,1], clamping to nearest valid value")
+                    confidence = max(0.0, min(1.0, confidence))
+            except (ValueError, TypeError):
+                logger.error(f"Invalid confidence value: {response_data.get('confidence')}")
+                confidence = 0.0
+            
             reasoning = str(response_data.get('reasoning', ''))
             
             return ValidationResult(
@@ -376,13 +472,13 @@ class ResponseValidator:
                 reasoning=reasoning
             )
             
-        except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse JSON response: {str(e)}")
+        except Exception as e:
+            logger.error(f"Unexpected error in response validation: {str(e)}")
             return ValidationResult(
-                value=response,  # Return raw response if JSON parsing fails
+                value="0",  # Default to 0 on error
                 confidence=0.0,
                 confidence_level=ConfidenceLevel.LOW,
-                reasoning=f"Error parsing JSON response: {str(e)}"
+                reasoning=f"Error validating response: {str(e)}"
             )
 
     def _get_confidence_level(self, confidence: float) -> ConfidenceLevel:
@@ -399,8 +495,7 @@ class GPTClassificationAgent:
     def __init__(self):
         self.client = OpenAI(
             api_key=os.getenv("OPENAI_API_KEY"),
-            timeout=120.0,  # Increase timeout to 120 seconds
-            max_retries=5  # Increase retries
+            timeout=120.0  # Increase timeout to 120 seconds
         )
         self.logger = logging.getLogger('gpt_agent')  # Get a logger for GPT agent
 
@@ -432,40 +527,80 @@ class GPTClassificationAgent:
             self.logger.info(input_data.prompt)
             self.logger.info("=" * 50)
 
-            response = self.client.chat.completions.create(
-                model=input_data.model,
-                temperature=input_data.temperature,
-                messages=[
-                    {
-                        "role": "system", 
-                        "content": "Du bist ein wissenschaftlicher Coder, spezialisiert auf strukturierte Daten."
-                    },
-                    {"role": "user", "content": input_data.prompt}
-                ]
-            )
+            try:
+                # Add response format specification to ensure JSON output
+                response = self.client.chat.completions.create(
+                    model=input_data.model,
+                    temperature=input_data.temperature,
+                    messages=[
+                        {
+                            "role": "system", 
+                            "content": "Du bist ein wissenschaftlicher Coder, spezialisiert auf strukturierte Daten. Bitte antworte immer im JSON-Format mit den Feldern 'value', 'confidence' und 'reasoning'."
+                        },
+                        {
+                            "role": "user",
+                            "content": input_data.prompt + "\n\nBitte antworte im folgenden JSON-Format:\n{\n  \"value\": \"0\" oder \"1\",\n  \"confidence\": Zahl zwischen 0 und 1,\n  \"reasoning\": \"Deine Begründung\"\n}"
+                        }
+                    ],
+                    max_tokens=500,  # Limit response length
+                    timeout=120.0  # Timeout in seconds
+                )
 
-            # Check if we got a valid response
-            if not response.choices:
-                raise Exception("No response received from GPT")
-            
-            response_content = response.choices[0].message.content
-            if not response_content:
-                raise Exception("Empty response from GPT")
+                # Check if we got a valid response
+                if not response.choices:
+                    raise Exception("No response received from GPT")
+                
+                response_content = response.choices[0].message.content
+                if not response_content:
+                    raise Exception("Empty response from GPT")
 
-            # Debug output for response
-            self.logger.info("\n📝 GPT Response:")
-            self.logger.info("=" * 50)
-            self.logger.info(response_content)
-            self.logger.info("=" * 50)
+                # Check for HTML in response
+                if response_content.strip().startswith('<'):
+                    raise Exception("Received HTML response instead of JSON. This might indicate a server error or timeout.")
 
-            return GPTClassificationOutput(response=response_content)
+                # Debug raw response
+                self.logger.info("\n📝 Raw GPT Response:")
+                self.logger.info("=" * 50)
+                self.logger.info(response_content)
+                self.logger.info("=" * 50)
+
+                # Clean the response if it contains markdown code blocks
+                if '```json' in response_content:
+                    response_content = response_content.split('```json')[1].split('```')[0].strip()
+                elif '```' in response_content:
+                    response_content = response_content.split('```')[1].split('```')[0].strip()
+
+                # Validate that the response is JSON
+                try:
+                    json.loads(response_content)
+                except json.JSONDecodeError as e:
+                    self.logger.error(f"Failed to parse JSON response: {str(e)}")
+                    self.logger.error(f"Response content: {response_content[:500]}...")
+                    raise Exception(f"GPT response is not valid JSON. Response content: {response_content[:200]}...")
+
+                return GPTClassificationOutput(response=response_content)
+
+            except Exception as e:
+                self.logger.error(f"\n❌ Error in GPT request: {str(e)}")
+                self.logger.error("Request details:")
+                self.logger.error(f"Model: {input_data.model}")
+                self.logger.error(f"Temperature: {input_data.temperature}")
+                self.logger.error(f"API Key (first 8 chars): {api_key[:8]}...")
+                # Add more detailed error information
+                if hasattr(e, 'response'):
+                    self.logger.error(f"Response status: {e.response.status_code}")
+                    self.logger.error(f"Response body: {e.response.text}")
+                raise
 
         except Exception as e:
-            self.logger.error(f"\n❌ Error in GPT request: {str(e)}")
-            self.logger.error("Request details:")
-            self.logger.error(f"Model: {input_data.model}")
-            self.logger.error(f"Temperature: {input_data.temperature}")
-            self.logger.error(f"API Key (first 8 chars): {os.getenv('OPENAI_API_KEY')[:8]}...")
+            self.logger.error(f"Error in GPT processing: {str(e)}")
+            # Add more context to the error
+            if "SSL" in str(e):
+                self.logger.error("SSL connection error detected. This might be due to:")
+                self.logger.error("1. Network connectivity issues")
+                self.logger.error("2. SSL certificate verification problems")
+                self.logger.error("3. Proxy or firewall settings")
+                self.logger.error("4. API key authentication issues")
             raise
 
 # ============================================================================
@@ -532,15 +667,23 @@ class YAMLManager:
 
     def simplify_category_name(self, name: str) -> str:
         """Remove numbering pattern from category names"""
+        # Check if it's a derived category
+        is_derived = name.startswith('_DERIVED_')
+        base_name = name[9:] if is_derived else name  # Remove _DERIVED_ prefix if present
+        
         patterns = [
             r'^\d+\.\d+\.?\d*\s*[a-z]?\s*',
             r'^\.\d+\s*',
             r'^\d+\s+'
         ]
         
-        result = name
+        result = base_name
         for pattern in patterns:
             result = re.sub(pattern, '', result)
+        
+        # Add back the _DERIVED_ prefix if it was present
+        if is_derived:
+            result = '_DERIVED_' + result
         
         return result.strip()
 
@@ -572,6 +715,37 @@ class YAMLManager:
             
         values = str(values).strip().strip('"\'')
         
+        # Remove trailing commas and semicolons
+        values = values.rstrip(',;')
+        
+        # Handle special cases
+        if values.lower() == "offen":
+            return '"offen"'
+            
+        # Handle derived categories
+        if values.lower() == "ja (1)":
+            return '"Ja (1)"'
+            
+        # Handle conditional values
+        if "wenn" in values.lower():
+            return f'"{values}"'
+            
+        # Handle standard yes/no format
+        if "ja" in values.lower() and "nein" in values.lower():
+            return '"Ja (1), Nein (0)"'
+            
+        # Handle values with semicolons or commas
+        if ";" in values or "," in values:
+            # Split by either semicolon or comma
+            parts = []
+            for part in values.replace(';', ',').split(','):
+                part = part.strip()
+                if part:  # Only add non-empty parts
+                    parts.append(part)
+            # Join with consistent separator
+            return f'"{", ".join(parts)}"'
+            
+        # Default case: wrap in quotes if not already
         if not values.startswith('"'):
             values = f'"{values}"'
             
@@ -580,11 +754,18 @@ class YAMLManager:
     async def generate_yaml_from_docx(self) -> bool:
         """Generate YAML from DOCX file"""
         try:
-            doc_folder = os.path.join(os.path.dirname(self.config['paths']['coding_scheme']), "DOC_coding_scheme")
-            input_file = os.path.join(doc_folder, "doc_cs.docx")
-            output_file = os.path.join(doc_folder, "coding_scheme_imported.yml")
+            # Get the directory containing the coding scheme file
+            doc_dir = os.path.dirname(self.config['paths']['coding_scheme'])
+            # Use the path from config
+            input_file = os.path.join(doc_dir, self.config['paths']['docx_file'])
+            output_file = os.path.join(doc_dir, "coding_scheme_imported.yml")
             
             self.logger.info(f"Generating YAML from DOCX: {input_file}")
+            
+            # Check if file exists
+            if not os.path.exists(input_file):
+                self.logger.error(f"DOCX file not found at: {input_file}")
+                return False
             
             # Load DOCX
             doc = Document(input_file)
@@ -625,8 +806,9 @@ class YAMLManager:
     async def fix_yaml_format(self) -> bool:
         """Fix YAML formatting"""
         try:
-            doc_folder = os.path.join(os.path.dirname(self.config['paths']['coding_scheme']), "DOC_coding_scheme")
-            input_file = os.path.join(doc_folder, "coding_scheme_imported.yml")
+            # Get the directory containing the coding scheme file
+            doc_dir = os.path.dirname(self.config['paths']['coding_scheme'])
+            input_file = os.path.join(doc_dir, "coding_scheme_imported.yml")
             output_file = self.config['paths']['coding_scheme']
             
             self.logger.info(f"Fixing YAML format: {input_file}")
@@ -635,22 +817,50 @@ class YAMLManager:
             with open(input_file, 'r', encoding='utf-8') as file:
                 data = yaml.safe_load(file)
             
-            # Fix format
+            # Fix format - only include non-derived categories
             fixed_data = {}
             for key, value in data.items():
+                # Skip _DERIVED_ categories completely
+                if key.startswith('_DERIVED_'):
+                    self.logger.info(f"Skipping derived category: {key}")
+                    continue
+                
+                # Fix content for non-derived categories
                 new_key = self.simplify_category_name(key)
                 fixed_content = {
                     'criteria': self.fix_criteria(value['criteria']),
                     'examples': self.fix_examples(value['examples']),
                     'values': self.fix_values(value.get('values', ''))
                 }
+                
                 fixed_data[new_key] = fixed_content
+                
+                # Log the conversion
+                self.logger.info(f"Converted category:\n  From: {key}\n  To:   {new_key}\n  Values: {fixed_content['values']}")
             
-            # Save fixed YAML
+            # Save fixed YAML with proper formatting
             with open(output_file, 'w', encoding='utf-8') as file:
-                yaml.dump(fixed_data, file, allow_unicode=True, sort_keys=False)
+                yaml.dump(fixed_data, file, 
+                         allow_unicode=True, 
+                         sort_keys=False, 
+                         default_flow_style=False,
+                         indent=2,
+                         width=1000)  # Increase width to prevent line wrapping
             
             self.logger.info(f"Fixed YAML saved to: {output_file}")
+            self.logger.info("Categories included in YAML:")
+            for category in sorted(fixed_data.keys()):
+                self.logger.info(f"- {category}")
+            
+            # Verify the YAML is valid
+            try:
+                with open(output_file, 'r', encoding='utf-8') as file:
+                    yaml.safe_load(file)
+                self.logger.info("YAML validation successful")
+            except Exception as e:
+                self.logger.error(f"YAML validation failed: {str(e)}")
+                return False
+            
             return True
             
         except Exception as e:
@@ -767,59 +977,6 @@ class TrainingDataClassifier:
         self.response_validator = ResponseValidator()
         self.yaml_manager = YAMLManager(config)  # Add YAML manager
 
-    # Keep the SELECTED_CATEGORIES
-    SELECTED_CATEGORIES = [
-
-        ## Basic Categories
-        # "Kursname",
-        # "Anbieter",
-        # "Name der Hochschule",
-        # "Annehmerhochschulen des Hochschulanbieters",
-        # "Anzahl",
-        # "Dozent_in",
-        # "Veranstaltungsart",
-        # "Format der Veranstaltung Präsenz/Online",
-        # "Format der Veranstaltung synchron",
-        # "Stattfinden der Veranstaltung",
-        # "Termin der Veranstaltung",
-        # "Dauer",
-        # "Semester",
-        # "Zielgruppe",
-        # "Fachbereich",
-        # "Fachbereich offen",
-        # "Kompetenzbereich des Zertifikats Hochschullehre",
-        # "Pädagogisch-didaktisches Angebot allgemeiner oder fachbereichsspezifischer Art",
-        
-        ## Digital Competence Categories
-        # "Organisatorische Kommunikation",
-        # "Berufliche Zusammenarbeit",
-        # "Reflektierte Praxis",
-        # "Digitale fortlaufende berufliche Entwicklung",
-        # "Auswahl digitaler Ressourcen",
-        # "Erstellen und Anpassen digitaler Ressourcen",
-        # "Organisieren, Schützen und Teilen digitaler Ressourcen",
-        # "Lehren",
-        # "Lernbegleitung",
-        # "Kollaboratives Lernen",
-        # "Selbstgesteuertes Lernen",
-        # "Lernstand erheben",
-        # "Lern-Evidenzen analysieren",
-        # "Feedback und Planung",
-        # "Digitale Teilhabe",
-        # "Differenzierung und Individualisierung",
-        # "Aktive Einbindung von Lernenden",
-        # "Förderung der Informations- und Medienkompetenz der Studierenden",
-        # "Förderung der Digitalen Kommunikation und Zusammenarbeit der Studierenden",
-        # "Förderung der Erstellung digitaler Inhalte der Studierenden",
-        # "Förderung des verantwortungsvollen Umgang der Studierenden mit digitalen Medien",
-        # "Förderung der Studierenden zum Digitalen Problemlösen",
-        "Informations- und Medienkompetenz",
-        # "Digitale Kommunikation und Zusammenarbeit",
-        # "Erstellung digitaler Inhalte",
-        # "Verantwortungsvoller Umgang mit digitalen Medien",
-        # "Digitales Problemlösen"
-    ]
-
     async def process_entries(self, entries: List[DataEntry], scheme: CodingScheme) -> None:
         """Process all entries through the pipeline"""
         print("\nStarting pipeline processing...")
@@ -848,12 +1005,24 @@ class TrainingDataClassifier:
         print(f"Title: {entry.title}")
         print(f"Description: {entry.description[:100]}...")
         
-        for category_key in self.SELECTED_CATEGORIES:
+        # Use categories from config instead of hardcoded list
+        selected_categories = self.config.get('selected_categories', [])
+        if not selected_categories:
+            print("Warning: No categories selected in config")
+            return results
+        
+        # Process each category only once
+        processed_categories = set()
+        for category_key in selected_categories:
+            if category_key in processed_categories:
+                continue
+                
             if category_key not in scheme.categories:
                 print(f"Warning: Category {category_key} not found in scheme")
                 continue
             
             print(f"\n📋 Category: {category_key}")
+            processed_categories.add(category_key)
             
             try:
                 # Generate prompt
@@ -897,12 +1066,20 @@ class TrainingDataClassifier:
         """Run the complete classification process"""
         self.logger.info("Starting classification")
         try:
-            # Update coding scheme if needed
-            if os.path.exists(os.path.join(os.path.dirname(self.config['paths']['coding_scheme']), "DOC_coding_scheme", "doc_cs.docx")):
+            # Check if we have temporary files to use
+            if self.config.get('temp_files', {}).get('data_csv'):
+                self.config['paths']['data_csv'] = self.config['temp_files']['data_csv']
+            if self.config.get('temp_files', {}).get('coding_scheme'):
+                self.config['paths']['coding_scheme'] = self.config['temp_files']['coding_scheme']
+            if self.config.get('temp_files', {}).get('prompt_template'):
+                self.config['paths']['prompt_template'] = self.config['temp_files']['prompt_template']
+
+            # Generate YAML from DOCX if needed
+            if not os.path.exists(self.config['paths']['coding_scheme']):
                 self.logger.info("Found DOCX file, updating coding scheme...")
                 if not await self.yaml_manager.update_coding_scheme():
                     self.logger.error("Failed to update coding scheme")
-                    return
+                    return False
             
             # Load and validate resources
             dataset = await self.data_manager.load_data(self.config['paths']['data_csv'])
@@ -914,19 +1091,29 @@ class TrainingDataClassifier:
             scheme = await self.resource_manager.load_scheme(self.config['paths']['coding_scheme'])
             template = await self.resource_manager.load_template(self.config['paths']['prompt_template'])
             
-            # Process each category
+            # Process entries
             all_results = []
-            categories = list(scheme.categories.keys())
-            if self.config.get('test_mode', {}).get('enabled', False):
-                categories = categories[:self.config['test_mode']['max_categories']]
+            entry_count = 0
             
-            for category in categories:
-                entry_count = 0
-                async for entry in self.data_manager.iterate_entries(dataset, category):
-                    entry_count += 1
-                    self.logger.info(f"Processing entry {entry_count} for category {category}")
-                    results = await self.process_entry(entry, template, scheme)
-                    all_results.extend(results)
+            # Get selected categories
+            selected_categories = self.config.get('selected_categories', [])
+            if not selected_categories:
+                self.logger.error("No categories selected in config")
+                return False
+                
+            # Process each entry once
+            for _, row in dataset.iterrows():
+                entry = DataEntry(
+                    title=row["title"],
+                    description=row["description"],
+                    human_code="0"  # Default value
+                )
+                entry_count += 1
+                self.logger.info(f"Processing entry {entry_count}: {entry.title}")
+                
+                # Process all selected categories for this entry
+                results = await self.process_entry(entry, template, scheme)
+                all_results.extend(results)
             
             # Save results with timestamp
             output_path = await self.results_manager.save_results(
@@ -935,16 +1122,13 @@ class TrainingDataClassifier:
             )
             self.logger.info(f"Results saved to: {output_path}")
             
-            # Skip metrics for now
-            # metrics = await self.results_manager.calculate_metrics(all_results)
-            
             self.logger.info("Pipeline completed successfully")
+            return True
             
         except KeyboardInterrupt:
             print("\n\n🛑 Process interrupted by user")
             print("Cleaning up and shutting down...")
-            # Add any cleanup code here
-            return
+            return False
         except Exception as e:
             self.logger.error(f"Pipeline failed: {str(e)}")
             raise
@@ -980,29 +1164,48 @@ class TrainingDataClassifier:
 
 async def main():
     """Main entry point for the classification pipeline"""
+    # Check for API key before proceeding
+    if not os.getenv("OPENAI_API_KEY"):
+        print("Error: OPENAI_API_KEY environment variable is not set. Please check your .env file.")
+        sys.exit(1)
+        
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     # Create directory structure
-    os.makedirs('log', exist_ok=True)
+    os.makedirs(CONFIG['paths']['log_dir'], exist_ok=True)
     os.makedirs(CONFIG['paths']['output_dir'], exist_ok=True)
     
-    # Create run-specific log file
-    log_file = os.path.join('log', f'pipeline_run_{timestamp}.log')
+    # Create run-specific log file with rotation
+    log_file = os.path.join(CONFIG['paths']['log_dir'], f'pipeline_run_{timestamp}.log')
     
-    # Setup logging with custom formatting
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    # Setup logging with custom formatting and rotation
+    formatter = logging.Formatter(
+        json.dumps(CONFIG['logging']['format']),
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
     
-    # File handler
-    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    # File handler with rotation
+    file_handler = RotatingFileHandler(
+        log_file,
+        maxBytes=CONFIG['logging']['max_bytes'],
+        backupCount=CONFIG['logging']['backup_count'],
+        encoding='utf-8'
+    )
     file_handler.setFormatter(formatter)
     
     # Console handler
-    console_handler = logging.StreamHandler(sys.stdout)  # Explicitly use stdout
+    console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
     
     # Setup root logger
     root_logger = logging.getLogger()
-    root_logger.setLevel(logging.INFO)
+    root_logger.setLevel(getattr(logging, CONFIG['logging']['level']))
+    
+    # Remove any existing handlers
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
+    
+    # Add our handlers
     root_logger.addHandler(file_handler)
     root_logger.addHandler(console_handler)
     
@@ -1011,26 +1214,25 @@ async def main():
     
     try:
         # Log configuration details
-        logger.info("=== Pipeline Run Configuration ===")
-        logger.info(f"Timestamp: {timestamp}")
-        logger.info(f"GPT Model: {CONFIG['gpt']['model']}")
-        logger.info(f"Temperature: {CONFIG['gpt']['temperature']}")
+        logger.info("Pipeline Run Configuration", extra={
+            'timestamp': timestamp,
+            'gpt_model': CONFIG['gpt']['model'],
+            'temperature': CONFIG['gpt']['temperature']
+        })
         
         # Log complete coding scheme
-        logger.info("\n=== APPENDIX: Complete Coding Scheme ===")
+        logger.info("Complete Coding Scheme", extra={
+            'timestamp': timestamp,
+            'coding_scheme_path': CONFIG['paths']['coding_scheme']
+        })
+        
         with open(CONFIG['paths']['coding_scheme'], 'r', encoding='utf-8') as f:
             scheme = yaml.safe_load(f)
             scheme_str = yaml.dump(scheme, allow_unicode=True, default_flow_style=False)
-            logger.info("\nCoding Scheme Structure:")
-            logger.info("-" * 80)
-            for line in scheme_str.split('\n'):
-                logger.info(line)
-            logger.info("-" * 80)
-            
-            # Also log summary of categories
-            logger.info("\nCategories Summary:")
-            for category in scheme.keys():
-                logger.info(f"- {category}")
+            logger.info("Coding Scheme Structure", extra={
+                'scheme': scheme_str,
+                'categories': list(scheme.keys())
+            })
         
         # Check required files
         required_files = [
@@ -1042,27 +1244,23 @@ async def main():
         
         missing_files = [f for f in required_files if not os.path.exists(f)]
         if missing_files:
-            logger.error("Missing required files:")
-            for file in missing_files:
-                logger.error(f"- {file}")
-            return
-        
-        # Check API key
-        if not os.getenv("OPENAI_API_KEY"):
-            logger.error("OPENAI_API_KEY not found in environment variables")
+            logger.error("Missing required files", extra={'missing_files': missing_files})
             return
         
         # Create and run classifier
         classifier = TrainingDataClassifier(CONFIG)
         await classifier.run()
         
-        logger.info("=== Pipeline Run Completed ===")
+        logger.info("Pipeline Run Completed", extra={'timestamp': datetime.now().isoformat()})
         
     except Exception as e:
-        logger.error(f"Pipeline failed: {str(e)}", exc_info=True)
+        logger.error("Pipeline failed", extra={
+            'error': str(e),
+            'traceback': sys.exc_info()
+        })
     finally:
         # Log final timestamp
-        logger.info(f"Run finished at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.info("Run finished", extra={'timestamp': datetime.now().isoformat()})
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -28,4 +28,4 @@ if 'OPENAI_API_KEY' in os.environ:
 print("==========================\n")
 
 # Import your Flask app
-from web_interface.app import app as application 
+from web_interface.app import app 

@@ -1,0 +1,121 @@
+
+=== WSGI Environment Variables ===
+Project home: /home/aipipeline/coding-agent
+Env file path: /home/aipipeline/coding-agent/.env
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+
+=== Environment Variables ===
+Current directory: /home/aipipeline/coding-agent
+Root directory: /home/aipipeline/coding-agent
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+{"timestamp": "2025-05-19 13:53:37", "level": "INFO", "logger": "web_interface", "message": "Flask Environment Variables", "module": "app", "function": "<module>", "line": "96"}
+
+=== WSGI Environment Variables ===
+Project home: /home/aipipeline/coding-agent
+Env file path: /home/aipipeline/coding-agent/.env
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+
+=== Environment Variables ===
+Current directory: /home/aipipeline/coding-agent
+Root directory: /home/aipipeline/coding-agent
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+{"timestamp": "2025-05-19 13:53:37", "level": "INFO", "logger": "web_interface", "message": "Flask Environment Variables", "module": "app", "function": "<module>", "line": "96"}
+
+=== WSGI Environment Variables ===
+Project home: /home/aipipeline/coding-agent
+Env file path: /home/aipipeline/coding-agent/.env
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+
+=== Environment Variables ===
+Current directory: /home/aipipeline/coding-agent
+Root directory: /home/aipipeline/coding-agent
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+{"timestamp": "2025-05-19 13:53:37", "level": "INFO", "logger": "web_interface", "message": "Flask Environment Variables", "module": "app", "function": "<module>", "line": "96"}
+
+=== WSGI Environment Variables ===
+Project home: /home/aipipeline/coding-agent
+Env file path: /home/aipipeline/coding-agent/.env
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+
+=== Environment Variables ===
+Current directory: /home/aipipeline/coding-agent
+Root directory: /home/aipipeline/coding-agent
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+{"timestamp": "2025-05-19 13:53:37", "level": "INFO", "logger": "web_interface", "message": "Flask Environment Variables", "module": "app", "function": "<module>", "line": "96"}
+
+=== WSGI Environment Variables ===
+Project home: /home/aipipeline/coding-agent
+Env file path: /home/aipipeline/coding-agent/.env
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+
+=== Environment Variables ===
+Current directory: /home/aipipeline/coding-agent
+Root directory: /home/aipipeline/coding-agent
+OPENAI_API_KEY exists: True
+OPENAI_API_KEY length: 164
+OPENAI_API_KEY first 8 chars: sk-proj-...
+==========================
+
+{"timestamp": "2025-05-19 13:53:37", "level": "INFO", "logger": "web_interface", "message": "Flask Environment Variables", "module": "app", "function": "<module>", "line": "96"}
+{"timestamp": "2025-05-19 13:53:50", "level": "INFO", "logger": "web_interface", "message": "Starting pipeline run", "module": "app", "function": "run_pipeline", "line": "336"}
+{"timestamp": "2025-05-19 13:53:50", "level": "ERROR", "logger": "web_interface", "message": "Error running pipeline", "module": "app", "function": "run_pipeline", "line": "419"}
+{"timestamp": "2025-05-19 13:58:54", "level": "INFO", "logger": "web_interface", "message": "Starting pipeline run", "module": "app", "function": "run_pipeline", "line": "336"}
+{"timestamp": "2025-05-19 13:58:54", "level": "ERROR", "logger": "web_interface", "message": "Error running pipeline", "module": "app", "function": "run_pipeline", "line": "419"}
+{"timestamp": "2025-05-19 13:59:46", "level": "INFO", "logger": "web_interface", "message": "Starting pipeline run", "module": "app", "function": "run_pipeline", "line": "336"}
+{"timestamp": "2025-05-19 13:59:46", "level": "ERROR", "logger": "web_interface", "message": "Error running pipeline", "module": "app", "function": "run_pipeline", "line": "419"}
+
+Shutting down server...
+
+Shutting down server...
+
+Shutting down server...
+
+Shutting down server...
+
+Shutting down server...
+
+Shutting down server...
+
+Shutting down server...
+
+Shutting down server...
+
+Shutting down server...
+
+Shutting down server...

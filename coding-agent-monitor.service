@@ -1,0 +1,15 @@
+[Unit]
+Description=Coding Agent Service Monitor
+After=network.target coding-agent.service
+
+[Service]
+Type=simple
+User=aipipeline
+WorkingDirectory=/home/aipipeline/coding-agent
+Environment=PYTHONPATH=/home/aipipeline/coding-agent
+ExecStart=/home/aipipeline/coding-agent/venv/bin/python monitor_service.py
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target 

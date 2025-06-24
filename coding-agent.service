@@ -1,0 +1,16 @@
+[Unit]
+Description=Coding Agent Web Interface
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/home/aipipeline/coding-agent
+Environment="PATH=/home/aipipeline/coding-agent/venv/bin"
+Environment="PYTHONPATH=/home/aipipeline/coding-agent"
+ExecStart=/home/aipipeline/coding-agent/venv/bin/gunicorn -c gunicorn_config.py wsgi:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target 

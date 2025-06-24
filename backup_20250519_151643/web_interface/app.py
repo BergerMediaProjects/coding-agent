@@ -19,9 +19,6 @@ import logging
 from logging.handlers import RotatingFileHandler
 import traceback
 from typing import Dict, Any
-import subprocess
-import getpass
-import threading
 
 # Load environment variables from .env file
 load_dotenv()
@@ -246,38 +243,21 @@ def filter_categories(scheme):
     # Get categories from the new nested structure
     categories = scheme.get('coding_scheme', {}).get('categories', {})
     
-    logger.info("Starting category filtering", extra={
-        'total_categories': len(categories),
-        'scheme_version': scheme.get('coding_scheme', {}).get('version', 'unknown')
-    })
-    
     for category, details in categories.items():
         # Get the display name (or use the category key if display_name is not present)
         display_name = details.get('display_name', category)
         
         # Extract the numeric prefix from display_name
-        # Example: "1.0.1 Kursname" -> "1.0.1"
+        # Example: "2.0.1 Vorkommen Medienkompetenz" -> "2.0.1"
         numeric_prefix = display_name.split()[0] if display_name else ""
         
-        # Include all categories, including derived ones
-        if numeric_prefix and any(c.isdigit() for c in numeric_prefix):
+        # Check if category starts with "2." or "3." and doesn't start with "_DERIVED_"
+        if (numeric_prefix.startswith(('2.', '3.')) and 
+            not category.startswith('_DERIVED_') and
+            not numeric_prefix.startswith('1.')):
             # Store category with its sort key
             sort_key = get_category_sort_key(numeric_prefix)
             categories_with_sort_keys.append((sort_key, category, details))
-            logger.debug("Category included", extra={
-                'category': category,
-                'display_name': display_name,
-                'numeric_prefix': numeric_prefix,
-                'sort_key': sort_key
-            })
-        else:
-            logger.debug("Category filtered out", extra={
-                'category': category,
-                'display_name': display_name,
-                'numeric_prefix': numeric_prefix,
-                'is_derived': category.startswith('_DERIVED_'),
-                'has_numeric': any(c.isdigit() for c in numeric_prefix) if numeric_prefix else False
-            })
     
     # Sort categories based on their numeric parts and letter suffixes
     categories_with_sort_keys.sort(key=lambda x: x[0])
@@ -286,79 +266,18 @@ def filter_categories(scheme):
     for _, category, details in categories_with_sort_keys:
         filtered_scheme[category] = details
     
-    logger.info("Category filtering completed", extra={
-        'filtered_categories': len(filtered_scheme),
-        'removed_categories': len(categories) - len(filtered_scheme)
-    })
-    
     return filtered_scheme
 
 @app.route('/')
 def index():
-    # Log session information
-    session_id = session.get('session_id', 'no_session')
-    logger.info("Index route accessed", extra={
-        'session_id': session_id,
-        'has_session': 'session_id' in session
-    })
+    # Load current coding scheme to get categories
+    coding_scheme_path = CONFIG['paths']['coding_scheme']
+    with open(coding_scheme_path, 'r', encoding='utf-8') as file:
+        scheme = yaml.safe_load(file)
     
-    # Get the coding scheme path from session, or use default if not set
-    coding_scheme_path = session.get('coding_scheme_path', CONFIG['paths']['coding_scheme'])
-    logger.info("Loading coding scheme", extra={
-        'path': coding_scheme_path,
-        'file_exists': os.path.exists(coding_scheme_path),
-        'is_default': coding_scheme_path == CONFIG['paths']['coding_scheme'],
-        'is_session_path': 'coding_scheme_path' in session,
-        'file_size': os.path.getsize(coding_scheme_path) if os.path.exists(coding_scheme_path) else 0,
-        'file_mtime': datetime.fromtimestamp(os.path.getmtime(coding_scheme_path)).strftime('%Y-%m-%d %H:%M:%S') if os.path.exists(coding_scheme_path) else None
-    })
-    
-    try:
-        with open(coding_scheme_path, 'r', encoding='utf-8') as file:
-            scheme = yaml.safe_load(file)
-            # Log the first few categories to verify content
-            categories = scheme.get('coding_scheme', {}).get('categories', {})
-            first_categories = dict(list(categories.items())[:3])  # Get first 3 categories
-            logger.info("Coding scheme content sample", extra={
-                'first_categories': first_categories,
-                'total_categories': len(categories),
-                'path_used': coding_scheme_path,
-                'session_id': session_id
-            })
-            
-            # Filter categories
-            filtered_scheme = filter_categories(scheme)
-            logger.info("Categories loaded successfully", extra={
-                'total_categories': len(filtered_scheme),
-                'path_used': coding_scheme_path,
-                'session_id': session_id
-            })
-            return render_template('index.html', categories=filtered_scheme)
-    except Exception as e:
-        logger.error("Error loading coding scheme", extra={
-            'error': str(e),
-            'path': coding_scheme_path,
-            'session_id': session_id
-        })
-        # Try default file if the current one fails
-        default_path = CONFIG['paths']['coding_scheme']
-        try:
-            with open(default_path, 'r', encoding='utf-8') as file:
-                scheme = yaml.safe_load(file)
-                filtered_scheme = filter_categories(scheme)
-                logger.info("Loaded default coding scheme", extra={
-                    'total_categories': len(filtered_scheme),
-                    'path_used': default_path,
-                    'session_id': session_id
-                })
-                return render_template('index.html', categories=filtered_scheme)
-        except Exception as e:
-            logger.error("Error loading default coding scheme", extra={
-                'error': str(e),
-                'path': default_path,
-                'session_id': session_id
-            })
-            return render_template('index.html', categories={})
+    # Filter categories
+    filtered_scheme = filter_categories(scheme)
+    return render_template('index.html', categories=filtered_scheme)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -384,19 +303,10 @@ def upload_file():
         })
         return jsonify({'error': f'File type not allowed for {file_type}'}), 400
     
-    # Log current session state
     session_id = session.get('session_id')
-    logger.info("Upload request received", extra={
-        'session_id': session_id,
-        'has_session': 'session_id' in session,
-        'file_type': file_type,
-        'filename': file.filename
-    })
-    
     if not session_id:
         session_id = str(uuid.uuid4())
         session['session_id'] = session_id
-        logger.info("Created new session", extra={'session_id': session_id})
     
     session_folder = os.path.join(TEMP_FOLDER, session_id)
     os.makedirs(session_folder, exist_ok=True)
@@ -405,31 +315,20 @@ def upload_file():
     file_path = os.path.join(session_folder, filename)
     file.save(file_path)
     
-    # Log the file save
-    logger.info("File saved", extra={
+    logger.info("File uploaded successfully", extra={
         'filename': filename,
         'file_type': file_type,
         'session_id': session_id,
-        'file_path': file_path,
-        'file_exists': os.path.exists(file_path),
-        'file_size': os.path.getsize(file_path) if os.path.exists(file_path) else 0
+        'file_path': file_path
     })
     
-    # Store paths in session instead of CONFIG
+    # Update configuration based on file type
     if file_type == 'coding_scheme':
-        session['coding_scheme_path'] = file_path
+        CONFIG['paths']['coding_scheme'] = file_path
     elif file_type == 'prompt':
-        session['prompt_template_path'] = file_path
+        CONFIG['paths']['prompt_template'] = file_path
     elif file_type == 'input_data':
-        session['data_csv_path'] = file_path
-    
-    # Log session state after update
-    logger.info("Updated session state", extra={
-        'session_id': session_id,
-        'coding_scheme_path': session.get('coding_scheme_path'),
-        'prompt_template_path': session.get('prompt_template_path'),
-        'data_csv_path': session.get('data_csv_path')
-    })
+        CONFIG['paths']['data_csv'] = file_path
     
     return jsonify({'message': 'File uploaded successfully'})
 
@@ -469,99 +368,6 @@ async def run_pipeline():
         coding_scheme_file = request.files.get('coding_scheme_file')
         prompt_file = request.files.get('prompt_file')
         
-        # Get file paths from session, or use defaults
-        config = CONFIG.copy()  # Create a copy of the default config
-        
-        # Get session folder for temporary files
-        session_folder = get_session_folder()
-        
-        # Save temporary files if provided
-        if data_file:
-            pipeline_status['status_message'] = 'Saving data file...'
-            data_path = os.path.join(session_folder, 'temp_data.xlsx')
-            data_file.save(data_path)
-            config['paths']['data_csv'] = data_path
-            session['data_csv_path'] = data_path
-            logger.info("Saved data file", extra={
-                'path': data_path,
-                'session_id': session.get('session_id')
-            })
-        else:
-            config['paths']['data_csv'] = session.get('data_csv_path', CONFIG['paths']['data_csv'])
-            
-        if coding_scheme_file:
-            pipeline_status['status_message'] = 'Processing coding scheme...'
-            # Save DOCX file
-            docx_path = os.path.join(session_folder, 'temp_coding_scheme.docx')
-            coding_scheme_file.save(docx_path)
-            logger.info("Saved coding scheme file", extra={
-                'path': docx_path,
-                'session_id': session.get('session_id')
-            })
-            
-            # Generate YAML from DOCX
-            yaml_generator = YAMLGenerator()
-            yaml_path = os.path.join(session_folder, 'temp_coding_scheme.yml')
-            if not yaml_generator.generate_yaml_from_docx(docx_path, yaml_path):
-                pipeline_status['error'] = 'Failed to generate YAML from DOCX'
-                pipeline_status['is_running'] = False
-                logger.error("Failed to generate YAML from DOCX", extra={
-                    'session_id': session.get('session_id')
-                })
-                return jsonify({'status': 'error', 'message': 'Failed to generate YAML from DOCX'}), 500
-            
-            # Fix YAML format
-            if not fix_yaml_format(yaml_path, yaml_path):
-                pipeline_status['error'] = 'Failed to fix YAML format'
-                pipeline_status['is_running'] = False
-                logger.error("Failed to fix YAML format", extra={
-                    'session_id': session.get('session_id')
-                })
-                return jsonify({'status': 'error', 'message': 'Failed to fix YAML format'}), 500
-            
-            # Validate YAML
-            if not validate_yaml(yaml_path):
-                pipeline_status['error'] = 'Invalid YAML format'
-                pipeline_status['is_running'] = False
-                logger.error("Invalid YAML format", extra={
-                    'session_id': session.get('session_id')
-                })
-                return jsonify({'status': 'error', 'message': 'Invalid YAML format'}), 500
-            
-            config['paths']['coding_scheme'] = yaml_path
-            session['coding_scheme_path'] = yaml_path
-            logger.info("Generated and validated YAML", extra={
-                'path': yaml_path,
-                'session_id': session.get('session_id')
-            })
-        else:
-            config['paths']['coding_scheme'] = session.get('coding_scheme_path', CONFIG['paths']['coding_scheme'])
-            
-        if prompt_file:
-            pipeline_status['status_message'] = 'Saving prompt file...'
-            prompt_path = os.path.join(session_folder, 'temp_prompt.txt')
-            prompt_file.save(prompt_path)
-            config['paths']['prompt_template'] = prompt_path
-            session['prompt_template_path'] = prompt_path
-            logger.info("Saved prompt file", extra={
-                'path': prompt_path,
-                'session_id': session.get('session_id')
-            })
-        else:
-            config['paths']['prompt_template'] = session.get('prompt_template_path', CONFIG['paths']['prompt_template'])
-        
-        # Log the configuration being used
-        logger.info("Pipeline configuration", extra={
-            'session_id': session.get('session_id'),
-            'coding_scheme_path': config['paths']['coding_scheme'],
-            'prompt_template_path': config['paths']['prompt_template'],
-            'data_csv_path': config['paths']['data_csv'],
-            'is_using_session_paths': all(
-                session.get(f'{key}_path') is not None 
-                for key in ['coding_scheme', 'prompt_template', 'data_csv']
-            )
-        })
-        
         # Get selected categories
         selected_categories = request.form.get('selected_categories')
         if selected_categories:
@@ -575,12 +381,78 @@ async def run_pipeline():
                 }), 400
         else:
             selected_categories = []
-        
-        config['selected_categories'] = selected_categories
-        
-        # Run the pipeline with the session-specific config
+
+        logger.info("Starting pipeline run", extra={
+            'has_data_file': bool(data_file),
+            'has_coding_scheme': bool(coding_scheme_file),
+            'has_prompt_file': bool(prompt_file),
+            'selected_categories': selected_categories
+        })
+
+        # Get session folder for temporary files
+        session_folder = get_session_folder()
+
+        # Save temporary files if provided
+        temp_files = {}
+        if data_file:
+            pipeline_status['status_message'] = 'Saving data file...'
+            data_path = os.path.join(session_folder, 'temp_data.xlsx')
+            data_file.save(data_path)
+            temp_files['data_csv'] = data_path
+            logger.info("Saved data file", extra={'path': data_path})
+            
+        if coding_scheme_file:
+            pipeline_status['status_message'] = 'Processing coding scheme...'
+            # Save DOCX file
+            docx_path = os.path.join(session_folder, 'temp_coding_scheme.docx')
+            coding_scheme_file.save(docx_path)
+            temp_files['docx_file'] = docx_path
+            logger.info("Saved coding scheme file", extra={'path': docx_path})
+            
+            # Generate YAML from DOCX
+            yaml_generator = YAMLGenerator()
+            yaml_path = os.path.join(session_folder, 'temp_coding_scheme.yml')
+            if not yaml_generator.generate_yaml_from_docx(docx_path, yaml_path):
+                pipeline_status['error'] = 'Failed to generate YAML from DOCX'
+                pipeline_status['is_running'] = False
+                logger.error("Failed to generate YAML from DOCX")
+                return jsonify({'status': 'error', 'message': 'Failed to generate YAML from DOCX'}), 500
+            
+            # Fix YAML format
+            if not fix_yaml_format(yaml_path, yaml_path):
+                pipeline_status['error'] = 'Failed to fix YAML format'
+                pipeline_status['is_running'] = False
+                logger.error("Failed to fix YAML format")
+                return jsonify({'status': 'error', 'message': 'Failed to fix YAML format'}), 500
+            
+            # Validate YAML
+            if not validate_yaml(yaml_path):
+                pipeline_status['error'] = 'Invalid YAML format'
+                pipeline_status['is_running'] = False
+                logger.error("Invalid YAML format")
+                return jsonify({'status': 'error', 'message': 'Invalid YAML format'}), 500
+            
+            temp_files['coding_scheme'] = yaml_path
+            logger.info("Generated and validated YAML", extra={'path': yaml_path})
+            
+        if prompt_file:
+            pipeline_status['status_message'] = 'Saving prompt file...'
+            prompt_path = os.path.join(session_folder, 'temp_prompt.txt')
+            prompt_file.save(prompt_path)
+            temp_files['prompt_template'] = prompt_path
+            logger.info("Saved prompt file", extra={'path': prompt_path})
+
+        # Update CONFIG with temporary files
+        for key, path in temp_files.items():
+            if key in CONFIG['paths']:
+                CONFIG['paths'][key] = path
+
+        # Update selected categories
+        CONFIG['selected_categories'] = selected_categories
+
+        # Run the pipeline
         pipeline_status['status_message'] = 'Starting classification...'
-        classifier = TrainingDataClassifier(config)
+        classifier = TrainingDataClassifier(CONFIG)
         
         # Set up status update callback
         def status_callback(entry_num, total_entries, category, progress):
@@ -597,45 +469,11 @@ async def run_pipeline():
             if pipeline_status['is_cancelled']:
                 raise Exception("Pipeline cancelled by user")
         
-        # Add callback to config
-        config['status_callback'] = status_callback
+        # Add callback to CONFIG
+        CONFIG['status_callback'] = status_callback
         
         try:
             result = await classifier.run()
-            
-            # Get the latest results file
-            result_file = get_latest_results_file()
-            if result_file:
-                result_filename = os.path.basename(result_file)
-                pipeline_status.update({
-                    'is_running': False,
-                    'status_message': 'Pipeline completed successfully',
-                    'progress': 100,
-                    'error': None
-                })
-                logger.info("Pipeline completed successfully", extra={
-                    'result_file': result_filename,
-                    'session_id': session.get('session_id')
-                })
-                return jsonify({
-                    'status': 'success',
-                    'message': 'Pipeline completed successfully',
-                    'result_file': result_filename
-                })
-            else:
-                pipeline_status.update({
-                    'is_running': False,
-                    'error': 'No results file found',
-                    'status_message': 'Pipeline completed but no results file was found'
-                })
-                logger.error("Pipeline completed but no results file was found", extra={
-                    'session_id': session.get('session_id')
-                })
-                return jsonify({
-                    'status': 'error',
-                    'message': 'Pipeline completed but no results file was found'
-                }), 500
-                
         except Exception as e:
             if pipeline_status['is_cancelled']:
                 pipeline_status.update({
@@ -648,13 +486,40 @@ async def run_pipeline():
                     'message': 'Pipeline cancelled by user'
                 })
             raise
-            
+
+        # Get the latest results file
+        result_file = get_latest_results_file()
+        if result_file:
+            result_filename = os.path.basename(result_file)
+            pipeline_status.update({
+                'is_running': False,
+                'status_message': 'Pipeline completed successfully',
+                'progress': 100
+            })
+            logger.info("Pipeline completed successfully", extra={
+                'result_file': result_filename
+            })
+            return jsonify({
+                'status': 'success',
+                'message': 'Pipeline completed successfully',
+                'result_file': result_filename
+            })
+        else:
+            pipeline_status.update({
+                'is_running': False,
+                'error': 'No results file found',
+                'status_message': 'Pipeline completed but no results file was found'
+            })
+            logger.error("Pipeline completed but no results file was found")
+            return jsonify({
+                'status': 'error',
+                'message': 'Pipeline completed but no results file was found'
+            }), 500
+
     except Exception as e:
         error_message = str(e)
         stack_trace = traceback.format_exc()
-        logger.error(f"Error running pipeline: {error_message}\n{stack_trace}", extra={
-            'session_id': session.get('session_id')
-        })
+        logger.error(f"Error running pipeline: {error_message}\n{stack_trace}")
         
         pipeline_status.update({
             'is_running': False,
@@ -672,16 +537,6 @@ def download_results(filename):
     results_dir = os.path.join(root_dir, 'data', 'results')
     file_path = os.path.join(results_dir, filename)
     return send_file(file_path, as_attachment=True)
-
-@app.route('/restart_service', methods=['POST'])
-def restart_service():
-    def do_restart():
-        import time
-        time.sleep(1)  # Give the response time to go out
-        subprocess.run(['/usr/bin/sudo', 'systemctl', 'restart', 'coding-agent.service'],
-                       capture_output=True, text=True, timeout=30)
-    threading.Thread(target=do_restart).start()
-    return jsonify({'status': 'success', 'message': 'Service restart initiated successfully'})
 
 def signal_handler(signum, frame):
     """Handle shutdown signals gracefully"""
