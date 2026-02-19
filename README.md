@@ -42,21 +42,22 @@ export OPENAI_API_KEY='your-api-key-here'
 .
 ├── README.md
 ├── requirements.txt
-├── pipeline-draft1.0.py      # Main pipeline script
-├── coding_scheme.yml        # Active coding scheme (used by pipeline)
-├── training_data.xlsx      # Course descriptions
-├── human_codes.xlsx        # Optional human-coded data
-├── utils/
-│   ├── validate_yaml.py      # YAML validation script
-│   ├── yaml_generator.py     # Converts Word docs to YAML
-│   ├── fix_yaml_format.py    # Cleans up YAML format
-│   └── prompt.txt           # GPT prompt template
-├── DOC_coding_scheme/       # Directory for coding scheme documents
-│   ├── doc_cs.docx         # Word document with coding scheme
-│   └── coding_scheme_imported.yml  # Generated YAML scheme
-├── log/                    # Log files directory
-└── results/                # Results will be saved here
-    └── ai_coded_results_*.xlsx   # Timestamped results
+├── pipeline_draft1_0.py     # Main pipeline script
+├── data/
+│   ├── training_data.xlsx   # Course descriptions
+│   ├── human_codes.xlsx     # Optional human-coded data
+│   ├── coding_scheme.yml    # Active coding scheme (used by pipeline)
+│   ├── prompt.txt           # GPT prompt template
+│   ├── DOC_coding_scheme/   # Directory for coding scheme documents
+│   │   ├── doc_cs.docx      # Word document with coding scheme
+│   │   └── coding_scheme_imported.yml  # Generated YAML scheme
+│   ├── log/                 # Log files directory
+│   └── results/             # Results will be saved here
+│       └── ai_coded_results_*.xlsx   # Timestamped results
+└── utils/
+    ├── validate_yaml.py     # YAML validation script
+    ├── yaml_generator.py   # Converts Word docs to YAML
+    └── fix_yaml_format.py  # Cleans up YAML format
 ```
 
 ## Workflow
@@ -71,19 +72,19 @@ export OPENAI_API_KEY='your-api-key-here'
    ```bash
    python utils/fix_yaml_format.py
    ```
-   This creates `coding_scheme.yml` in the root directory
+   This creates `coding_scheme.yml`. Copy it to `data/coding_scheme.yml` for the pipeline.
 
 3. **Validate YAML structure**
    ```bash
-   python utils/validate_yaml.py
+   python utils/validate_yaml.py data/coding_scheme.yml
    ```
-   This checks the root `coding_scheme.yml`
+   Validates the coding scheme used by the pipeline
 
 4. **Run the pipeline**
    ```bash
-   python pipeline-draft1.0.py
+   python pipeline_draft1_0.py
    ```
-   This uses the root `coding_scheme.yml`
+   This uses `data/coding_scheme.yml`
 
 ## Available Scripts
 
@@ -166,20 +167,20 @@ python utils/validate_yaml.py
 - If no path is provided, it looks for `coding_scheme.yml` in the root directory
 - This is the same file that `fix_yaml_format.py` creates as output
 
-### 4. Main Pipeline (`pipeline-draft1.0.py`)
+### 4. Main Pipeline (`pipeline_draft1_0.py`)
 
 The primary script for analyzing course descriptions.
 
 **Usage:**
 ```bash
-python pipeline-draft1.0.py
+python pipeline_draft1_0.py
 ```
 
 **Input Requirements:**
-- Excel files in root directory:
-  - `training_data.xlsx`: Course descriptions (title and description columns)
-  - `human_codes.xlsx`: Optional human-coded data
-- Valid `coding_scheme.yml` in the root directory
+- Excel files in `data/` directory:
+  - `data/training_data.xlsx`: Course descriptions (title and description columns)
+  - `data/human_codes.xlsx`: Optional human-coded data
+- Valid `data/coding_scheme.yml`
 - OpenAI API key in environment
 
 **Configuration:**
@@ -187,7 +188,7 @@ python pipeline-draft1.0.py
 - Categories can be activated/deactivated by uncommenting/commenting them
 
 **Output:**
-- Creates Excel files in the `results/` directory
+- Creates Excel files in the `data/results/` directory
 - Files are timestamped (format: `ai_coded_results_YYYYMMDD_HHMMSS.xlsx`)
 - Results include:
   - Original course titles and descriptions
